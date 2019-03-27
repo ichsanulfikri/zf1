@@ -1,0 +1,61 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field3').focus();	
+	dijit.byId('field5').set('value','');
+	dijit.byId('field5').set('placeHolder','Select');
+	});
+</script>
+</head>
+<body class="claro">
+	<fieldset>
+	<legend><?php echo $this->translate($this->College).' '.$this->translate("Search");?></legend>
+                    <form action="<?php echo $this->baseUrl();?>/generalsetup/programbranch/index/search/1" method="POST">
+                            <table width="100%">
+                                  <tr>
+                                    <td class="label"><?php echo $this->translate($this->College).' '.$this->translate("Name");?></td>
+                                    <td ><?php echo $this->lobjform->field3;?></td>
+                                    <td class="label"><?php echo $this->translate("Short Name");?></td>
+                                    <td ><?php echo $this->lobjform->field2;?></td>
+                                </tr>
+                                <tr>
+                                	<td class="label"><?php echo $this->translate("Affiliated").' '.$this->translate("To");?></td>
+                                    <td ><?php echo $this->lobjform->field5;?></td>
+                                	<td ><?php echo $this->translate("Email");?></td>
+                  					<td ><?php echo $this->lobjform->field4;?></td>
+                                </tr>
+                                <tr>
+                                	<td class="label"><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "center" colspan = "4">
+									<?php echo $this->lobjform->Search;?>
+									<?php echo $this->lobjform->Clear;?>
+								</td>
+							    
+                                </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	    	<th><?php echo $this->translate($this->College).' '.$this->translate("Name");?></th>
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjprogrambranch): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/programbranch/newprogrambranch/id/<?php echo $this->escape($lobjprogrambranch['IdCollege']);?>" ><?php echo $lobjprogrambranch['CollegeName'];?></a></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+		</table>
+	</fieldset>
+</body>
+</html>

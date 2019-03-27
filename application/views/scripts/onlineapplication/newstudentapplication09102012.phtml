@@ -1,0 +1,93 @@
+<script language="JavaScript" type="text/javascript">
+dojo.addOnLoad(function() {
+	var tabid = <?php echo $this->applicantTabvalue; ?>;
+	<?php if(count($this->IntakeList) == 0) { ?>
+    	alert("Application cannot be submitted due to some problem. Please contact the university.");
+    	tabid = 1;
+	<?php } ?>
+	if(tabid=='5') {
+		for(i=5;i>=1;i--) {
+			var tab_id = "#tab"+i;
+			$(tab_id).unbind('click');
+		}
+	} else {
+
+  		for(i=1;i <= tabid;i++) {
+		var tab_id = "#tab"+i;
+		var tab_obj = $(tab_id);
+		console.log(i);
+		$(tab_obj).bind('click',function(){
+
+			var activeTab = $(this);
+			// check if the current tab already selected
+			if($(this).hasClass("selected")){
+				return;
+			}
+
+			var contentId = $(this).attr("id");
+			contentId = contentId.replace("tab", "content");
+
+
+			// remove selected class for previous tab
+			var tmp = $("#tabbedpanels a.selected").attr("id").replace("tab", "content");
+
+			$("#tabbedpanels a.selected").removeClass("selected");
+
+			$("#"+tmp).hide();
+
+			// 	adding selected class to this tab
+			$(this).addClass("selected");
+
+			$("#"+contentId).show();
+			});
+		}
+
+	}
+
+});
+</script>
+
+
+
+
+<div id="processtabs" class="tabParent">
+<div id="tabbedpanels">
+<a href="#" id="tab1" class="dspp_step <?php if($this->applicantTabvalue=='1') { echo 'selected';} ?> ">Personal Particulars<span class="dspp_stepLabel">1</span></a>
+<a href="#"	id="tab2" class="dspp_step <?php if($this->applicantTabvalue=='2') { echo 'selected';} ?> ">Preferred Programs<span	class="dspp_stepLabel">2</span></a>
+<a href="#" id="tab3" class="dspp_step <?php if($this->applicantTabvalue=='3') { echo 'selected';} ?>  ">Qualification<span class="dspp_stepLabel">3</span></a>
+<a href="#" id="tab4" class="dspp_step <?php if($this->applicantTabvalue=='4') { echo 'selected';} ?>  ">Declaration<span class="dspp_stepLabel">4</span></a>
+<a href="#" id="tab5" class="dspp_step <?php if($this->applicantTabvalue=='5') { echo 'selected';} ?>  ">Admission Status<span class="dspp_stepLabel">5</span></a>
+</div>
+
+<div id="contentArea">
+
+
+
+
+<div class="section" id="content1" <?php if($this->applicantTabvalue=='1') { echo $this->selectedActiveStyle; } else {  echo $this->selectedInactiveStyle; } ?> >
+
+<?php echo $this->partial("onlineapplication/personalparticulars.phtml",array('lobjStudentApplicationForm'=>$this->lobjStudentApplicationForm,'NameconfDetail'=>$this->NameconfDetail,'ExtraIdconfDetail'=>$this->ExtraIdconfDetail,'passportDtl'=>$this->passportDtl,'award'=>$this->award,'country'=>$this->country,'applicantEmail'=>$this->applicantEmail,'defaultLanguage'=>$this->defaultLanguage,'applicantdetails'=>$this->applicantdetails,'state'=>$this->state,'city'=>$this->city,'countrycode'=>$this->countrycode,'maritalstatus'=>$this->maritalstatus));?>
+</div>
+<div class="section" id="content2"  <?php if($this->applicantTabvalue=='2') { echo $this->selectedActiveStyle; } else {  echo $this->selectedInactiveStyle; } ?> >
+<table width="100%">
+  <tr>
+    <td width="100%">
+      *Please Choose your preferred program<br />
+    </td>
+  </tr>
+  <tr>
+    <td width="90%" align="left"><?php echo $this->partial("onlineapplication/preferredprogram.phtml",array('IntakeList' => $this->IntakeList,'applicantpreferredForm' => $this->applicantpreferredForm, 'program' => $this->program, 'intake' => $this->intake, 'preferreddet' => $this->preferreddet, 'noofpreferred' => $this->noofpreferred)); ?></td>
+  </tr>
+</table>
+</div>
+<div class="section" id="content3" <?php if($this->applicantTabvalue=='3') { echo $this->selectedActiveStyle; } else {  echo $this->selectedInactiveStyle; } ?> >*Please enter Your Qualifications
+<?php echo $this->partial("onlineapplication/qualification.phtml",array('lobjqualificationform' => $this->lobjqualificationform,'lobjsubjectgradeform' => $this->lobjsubjectgradeform,'applicantqualification' => $this->applicantqualification)); ?>
+</div>
+<div class="section" id="content4" <?php if($this->applicantTabvalue=='4') { echo $this->selectedActiveStyle; } else {  echo $this->selectedInactiveStyle; } ?> >
+<?php echo $this->partial("onlineapplication/studentdeclaration.phtml",array('lobjStudentApplicationForm'=>$this->lobjStudentApplicationForm));?>
+</div>
+<div class="section" id="content5" <?php if($this->applicantTabvalue=='5') { echo $this->selectedActiveStyle; } else {  echo $this->selectedInactiveStyle; } ?>  >
+<?php echo $this->partial("onlineapplication/admissionstatus.phtml",array('lobjStudentApplicationForm'=>$this->lobjStudentApplicationForm,'status'=>$this->status,'idapplicant'=>$this->idapplicant,'msg'=>$this->msg));?>
+</div>
+</div>
+</div>

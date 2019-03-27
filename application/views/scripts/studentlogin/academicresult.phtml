@@ -1,0 +1,101 @@
+<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>
+	
+	<br/>
+<?php if(COUNT($this->sdudentresults) > 0) {?>
+<fieldset>
+<legend><?php echo $this->translate("Academic Result");?></legend>
+<br/>
+		<table class="table" width="100%" >
+			<?php foreach ($this->sdudentresults as $lobjStudentName ): ?>
+			<?php endforeach; ?>
+				<tr>
+					<th colspan ="6"><?php echo $this->translate("Student").' '.$this->translate("Details");?></th>
+				</tr>
+				<tr>
+					<td><b><?php echo $this->translate("Student Name");?><b></td>
+					<td><?php print_r($this->escape($lobjStudentName['FName'].' '.$lobjStudentName['MName'].' '.$lobjStudentName['LName']));?></td>
+					<td><b><?php echo $this->translate("Student/Registration Id");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['registrationId']);?></td>
+					<td><b><?php echo $this->translate("Program Name");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['ProgramName']);?></td>
+				</tr>	
+		</table>
+<br/>
+<?php $studarray = array();
+$sumto = 0;
+?>
+		<table class="table" width="100%" >
+			<tr>
+				<th><?php echo $this->translate("Subject Name");?></th>
+				<th><?php echo $this->translate("Subject Code");?></th>
+				<th><?php echo $this->translate("Subject Distribution");?></th>
+				<th><?php echo $this->translate("Components Name");?></th>
+				<th><?php echo $this->translate("Marks Obtained");?></th>
+				<th><?php echo $this->translate("Appeal");?></th>
+			</tr>
+			<?php foreach ($this->sdudentresults as $lobjStudentResults ): ?>
+			
+				<?php if(!in_array($lobjStudentResults['IdSubject'],$studarray) && $sumto!=0){?>
+					<tr>
+						<td align="right" colspan="4"><b><?php echo $this->translate("Marks Obtained Per Subject :");?><b></td>
+						<td width="21%" colspan="3"><b><?php echo $sumto;  $sumto =0;?><b></td>				
+					</tr>
+				<?php } ?>
+				<tr>
+					<td><?php if(!in_array($lobjStudentResults['IdSubject'],$studarray)){
+							$studarrays[$lobjStudentResults['IdSubject']] = array();	
+							$arraysubsummarks[$lobjStudentResults['IdSubject']] = 0;							
+							echo $this->escape($lobjStudentResults['SubjectName']);
+						}?>
+					</td>
+					<td><?php if(!in_array($lobjStudentResults['IdSubject'],$studarray)){	
+							$studarray[] = $lobjStudentResults['IdSubject'];	
+							echo $this->escape($lobjStudentResults['SubCode']);
+							}?>
+					</td>					
+					<td><?php if(!in_array($lobjStudentResults['Name'],$studarrays[$lobjStudentResults['IdSubject']])){
+							$studarrays[$lobjStudentResults['IdSubject']][] = $lobjStudentResults['Name'];		
+							echo $this->escape($lobjStudentResults['Name']);
+						}?>				
+					</td>
+					<td><?php echo $this->escape($lobjStudentResults['ComponentName']);?></td>
+
+					<?php $lobjmarks= $lobjStudentResults['verifiresubjectmarks'];?>
+					<td><?php echo number_format($this->escape($lobjStudentResults['verifiresubjectmarks']),2);?></td>
+					
+					<?php $arraysubmarks[] = $lobjmarks;
+					 	  $arraysubsummarks[$lobjStudentResults['IdSubject']] = $arraysubsummarks[$lobjStudentResults['IdSubject']] +$lobjmarks;
+						  $sumto = $arraysubsummarks[$lobjStudentResults['IdSubject']] ;
+					?>
+					
+					<td>
+						<a href="<?php echo $this->url(array('controller'=>'studentlogin','action'=>'appeallist' ,'subjid'=>$lobjStudentResults['IdSubject'] , 'subjmarks'=>$lobjStudentResults['verifiresubjectmarks'],'subjname'=>$lobjStudentResults['SubjectName'],'registrationId'=>$lobjStudentResults['IdStudentRegistration'],'applicationId'=>$lobjStudentResults['IdApplication'],'programid'=>$lobjStudentResults['IDCourse'],'IdMarksDistributionMaster'=>$lobjStudentResults['IdMarksDistributionMaster'],'IdMarksDistributionDetails'=>$lobjStudentResults['IdMarksDistributionDetails'],'Subjdistrbn'=>$lobjStudentResults['Name'],'Cmpname'=>$lobjStudentResults['ComponentName'],'idverifier'=>$lobjStudentResults['idVerifierMarks']),'default',true);?>" >Appeal</a>
+					</td>
+				</tr>
+				
+			<?php  endforeach; ?>	
+			<?php if($sumto > 0){?>
+				<tr>
+					<td align="right" colspan="4"><b><?php echo $this->translate("Marks Obtained Per Subject :");?><b></td>
+					<td width="21%" colspan="3"><b><?php echo $sumto; ?><b></td>
+					
+				</tr>	
+			<?php }?>
+				<tr>
+					<td align="right" colspan="4"><b><?php echo $this->translate("Total Marks :");?><b></td>
+					<td width="21%" colspan="3"><b><?php echo array_sum($arraysubmarks); ?><b></td>
+					
+				</tr>
+		</table>
+</fieldset>
+<?php } else { ?>
+		<table class="table" width="100%">
+			<tr >
+				<th ><?php echo $this->noresults;?></th>
+			</tr>
+		</table>	
+<?php } ?>

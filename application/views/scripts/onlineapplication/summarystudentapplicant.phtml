@@ -1,0 +1,226 @@
+<?php
+//echo "<pre>";
+//print_r($this->applicantDetail);
+//die;
+$applicantDet = $this->applicantDetail;
+
+
+?>
+<div id="contentArea">
+  <div class="section" id="content1">
+    <div align="center"><h4>Admission- Application Detail</h4></div>
+    <table width="100%" cellspacing="10">
+      <tr>
+        <th colspan="2"><b>A.<?php echo $this->translate('Personal').' '.$this->translate('Particulars')?><b></th>
+      </tr>
+      <tr>
+        <td width="30%"><?php echo $this->translate('Name');?></td>
+         
+        <td><?php echo (isset($applicantDet['personaldet'][0]['FName'])) ? $applicantDet['personaldet'][0]['FName'].' '.$applicantDet['personaldet'][0]['MName'].' '.$applicantDet['personaldet'][0]['LName'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Default Language').' '.$this->translate('Name');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['defaultlangname']) ? $applicantDet['personaldet'][0]['defaultlangname'] : '';?></td>
+      </tr>      
+      <tr>
+        <td><?php echo $this->translate('Date').' '.$this->translate('of').' '.$this->translate('Birth');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['DOB']) ? $applicantDet['personaldet'][0]['DOB'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Sex');?></td>
+        
+        <?php if(isset($applicantDet['personaldet'][0]['Gender'])){?>
+        <?php if($applicantDet['personaldet'][0]['Gender'] == 1){?>
+        <td>Male</td>
+        <?php }else{?>
+        <td>Female</td>
+        <?php }}else{?>
+        <td> </td>
+        <?php }?>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Email');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['email']) ? $applicantDet['personaldet'][0]['email'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Home').' '.$this->translate('Number');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['HomeNumber']) ? $applicantDet['personaldet'][0]['HomeNumber'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Office').' '.$this->translate('Number');?></td>
+       
+        <td><?php echo isset($applicantDet['personaldet'][0]['OfficeNumber']) ? $applicantDet['personaldet'][0]['OfficeNumber'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Mobile').' '.$this->translate('Number');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['MobileNumber']) ? $applicantDet['personaldet'][0]['MobileNumber'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Country');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['CountryName']) ? $applicantDet['personaldet'][0]['CountryName'] : '';?></td>
+      </tr>
+      <tr>
+        <th colspan="2"><b><?php echo $this->translate('Passport').' '.$this->translate('Details')?><b></th>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Passport').' '.$this->translate('Number');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['PPNos']) ? $applicantDet['personaldet'][0]['PPNos'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Passport').' '.$this->translate('Issue').' '.$this->translate('Date');?></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['PPIssueDt']) ? $applicantDet['personaldet'][0]['PPIssueDt'] : '';?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate('Passport').' '.$this->translate('Expiry').' '.$this->translate('Date');?></td>
+       
+        <td><?php echo isset($applicantDet['personaldet'][0]['PPExpDt']) ? $applicantDet['personaldet'][0]['PPExpDt'] : '';?></td>
+      </tr>
+      <?php for($i=1; $i<=5; $i++){$tem = 'PPField'.$i;?>
+      <?php if(isset($applicantDet['personaldet'][0][$tem])){?>
+      <?php if($applicantDet['personaldet'][0][$tem] != ''){?>
+      <tr>
+        <td><?php echo $applicantDet['conf'][$tem];?></td>
+        
+        <td><?php echo $applicantDet['personaldet'][0][$tem];?></td>
+      </tr>
+      <?php }}else{echo "<td> </td>";}}?>
+       <?php for($i=1; $i<=5; $i++){$tem = 'VisaDetailField'.$i;?>
+      <?php if(isset($applicantDet['personaldet'][0][$tem])){?>
+      <?php if($applicantDet['personaldet'][0][$tem] != ''){?>
+      <tr>
+        <td><?php echo $applicantDet['conf'][$tem];?></td>
+        
+        <td><?php echo $applicantDet['personaldet'][0][$tem];?></td>
+      </tr>
+      <?php }}else{echo "<td> </td>";}}?>
+       <?php for($i=1; $i<=20; $i++){
+         $tem = 'ExtarIdDtl'.$i;
+         $tem1 = 'ExtraIdField'.$i;
+         ?>
+      <?php if(isset($applicantDet['personaldet'][0][$tem1])){?>
+      <?php if($applicantDet['personaldet'][0][$tem1] != ''){?>
+      <tr>
+        <td><?php echo $applicantDet['conf'][$tem];?></td>
+        
+        <td><?php echo $applicantDet['personaldet'][0][$tem1];?></td>
+      </tr>
+      <?php }}else{echo "<td> </td>";}}?>
+      <tr>
+        <td><b><?php echo $this->translate('Program');?><b></td>
+        
+        <td><?php echo isset($applicantDet['personaldet'][0]['ProgramName']) ? $applicantDet['personaldet'][0]['ProgramName'] : '' ;?></td>
+      </tr>
+      </br>
+      <tr>
+        <th colspan="2"><b>B.<?php echo $this->translate('Preferred').' '.$this->translate('Program'); ?><b></th>
+      </tr>
+      <tr>
+        <td width="596px">
+          <table border="1" style="border-color:black; solid">
+            <tr>
+              <th><b>No</th>
+              <th><b>ProgramLevel</th>
+              <th><b>Program</th>
+              <th><b>Branch</th>
+              <th><b>Scheme</th>
+               <th><b>Intake</th>
+              
+            </tr>
+            <?php $i = 1;foreach($applicantDet['preferreddet'] as $pref){?>
+            <tr>
+              <td width="3%"><?php echo $pref['IdPriorityNo'];?>
+              <td><?php echo $pref['DefinitionDesc'];?></td>
+              <td><?php echo $pref['ProgramName'];?></td>
+              <td><?php echo $pref['BranchName'];?></td>
+              <td><?php echo $pref['EnglishDescription'];?></td>
+              <td><?php echo $pref['IntakeDesc'];?></td>
+              
+            </tr>
+            <?php $i++;} ?>
+          </table>
+        </td>
+      </tr>
+      <tr>
+        <th colspan="2"><b>C.<?php echo $this->translate('Qualification'); ?><b></th>
+      </tr>
+      <tr>
+        <td colspan="2">
+          <?php foreach($applicantDet['qualificationdet'] as $qualdet){?>
+              <fieldset>
+                <legend><?php echo $qualdet['QualificationLevel'];?></legend>
+                <table>
+                  <tr>
+                    <td><b>Obtained Name<b></td>
+                    
+                    <td><?php echo $qualdet['PlaceObtained'];?></td>
+                    <td><b>Year Obtained</td>
+                    
+                    <td><?php echo $qualdet['yearobtained'];?></td>
+                    <td><b>Certification Name</td>
+                    
+                    <td><?php echo $qualdet['Certificate'];?></td>
+
+                  </tr>
+                  <tr>
+                    <td><b>Institution Name</td>
+                   
+                    <td><?php echo $qualdet['Institution'];?></td>
+                    <td><b>Result Type</td>
+                    
+                    <td><?php echo $qualdet['ResultItem'];?></td>
+                  </tr>
+                  <tr>
+                    <td><b>Result/Total Score</td>
+                    
+                    <td><?php echo $qualdet['resulttotal'];?></td>
+                    <td><b>Result Type</td>
+                    <td><?php echo $qualdet['ResultItem'];?></td>
+                  </tr>
+                </table>
+                <table border="1" style="border-color:black; solid" width="50%">
+                  <tr>
+                    <th><b>Subject</th>
+                    <th><b>Subject Grade</th>
+                  </tr>
+                  <?php foreach($qualdet['subjectdetails'] as $subject){?>
+                    <tr>
+                      <td><?php echo $subject['Subject'];?></td>
+                      <td><?php echo $subject['SubjectGrade'];?></td>
+                    </tr>
+                  <?php }?>
+                  
+                </table>
+              </fieldset>
+              <br>
+          <?php }?>
+        </td>
+      </tr>
+      <br>
+    </table>
+    <table>
+       <tr>
+         <th colspan="2"><b>D.<?php echo $this->translate('Declaration');?><b></th>
+       </tr>
+       <table>
+       <tr>
+    	<td width="100%" colspan="3">I agree to abide by the policies and regulations of Allianze University College of Medical Sciences. I understand that any information given falsely will affect the decision on my application, and may result in my eligibility for admission/enrollment.</td>
+  	   </tr>
+  	   <tr>
+  	   	<td align="left">
+  	   		<input type="checkbox" <?php if($applicantDet['personaldet'][0]['status'] != "184" || $applicantDet['personaldet'][0]['status'] != "191" || $applicantDet['personaldet'][0]['status'] != "192"){echo "checked";}?> value="0" name="declaration" dojotype="dijit.form.CheckBox" readonly="readonly"/> I Agree
+  	   	</td>
+  	   </tr>
+  	    <tr>
+            <td colspan="7"><input type="button" style="float:right" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'applicationstatus'),'default',true);?>';" /></td>
+      </tr>
+    </table>
+  </div>
+</div>

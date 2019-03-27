@@ -1,0 +1,118 @@
+<head>
+
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+	});
+
+
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("idState",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+
+function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("idCity",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	
+		
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+    	var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("Secondary").' '.$this->translate("School").' '.$this->translate("Master");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/schoolmaster/schoolmasterlist/id/<?php echo $this->idSchool; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Secondary").' '.$this->translate("School").' '.$this->translate("Master").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Secondary").' '.$this->translate("School").' '.$this->translate("Master").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjschoolmasterForm->SchoolName;?>
+                            <td><?php echo $this->translate("Bahasa Indonesia");?></td>
+                   			<td><?php echo $this->lobjschoolmasterForm->School_ArabicName;?></td>                           
+                           
+                             <?php echo $this->lobjschoolmasterForm->idSchool;?>
+                            <?php echo $this->lobjschoolmasterForm->UpdDate;?>
+                            <?php echo $this->lobjschoolmasterForm->UpdUser;?></td>
+                        </tr>
+                      	<tr> 
+                      		 <td><?php echo $this->translate("Address 1");?></td>
+                             <td><?php echo $this->lobjschoolmasterForm->Address1;?></td>
+                      		<td><?php echo $this->translate("Address 2");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjschoolmasterForm->Address2;?></td>
+                      		
+                        </tr>
+                          <tr> 
+                          <td><?php echo $this->translate("Email");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjschoolmasterForm->Email;?></td>
+                        	<td ><?php echo $this->translate("Url");?><span class="reqMark"></span></td>
+                      		<td><?php echo $this->lobjschoolmasterForm->Url;?></td>
+                      	    
+                            </tr>
+                         <tr> 
+                        	<td ><?php echo $this->translate("Work Phone");?><span class="reqMark"></span></td>
+                      		<td ><?php echo $this->lobjschoolmasterForm->workcountrycode;?><?php echo $this->lobjschoolmasterForm->workstatecode;?><?php echo $this->lobjschoolmasterForm->workPhone;?></td>
+                        		 <td><?php echo $this->translate('Country');?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjschoolmasterForm->country;?></td>
+                      	    
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("State");?></span><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjschoolmasterForm->idState;?></td>
+                        	<td><?php echo $this->translate('City');?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjschoolmasterForm->idCity;?></td>
+                        
+                        </tr>
+                        <tr>
+                        <td ><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                        <td ><?php echo $this->lobjschoolmasterForm->Active;?></td>
+                        <td></td>
+                        <td></td>
+                        
+                        </tr>
+                        <tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjschoolmasterForm->Save;?>
+                             <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'schoolmaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

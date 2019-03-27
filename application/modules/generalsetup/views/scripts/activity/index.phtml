@@ -1,0 +1,54 @@
+
+<body class="claro">
+    <fieldset>
+		<legend><?php echo $this->translate("Activity");?></legend>
+	</fieldset>	
+    <fieldset>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/activity/index/search/1" method="POST">
+		<table width="100%">
+			<tr>	
+				<td><?php echo $this->translate("Activity").' '.$this->translate("Name");?></td>
+				<td><?php echo $this->lobjform->field3;?></td>		
+		    	
+            </tr>
+           
+			<tr>
+				<td colspan="4" align="center">
+							<?php echo $this->lobjform->Search;?>
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'activity', 'action'=>'newactivity'),'default',true);?>';" />
+							<?php echo $this->lobjform->Clear;?>					
+				</td>
+			</tr>
+		</table>
+	</form>	
+</fieldset>
+</br>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate("Activity").' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Color");?></th>
+	        	<!--<th><?php echo $this->translate("Delete");?></th>
+	    	--></tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjActivity): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/activity/editactivity/id/<?php echo $this->escape($lobjActivity['idActivity']);?>" ><?php print_r($this->escape($lobjActivity['ActivityName']));?></a></td>
+	        	<td style="background-color:<?php print_r($this->escape($lobjActivity['ActivityColorCode']));?>" width="80px"></td>
+<!--	        	<td>-->
+<!--	        	<a href="<?php echo $this->baseUrl();?>/generalsetup/activity/deleteactivity/id/<?php echo $this->escape($lobjActivity['idActivity']);?>"" onClick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'activity', 'action'=>'deleteactivity'),'default',true);?>';"> -->
+<!--	        	<img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'>-->
+<!--	        	</a>-->
+<!--	        	</td>-->
+	            
+	        <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+   			 
+		</table>
+	</fieldset>
+ </body>

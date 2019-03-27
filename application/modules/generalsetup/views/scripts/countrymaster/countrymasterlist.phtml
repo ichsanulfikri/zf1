@@ -1,0 +1,67 @@
+<head>
+
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+	
+	});
+	
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("Country");?></legend>
+                 <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/countrymaster/countrymasterlist/id/<?php echo $this->idCountry; ?>" method="post"  name= "myForm">
+               <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Country").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Country").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryName;?></td>
+                            <td ><?php echo $this->translate("Alias");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->Alias;?>
+                            	<?php echo $this->lobjCountrymasterForm->idCountry;?>
+                         		<?php echo $this->lobjCountrymasterForm->UpdDate;?>
+                           		<?php echo $this->lobjCountrymasterForm->UpdUser;?></td>
+                        </tr>
+                      	 <tr>
+                        	<td ><?php echo $this->translate("Country").' '.$this->translate("ISO");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryIso;?></td>
+                           <td ><?php echo $this->translate("Country").' '.$this->translate("ISO3");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryISO3;?></td>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Currency").' '.$this->translate("Name");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencyName;?></td>
+                            <td ><?php echo $this->translate("Currency").' '.$this->translate("Short").' '.$this->translate("Name");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencyShortName;?></td>
+                        </tr>
+                         <tr>
+                        	<td ><?php echo $this->translate("Currency").' '.$this->translate("Symbol");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencySymbol;?></td>
+                            <td ><?php echo $this->translate("Active");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->Active;?></td>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Default").' '.$this->translate("Language");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->DefaultLanguage;?></td>
+                            <td ><?php echo $this->translate("Country").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryCode;?></td>
+                        <tr>
+                        <tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjCountrymasterForm->Save;?>
+                           <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'countrymaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

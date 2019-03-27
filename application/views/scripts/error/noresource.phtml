@@ -1,0 +1,68 @@
+<div class="message error"><strong><?php echo $this->translate('An error occurred: Resource not found');?></strong>.</div>
+  
+<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url; ?>';" />
+ 
+ 
+ <?php if (isset($this->exception)): ?>
+<h3>Exception information:</h3>
+  <p>
+      <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+  </p>
+
+  <h3>Stack trace:</h3>
+  <pre><?php echo $this->exception->getTraceAsString() ?>
+  </pre>
+
+  <h3>Request Parameters:</h3>
+  <pre><?php echo var_export($this->request->getParams(), true) ?>
+  </pre>
+ <?php endif ?>
+  
+<?php 
+if( isset($this->admin) && $this->admin == true){
+?>
+<fieldset style="margin: 10px 0;">
+	<legend>Admin Option</legend>
+	<form method="post" action="/generalsetup/resource/add">
+		<table>
+			<tr>
+				<td>Module</td>
+				<td>:</td>
+				<td><input type="text" name="Module" value="<?php echo isset($this->route[1])?$this->route[1]:"";?>" /></td>
+			</tr>
+			<tr>
+				<td>Controller</td>
+				<td>:</td>
+				<td><input type="text" name="Controller" value="<?php echo isset($this->route[2])?$this->route[2]:"index";?>" /></td>
+			</tr>
+			<tr>
+				<td>Action</td>
+				<td>:</td>
+				<td><input type="text" name="Action" value="<?php echo isset($this->route[3])?$this->route[3]:"index";?>" /></td>
+			</tr>
+			<tr>
+				<td>Resource Name</td>
+				<td>:</td>
+				<td><input type="text" name="Name" /></td>
+			</tr>
+			
+			<tr>
+				<td>Route Name</td>
+				<td>:</td>
+				<td><input type="text" name="RouteName" /></td>
+			</tr>
+		</table>
+		
+		<br />
+		<input type="submit" value="Update Resource" />
+	</form>
+</fieldset>
+<?php 
+}
+?>
+
+
+
+
+
+

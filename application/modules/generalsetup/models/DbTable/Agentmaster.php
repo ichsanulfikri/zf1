@@ -1,0 +1,164 @@
+<?php
+class GeneralSetup_Model_DbTable_Agentmaster extends Zend_Db_Table { 	
+	protected $_name = 'tbl_agentmaster'; // table name
+	
+	/*
+	 * fetch all  Active Bank details
+	 */
+    public function fnGetAgentDetails() {
+    	
+		$select = $this->select()
+			->setIntegrityCheck(false)  	
+			->join(array('a' => 'tbl_agentmaster'),array('IdAgentMaster'))			
+			->where("Active = 1")
+			->order("a.AgentName")
+			->group("a.AgentName");
+		$result = $this->fetchAll($select);
+		
+		return $result->toArray();    	  
+    }
+
+    /*
+     * search method
+     */
+	public function fnSearchAgents($post = array()) {
+		    $db = Zend_Db_Table::getDefaultAdapter();
+		    $field7 = "Active = ".$post["field7"];
+		    $select = $this->select()
+			->setIntegrityCheck(false)  	
+			->join(array('a' => 'tbl_agentmaster'),array('a.IdAgentMaster '))
+			->join(array('b'=>'tbl_agentprogram'),'a.IdAgentMaster  = b.IdAgentMaster',array('b.IdAgentMaster as IdAgentMasterprogram'));
+		if(isset($post['field5']) && !empty($post['field5'])){
+				$select = $select->where("b.IdProgram = ?",$post['field5']);
+			}		
+		$select	->where("a.AgentName LIKE '%".$post['field3']."%'")
+			->where("a.Email  LIKE '%".$post['field2']."%'")
+			->where($field7)
+			->order("a.AgentName")
+			->group("a.AgentName");
+		$result = $this->fetchAll($select);
+		
+		return $result->toArray();
+	}
+	public function fnGetProgramList(){
+		$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+		$lstrSelect = $lobjDbAdpt->select()
+		 				 ->from(array("a"=>"tbl_program"),array("key"=>"a.IdProgram","value"=>"a.ProgramName"))
+		 				 ->where("a.Active = 1")
+		 				 ->order("a.ProgramName");
+		$larrResult = $lobjDbAdpt->fetchAll($lstrSelect);
+		return $larrResult;
+	}
+	/*public function fnGetAgentProgramList($IdAgentMaster){
+		$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+		$lstrSelect = $lobjDbAdpt->select()
+		 				 ->from(array("a"=>"tbl_program"),array("key"=>"a.IdProgram","value"=>"a.ProgramName"))
+		 				  ->join(array("b"=>"tbl_agentprogram"),"a.IdProgram = b.IdProgram")
+		 				 ->where('b.IdAgentMaster = ?',$IdAgentMaster)
+		 				 ->where("a.Active = 1");
+		$larrResult = $lobjDbAdpt->fetchAll($lstrSelect);
+		return $larrResult;
+	}*/
+	/*
+	 * add bank row
+	 */
+	public function fnAddAgentMaster($post) {	
+		$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();	
+		if($post['Country']== "") {
+				$post['Country']='0';
+		} 
+		if($post['State']== "") {
+				$post['State']='0';
+		} 
+		
+		$post['Phone'] = $post['Phonecountrycode']."-".$post['Phonestatecode']."-".$post['Phone'];
+		unset($post['Phonecountrycode']);
+		unset($post['Phonestatecode']);
+		
+		$post['Fax'] = $post['faxcountrycode']."-".$post['faxstatecode']."-".$post['Fax'];
+		unset($post['faxcountrycode']);
+		unset($post['faxstatecode']);
+		
+		$post['ContactPhone'] = $post['ContactPhonecountrycode']."-".$post['ContactPhonestatecode']."-".$post['ContactPhone'];
+		unset($post['ContactPhonecountrycode']);
+		unset($post['ContactPhonestatecode']);
+		
+		$post['ContactCell'] = $post['countrycode']."-".$post['ContactCell'];
+		unset($post['countrycode']);
+		unset($post['IdProgram']);
+						
+		$this->insert($post);
+		return $lobjDbAdpt->lastInsertId();
+	}
+	
+	public function fnaddAgentProgram($larrformData,$IdAgentMaster) { 
+		$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+		for($i = 0 ;$i<count($larrformData['IdProgram']); $i++) {
+		$lstrTable = "tbl_agentprogram";
+		$larrInsertData = array('IdAgentMaster' => $IdAgentMaster,
+								'IdProgram' => $larrformData["IdProgram"][$i],
+							   );
+		$lobjDbAdpt->insert($lstrTable,$larrInsertData);
+		}
+	}
+	
+	/*
+	 * fetch row by id 
+	 */
+    public function fnViewAgetMaster($lintIdAgentMaster) {
+    	$db = Zend_Db_Table::getDefaultAdapter();
+		$select = $db->select()
+				->from(array('a' => 'tbl_agentmaster'),array('a.*'))
+				->join(array("b"=>"tbl_agentprogram"),'a.IdAgentMaster = b.IdAgentMaster')
+				->where('a.IdAgentMaster = '.$lintIdAgentMaster);
+		$result = $db->fetchAll($select);	
+		return $result;
+    }
+	public function fndeleteAgentProgram($lintIdAgentMaster) { //Function for Delete Purchase order terms
+			$db = Zend_Db_Table::getDefaultAdapter();
+			$table = "tbl_agentprogram";
+	    	$where = $db->quoteInto("IdAgentMaster = $lintIdAgentMaster");
+			$db->delete($table, $where);
+	    }
+    
+    /*
+     * update bank row
+     */
+    
+     public function fnupdateCountrymaster($lintidCountry,$larrformData) { 
+     	
+    	$where = 'idCountry = '.$lintidCountry;
+		$this->update($larrformData,$where);
+		
+    } 
+    
+    public function fnUpdateAgentMaster($lintIdAgentMaster, $formData) {
+    	unset($formData['IdProgram']);
+    	$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();	
+    	if($formData['Country']== "") {
+				$post['Country']='0';
+		} 
+		if($formData['State']== "") {
+				$post['State']='0';
+		} 
+		
+		$formData['Phone'] = $formData['Phonecountrycode']."-".$formData['Phonestatecode']."-".$formData['Phone'];
+		unset($formData['Phonecountrycode']);
+		unset($formData['Phonestatecode']);
+		
+		$formData['Fax'] = $formData['faxcountrycode']."-".$formData['faxstatecode']."-".$formData['Fax'];
+		unset($formData['faxcountrycode']);
+		unset($formData['faxstatecode']);
+		
+		$formData['ContactPhone'] = $formData['ContactPhonecountrycode']."-".$formData['ContactPhonestatecode']."-".$formData['ContactPhone'];
+		unset($formData['ContactPhonecountrycode']);
+		unset($formData['ContactPhonestatecode']);
+		
+		$formData['ContactCell'] = $formData['countrycode']."-".$formData['ContactCell'];
+		unset($formData['countrycode']);
+		
+		$where = 'IdAgentMaster = '.$lintIdAgentMaster;
+		$this->update($formData,$where);
+		return $lobjDbAdpt->lastInsertId();
+    }
+}

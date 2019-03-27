@@ -1,0 +1,206 @@
+<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>
+<fieldset>
+	<legend><?php echo $this->translate("Academic Results");?></legend>
+		<form dojoType="dijit.form.Form" action="" method="POST"  name= "myform" id= "myform">
+			<script type="dojo/method" event="onSubmit">
+  				if (this.validate()) {
+				return true;
+				} else {
+				return false;}
+
+			</script>
+			<table class="table" width="100%" >
+				<tr>
+					<td align = "center"><?php echo $this->translate("To check Academic Results, please enter Student/Registration ID. ");?><span class="reqMark">*</span></td>
+				</tr>
+				<tr>
+					<td align = "center"><input type = "text" name = "registrationid" value = "" dojoType = "dijit.form.ValidationTextBox" required = "true"></td>
+				</tr>
+				<tr>
+                	<td colspan = "4" align = "right">
+                		<input type = "submit" name = "Save" value = "Save" dojotype="dijit.form.Button" class="NormalBtn" label="<?php echo $this->translate("Search"); ?>">
+						<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'default','controller'=>'index', 'action'=>'index'),'default',true);?>';" />
+                     </td>
+				</tr>
+			</table>
+		</form>
+</fieldset>
+<br/>
+<?php if(COUNT($this->sdudentresults) > 0) {?>
+<fieldset>
+<legend><?php echo $this->translate("Academic Results");?></legend>
+<br/>
+		<table class="table" width="100%" >
+			<?php foreach ($this->sdudentresults as $lobjStudentName ): ?>
+			<?php endforeach; ?>
+				<tr>
+					<td><b><?php echo $this->translate("Student Name");?><b></td>
+					<td><?php print_r($this->escape($lobjStudentName['FName'].' '.$lobjStudentName['MName'].' '.$lobjStudentName['LName']));?></td>
+					<td><b><?php echo $this->translate("Student/Registration Id");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['registrationId']);?></td>
+					<td><b><?php echo $this->translate("Program Name");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['ProgramName']);?></td>
+				</tr>
+
+		</table>
+<br/>
+		<table class="table" width="100%" >
+			<tr>
+				<th><?php echo $this->translate("Subject Name");?></th>
+				<th><?php echo $this->translate("Subject Code");?></th>
+				<th><?php echo $this->translate("Marks Obtained");?></th>
+				<th><?php echo $this->translate("Grade Description");?></th>
+				<th><?php echo $this->translate("Pass/Fail");?></th>
+				<th><?php echo $this->translate("Appeal");?></th>
+			</tr>
+			<?php foreach ($this->sdudentresults as $lobjStudentResults ): ?>
+				<tr>
+					<td><?php echo $this->escape($lobjStudentResults['SubjectName']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['SubCode']);?></td>
+
+					<?php if($lobjStudentResults['IdAppeal']) { ?>
+						<?php switch($this->markdentrytype) {
+							case 0: ?>
+									<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+									<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+									<?php break; ?>
+							<?php case 1: ?>
+									<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['subjectmarks'] || $lobjStudentResults['NewMarks'] < $lobjStudentResults['verifiresubjectmarks']) { ?>
+										<?php if(!$lobjStudentResults['idverifier']) { ?>
+											<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['subjectmarks']) { ?>
+												<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+											<?php } else { ?>
+												<?php $lobjmarks= $lobjStudentResults['subjectmarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['subjectmarks']);?></td>
+											<?php } ?>
+										<?php } else {  ?>
+											<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['verifiresubjectmarks']) { ?>
+												<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+											<?php } else { ?>
+												<?php $lobjmarks= $lobjStudentResults['verifiresubjectmarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['verifiresubjectmarks']);?></td>
+											<?php } ?>
+										<?php } ?>
+									<?php } else { ?>
+										<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+										<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+									<?php } ?>
+
+									<?php break; ?>
+							<?php case 2: ?>
+									<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['subjectmarks'] || $lobjStudentResults['NewMarks'] < $lobjStudentResults['verifiresubjectmarks']) { ?>
+										<?php if(!$lobjStudentResults['idverifier']) { ?>
+											<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['subjectmarks']) { ?>
+												<?php $lobjmarks= $lobjStudentResults['subjectmarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['subjectmarks']);?></td>
+											<?php } else { ?>
+												<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+											<?php } ?>
+										<?php } else {  ?>
+											<?php if($lobjStudentResults['NewMarks'] < $lobjStudentResults['verifiresubjectmarks']) { ?>
+												<?php $lobjmarks= $lobjStudentResults['verifiresubjectmarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['verifiresubjectmarks']);?></td>
+											<?php } else { ?>
+												<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+												<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+											<?php } ?>
+										<?php } ?>
+									<?php } else { ?>
+										<?php $lobjmarks= $lobjStudentResults['NewMarks'];?>
+										<td><?php echo $this->escape($lobjStudentResults['NewMarks']);?></td>
+									<?php } ?>
+									<?php break; ?>
+							<?php default: ?>
+									<?php echo "";?>
+						<?php } ?>
+
+
+						<?php
+	     					$consistantresult = 'SELECT MAX(i.EffectiveDate)  from tbl_gradesetup i where i.MinPoint <= '.$lobjmarks.' AND  i.MaxPoint >= '.$lobjmarks.' AND  i.IdSubject = '.$lobjStudentResults['IdSubject'].' AND  i.IdProgram = '.$lobjStudentResults['IdProgram'].' AND  i.IdSemester = '.$lobjStudentResults['IdSemestersyllabus'].' ';
+							$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+							$lstrSelect = $lobjDbAdpt->select()
+		    	   							->from(array("a" => "tbl_gradesetup"),array("a.*"))
+		    	   							->where("a.MinPoint <= ?",$lobjmarks)
+		    	   							->where("a.MaxPoint >= ?",$lobjmarks)
+		    	   							->where('a.IdSubject = ?',$lobjStudentResults['IdSubject'])
+		    	   							->where('a.IdProgram = ?',$lobjStudentResults['IdProgram'])
+		    	   							->where('a.IdSemester = ?',$lobjStudentResults['IdSemestersyllabus'])
+		    	   							->where("a.EffectiveDate = ?",new Zend_Db_Expr('('.$consistantresult.')'));
+							$larrResult = $lobjDbAdpt->fetchRow($lstrSelect);
+						?>
+						<td><?php echo $larrResult['GradeDesc'];?></td>
+						<?php if($larrResult['Pass'] == 0) { ?>
+							<td><?php echo "Fail";?></td>
+						<?php } elseif($larrResult['Pass'] == 1) {?>
+							<td><?php echo "Pass";?></td>
+						<?php } ?>
+					<?php } else { ?>
+						<?php if($lobjStudentResults['Verification'] == 1) { ?>
+							<td><?php echo $this->escape($lobjStudentResults['verifiresubjectmarks']);?></td>
+							<?php
+	     						$consistantresult = 'SELECT MAX(i.EffectiveDate)  from tbl_gradesetup i where i.MinPoint <= '.$lobjStudentResults['verifiresubjectmarks'].' AND  i.MaxPoint >= '.$lobjStudentResults['verifiresubjectmarks'].' AND  i.IdSubject = '.$lobjStudentResults['IdSubject'].' AND  i.IdProgram = '.$lobjStudentResults['IdProgram'].' AND  i.IdSemester = '.$lobjStudentResults['IdSemestersyllabus'].' ';
+								$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+								$lstrSelect = $lobjDbAdpt->select()
+		    	   							->from(array("a" => "tbl_gradesetup"),array("a.*"))
+		    	   							->where("a.MinPoint <= ?",$lobjStudentResults['verifiresubjectmarks'])
+		    	   							->where("a.MaxPoint >= ?",$lobjStudentResults['verifiresubjectmarks'])
+		    	   							->where('a.IdSubject = ?',$lobjStudentResults['IdSubject'])
+		    	   							->where('a.IdProgram = ?',$lobjStudentResults['IdProgram'])
+		    	   							->where('a.IdSemester = ?',$lobjStudentResults['IdSemestersyllabus'])
+		    	   							->where("a.EffectiveDate = ?",new Zend_Db_Expr('('.$consistantresult.')'));
+								$larrResult = $lobjDbAdpt->fetchRow($lstrSelect);
+							?>
+							<td><?php echo $larrResult['GradeDesc'];?></td>
+							<?php if($larrResult['Pass'] == 0) { ?>
+								<td><?php echo "Fail";?></td>
+							<?php } elseif($larrResult['Pass'] == 1) {?>
+								<td><?php echo "Pass";?></td>
+							<?php } ?>
+						<?php } elseif($lobjStudentResults['Verification'] == 0) { ?>
+							<td><?php echo $this->escape($lobjStudentResults['subjectmarks']);?></td>
+
+							<?php
+
+	     						$consistantresult = 'SELECT MAX(i.EffectiveDate)  from tbl_gradesetup i where i.MinPoint <= '.$lobjStudentResults['subjectmarks'].' AND  i.MaxPoint >= '.$lobjStudentResults['subjectmarks'].' AND  i.IdSubject = '.$lobjStudentResults['IdSubject'].' AND  i.IdProgram = '.$lobjStudentResults['IdProgram'].' AND  i.IdSemester = '.$lobjStudentResults['IdSemestersyllabus'].' ';
+
+								$lobjDbAdpt = Zend_Db_Table::getDefaultAdapter();
+								$lstrSelect = $lobjDbAdpt->select()
+		    	   							->from(array("a" => "tbl_gradesetup"),array("a.*"))
+		    	   							->where("a.MinPoint <= ?",$lobjStudentResults['subjectmarks'])
+		    	   							->where("a.MaxPoint >= ?",$lobjStudentResults['subjectmarks'])
+		    	   							->where('a.IdSubject = ?',$lobjStudentResults['IdSubject'])
+		    	   							->where('a.IdProgram = ?',$lobjStudentResults['IdProgram'])
+		    	   							->where('a.IdSemester = ?',$lobjStudentResults['IdSemestersyllabus'])
+		    	   							->where("a.EffectiveDate = ?",new Zend_Db_Expr('('.$consistantresult.')'));
+								$larrResult = $lobjDbAdpt->fetchRow($lstrSelect);
+							?>
+							<td><?php echo $larrResult['GradeDesc'];?></td>
+							<?php if($larrResult['Pass'] == 0) { ?>
+								<td><?php echo "Fail";?></td>
+							<?php } elseif($larrResult['Pass'] == 1) {?>
+								<td><?php echo "Pass";?></td>
+							<?php } ?>
+						<?php }?>
+					<?php } ?>
+
+					<td>
+					<a href="<?php echo $this->url(array('controller'=>'academicresult','action'=>'appeallist' ,'subjid'=>$lobjStudentResults['IdSubject'] , 'subjmarks'=>$lobjStudentResults['subjectmarks'],'subjname'=>$lobjStudentResults['SubjectName'],'registrationId'=>$lobjStudentResults['IdStudentRegistration'],'applicationId'=>$lobjStudentResults['IdApplication'],'programid'=>$lobjStudentResults['IDCourse']),'default',true);?>" >Appeal</a>
+					</td>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+</fieldset>
+<?php } else { ?>
+		<table class="table" width="100%">
+			<tr >
+				<th ><?php echo $this->noresults;?></th>
+			</tr>
+		</table>
+<?php } ?>

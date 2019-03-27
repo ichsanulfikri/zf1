@@ -1,0 +1,157 @@
+<script>
+var rowid = <?php echo count($this->subjectdetailslist);?>+1;
+var subjArray  = new Array();
+<?php
+		if($this->subjectdetailslist){
+			foreach($this->subjectdetailslist as $subjectdetails) { ?>		
+			subjArray.push('<?php echo $subjectdetails['SubjectDetailId']?>');
+			<?php
+			}
+		}?>
+
+function addsubjectdetails() {
+	var flag = true;
+	if(dijit.byId("CourseDetailCode").value==''){
+	    dijit.byId("CourseDetailCode").attr('required','true');
+		dijit.byId("CourseDetailCode").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("CourseDetailDescription").value==''){
+	    dijit.byId("CourseDetailDescription").attr('required','true');
+		dijit.byId("CourseDetailDescription").focus();
+		flag = false;
+	}
+
+	if(flag) {
+		insertsubjectdetails();
+	}
+}
+
+function insertsubjectdetails() {
+	var CourseDetailCode = dijit.byId("CourseDetailCode").value;
+	var CourseDetailDescription = dijit.byId("CourseDetailDescription").value;
+
+	subjArray.push(CourseDetailCode);
+
+	if(arrHasDupes(subjArray))
+	{
+		subjArray = subjArray.unique();
+		alert("Duplicate Entry");
+
+	} 
+	else {
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);
+		var tcol3=trow.insertCell(2);
+		
+		tcol1.innerHTML= "<input type='hidden' value='"+CourseDetailCode+"' name=SubjectDetailId[]>"+CourseDetailCode;
+		tcol2.innerHTML= "<input type='hidden' value='"+CourseDetailDescription+"' name=SubjectDetailDesc[]>"+CourseDetailDescription;
+		tcol3.innerHTML="<a href='#' onClick='deleteRowBefore(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=1 width='16' height='16'></a>";
+		rowid++;
+	}
+	
+}
+
+function deleteRowBefore(r){
+	rowid--;
+	subjArray.splice(parseInt(i-1),1);
+	var i=r.parentNode.parentNode.rowIndex;	
+	document.getElementById('hor').deleteRow(i);
+	subjArray.pop();
+
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+Array.prototype.unique = function () {
+    var r = new Array();
+    o:for(var i = 0, n = this.length; i < n; i++)
+    {
+        for(var x = 0, y = r.length; x < y; x++)
+        {
+                if(r[x]==this[i])
+                {
+                	continue o;
+                }
+                
+        }
+        r[r.length] = this[i];
+    }
+    return r;
+}
+
+
+
+
+</script>
+<fieldset><legend><?php echo $this->translate("$this->Subject").' '.$this->translate("details");?></legend>
+<Form dojoType="dijit.form.Form" id="myForm" action="" method="post" name="myForm">
+<script type="dojo/method" event="onSubmit" >
+               if (this.validate() || (flag==1)) {
+                   return true;
+                 } else {
+                   return false;
+ 	           }
+</script>
+<table class="table" width="100%">
+	<tr>
+		<th colspan="4"><?php echo $this->translate("Course Details").' '.$this->translate("$this->Subject");?></th>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("$this->Subject").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->subname;?></td>
+		<td><?php echo $this->translate("$this->Subject").' '.$this->translate("code");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->subcode;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Course").' '.$this->translate("Code").' '.$this->translate("Details");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->CourseDetailCode;?></td>
+		<td><?php echo $this->translate("Course").' '.$this->translate("Name").' '.$this->translate("Details");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->CourseDetailDescription;?> <?php echo $this->lobjform->IdSubject; ?></td>
+   </tr>
+</table>
+<table class="table" width="100%">
+      <tr>
+	    <td align="right"><?php echo $this->lobjform->Add;?>
+		<?php echo $this->lobjform->Clear;?></td>
+	</tr>
+</table>
+<table id="hor" class="table" width="100%" cellpadding="5"	cellspacing="1">
+	<tr>
+		<th><?php echo $this->translate("Course").' '.$this->translate("Code Details")?></th>
+		<th><?php echo $this->translate("Course").' '.$this->translate("Name Details")?></th>
+		<th><?php echo $this->translate("Delete")?></th>
+	</tr>
+	<?php foreach($this->subjectdetailslist as $subjectdetails) {?>
+	       			<tr>
+	       				<td><?php echo $subjectdetails['SubjectDetailId'];?><input type='hidden' value='<?php echo $subjectdetails['SubjectDetailId']; ?>' name=SubjectDetailId[]></td>
+	       				<td><?php echo $subjectdetails['SubjectDetailDesc'];?><input type='hidden' value='<?php echo $subjectdetails['SubjectDetailDesc'];?>' name=SubjectDetailDesc[]></td>
+	       				<td><a href='#' onClick='deleteRowBefore(this); return false;';><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+	       			</tr>
+	  <?php }?>
+	
+</table>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<td align="right" colspan="4"><?php echo $this->lobjform->Save;?>
+                           <input type='button' class="NormalBtn"
+			dojotype="dijit.form.Button"
+			label="<?php echo $this->translate('Back')?>" value='click'
+			onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectdetails', 'action'=>'index'),'default',true);?>';" />
+		</td>
+	</tr>
+</table>
+</Form>
+</fieldset>

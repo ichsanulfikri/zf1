@@ -1,0 +1,183 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+	fnSetCompany(<?php echo $this->typeSponsor;?>);
+	});
+
+
+function fnGetCountryStateList(idCountry){ 
+	
+	if(idCountry)
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown('State',data);  
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("City",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+	var options = {
+				label:"name",
+				identifier:"key",
+				items:JSONText
+			  };
+	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+function fnSetCompany(val){	
+	if(val == 1){
+		document.getElementById('tdorgnames').style.display = "block";
+		document.getElementById('tdorgnamestext').style.display = "block";
+		document.getElementById('spanid1').style.display = "block";
+		document.getElementById('tdurl').style.display = "block";		
+		document.getElementById('tdurltext').style.display = "block";
+		document.getElementById('midname').style.display = "none";		
+		document.getElementById('midnametext').style.display = "none";
+		document.getElementById('spanid2').style.display = "none";
+
+		document.getElementById('midgender').style.display = "none";
+		document.getElementById('midgenderf').style.display = "none";
+
+		//document.getElementById('trnames').style.display = "none";
+		document.getElementById('trnames1').style.display = "none";
+		document.getElementById('trnames2').style.display = "none";
+		document.getElementById('trnames3').style.display = "none";
+		document.getElementById('trnames4').style.display = "none";
+	}
+	else if(val == 0){
+		document.getElementById('tdorgnames').style.display = "none";
+		document.getElementById('tdorgnamestext').style.display = "none";
+		document.getElementById('spanid1').style.display = "none";
+		document.getElementById('tdurl').style.display = "none";
+		document.getElementById('tdurltext').style.display = "none";
+		document.getElementById('midname').style.display = "block";		
+		document.getElementById('midnametext').style.display = "block";
+		document.getElementById('spanid2').style.display = "block";
+
+		document.getElementById('midgender').style.display = "block";
+		document.getElementById('midgenderf').style.display = "block";
+		
+
+		//document.getElementById('trnames').style.display = "block";
+		document.getElementById('trnames1').style.display = "block";
+		document.getElementById('trnames2').style.display = "block";
+		document.getElementById('trnames3').style.display = "block";
+		document.getElementById('trnames4').style.display = "block";
+	}
+	
+}
+</script>
+<fieldset>
+	<legend><?php echo $this->translate->_("Sponsor");?></legend>
+	<div class="register">
+	<div class="profile_tab">
+
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php echo $this->lobjsponsorform->UpdDate;?>
+		<?php echo $this->lobjsponsorform->UpdUser;?>
+	<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->lobjsponsorform->idsponsor;?><?php echo $this->translate("Sponsor").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td width="20%"><?php echo $this->translate("Type").' '.$this->translate("Of").' '.$this->translate("Sponsor");?><span class="reqMark">*</span></td>
+				<td width="30%"><?php echo $this->lobjsponsorform->typeSponsor;?></td>
+				<td width="20%"> <span id="tdorgnames" style="display:none"><?php echo $this->translate("Organisation").' '.$this->translate("Name");?><span class="reqMark">*</span></span></td>
+				<td width="30%"><span id="tdorgnamestext" style="display:none"><?php echo $this->lobjsponsorform->Organisation;?></span></td>
+				
+			</tr>
+			<tr>
+				<th colspan = "4"><span id="spanid1" style="display:none"><?php echo $this->translate("Contact").' '.$this->translate("Person").' '.$this->translate("Details");?>&nbsp;</span><span id="spanid2" style="display:block"><?php echo $this->translate("Personal").' '.$this->translate("Details");?></span></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("First").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjsponsorform->fName;?></td>
+				<td><span id="midname" ><?php echo $this->translate("Middle").' '.$this->translate("Name");?></span></td>
+				<td><span id="midnametext" ><?php echo $this->lobjsponsorform->mName ;?></span></td>
+			</tr>
+			<tr id="trnames">
+				<td><span id="trnames1"><?php echo $this->translate("Last").' '.$this->translate("Name");?></span></td>
+				<td><span id="trnames2"><?php echo $this->lobjsponsorform->lName;?></span></td>
+				<td><span id="trnames3"><?php echo $this->translate("Date").' '.$this->translate("of").' '.$this->translate("Birth");?></span></td>
+				<td><span id="trnames4"><?php echo $this->lobjsponsorform->DOB;?></span></td>
+			</tr>				
+			<tr>
+				<td><span id="midgender" ><?php echo $this->translate("Gender");?></span><span id="tdurl" style="display:none"><?php echo $this->translate("URL");?></span></td>
+				<td><span id="midgenderf" ><?php echo $this->lobjsponsorform->gender;?></span><span id="tdurltext" style="display:none"><?php echo $this->lobjsponsorform->url;?></span></td>
+				<td><?php echo $this->translate("Address").' '.$this->translate("1");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjsponsorform->Add1;?></td>					
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Address").' '.$this->translate("2");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->Add2;?></td>
+				<td><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>						
+				<td><?php echo $this->lobjsponsorform->Country;?></td>								
+			</tr>				
+			<tr>
+				<td><?php echo $this->translate("State");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjsponsorform->State;?></td>
+				<td><?php echo $this->translate("City");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjsponsorform->City;?></td>
+			</tr>								
+			<tr>
+				<td><?php echo $this->translate("Zip").' '.$this->translate("Code");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->zipCode;?></td>
+				<td><?php echo $this->translate("Home").' '.$this->translate("Phone");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->HomePhonecountrycode;?><?php echo $this->lobjsponsorform->HomePhonestatecode;?><?php echo $this->lobjsponsorform->HomePhone;?></td>
+			</tr>									
+			<tr>
+				<td><?php echo $this->translate("Work").' '.$this->translate("Phone");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->WorkPhonecountrycode;?><?php echo $this->lobjsponsorform->WorkPhonestatecode;?><?php echo $this->lobjsponsorform->WorkPhone;?></td>
+				<td><?php echo $this->translate("Cell").' '.$this->translate("Phone");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->CellPhonecountrycode;?><?php echo $this->lobjsponsorform->CellPhone;?></td>
+			</tr>				
+			<tr>
+				<td><?php echo $this->translate("Fax");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->Faxcountrycode;?><?php echo $this->lobjsponsorform->Faxstatecode;?><?php echo $this->lobjsponsorform->Fax;?></td>
+				<td><?php echo $this->translate("Email");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjsponsorform->Email;?></td>					
+			</tr>				
+			<tr>
+				<td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+				<td><?php echo $this->lobjsponsorform->Active;?></td>
+				<td></td>
+				<td></td>								
+			</tr>		
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjsponsorform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'sponsor', 'action'=>'index'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+	</div>
+	</div>
+</fieldset>		

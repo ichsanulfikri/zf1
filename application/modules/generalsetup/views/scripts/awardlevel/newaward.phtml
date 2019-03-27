@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang;?>" lang="<?php echo $this->lang;?>" dir="<?php echo $this->rtl;?>">
+<head>	
+</head>
+<body class = "claro">
+	<fieldset>
+		<legend><?php echo $this->translate("New Award Level");?></legend>
+		<div class="register">
+			<div class="profile_tab">
+				<form dojoType="dijit.form.Form" action="" method="POST"  name= "myform" id= "myform">
+				<script type="dojo/method" event="onSubmit">
+  					if (this.validate()) {
+						return duplicate();
+						//return true;
+					} else {
+						return false;
+					}
+				</script>
+					 <table class="table" width="100%"  border="1">
+						<tr>
+							<td style="width:150px"><?php echo $this->translate("Definition")." ".$this->translate("Code");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjNewawardform->DefinitionCode;?>
+								<?php echo $this->lobjNewawardform->idDefType;?>
+								<br/><span id="errDefDesc"></span>
+							</td>							
+							
+							<td style="width:150px"><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjNewawardform->Status;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:150px"><?php echo $this->translate("Definition")." ".$this->translate("Description");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?> colspan="3">
+								<?php echo $this->lobjNewawardform->DefinitionDesc;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:150px"><?php echo $this->defaultlanguage ;?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjNewawardform->BahasaIndonesia;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+							<td style="width:150px"><?php echo $this->translate("Description");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjNewawardform->Description;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+                               <td colspan="3"></td>   
+                            <td align = "center" ><?php echo $this->lobjNewawardform->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'awardlevel', 'action'=>'index'),'default',true);?>';" />	
+                           </td> 
+                               
+                        </tr>	
+					</table>
+                
+					
+				</form>
+			</div>
+		</div>
+	</fieldset>
+</body>

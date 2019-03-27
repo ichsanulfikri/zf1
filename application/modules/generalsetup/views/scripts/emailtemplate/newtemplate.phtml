@@ -1,0 +1,91 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){			
+	dijit.byId("TemplateName").focus();
+	dijit.byId('idDefinition').set('value','');
+	dijit.byId('idDefinition').set('placeHolder','Select'); 
+});
+function fnValidate(){
+	var ScheduleName = dojo.byId("ScheduleName");
+	
+}
+</script>
+<fieldset>
+    <legend><?php echo $this->translate("Email")." ".$this->translate("Template");?> </legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="<?php echo $this->baseUrl();?>/generalsetup	/emailtemplate/newtemplate">
+<script type="dojo/method" event="onSubmit" >
+				if (dojo.byId('content') != null)
+			 {
+				var content = dijit.byId('content').attr('value');
+		 	    dijit.byId("content1").set('value',content);
+			 }
+
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+</script>
+
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    	<tr>
+        	<th><?php echo $this->translate("Email")." ".$this->translate("Template")." ".$this->translate("Details");?></th>
+            <th></th>
+            <th></th>
+            <th></th>
+       	</tr>
+        <?php echo $this->form->UpdDate;?>
+        <?php echo $this->form->UpdUser;?>
+		<tr>
+        	<td class="label"><?php echo $this->translate("Template")." ".$this->translate("Name");?><span class="reqMark">*</span></td>
+            <td><?php  echo $this->form->TemplateName;?></td>
+            <td class="label"><?php echo $this->translate("Template")." ".$this->translate("From")." ".$this->translate("Description");?> <span class="reqMark"></span></td>
+            <td ><?php echo $this->form->TemplateFromDesc;?></td>
+        </tr>
+        <tr>
+        	<td class="label"><?php echo $this->translate("Template")." ".$this->translate("From");?><span class="reqMark">*</span></td>
+            <td><?php echo $this->form->TemplateFrom;?></td>
+            <td class="label"><?php echo $this->translate("Template")." ".$this->translate("Subject");?><span class="reqMark"></span></td>
+            <td ><?php echo $this->form->TemplateSubject;?></td>
+        </tr>
+		<tr> 
+			<td class="label"><?php echo $this->translate("Template")." ".$this->translate("Header");?><span class="reqMark"></span></td>
+            <td ><?php echo $this->form->TemplateHeader;?></td>
+            <td class="label"><?php echo $this->translate("Template")." ".$this->translate("Footer");?><span class="reqMark"></span></td>
+            <td><?php  echo $this->form->TemplateFooter;?></td>
+        </tr>
+		<tr>       
+ 			<td class="label"><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+            <td><?php echo $this->form->Deleteflag;?></td>   
+            <td ><?php echo $this->translate("Module")." ".$this->translate("Name");?><span class="reqMark">*</span></td>   
+            <td ><?php echo $this->form->idDefinition;?></td>                                                      
+        </tr>
+	</table>
+	
+
+    <table width="100%">
+    		<script type="text/javascript">
+			dojo.require("dijit._editor.plugins.FontChoice");
+			dojo.require("dojox.editor.plugins.LocalImage");
+			if (dojo.byId('content') != null)
+			 {
+				var content = dijit.byId('content').attr('value');
+				alert(content);
+			 }
+
+	</script>
+	<input dojoType = "dijit.form.TextBox" type="hidden" name="content1"  id = "content1">                                    
+	<td dojoType="dijit.Editor" id="content" extraPlugins="['fontName', 'fontSize', 'formatBlock']"></td>
+
+
+    </table> 
+    
+	<table align = "right">
+		<tr>
+        	<td>
+					<?php echo $this->form->Save;?>
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'emailtemplate', 'action'=>'index'),'default',true);?>';" />	
+            </td>
+        </tr>
+    </table>
+    </form>
+</fieldset>

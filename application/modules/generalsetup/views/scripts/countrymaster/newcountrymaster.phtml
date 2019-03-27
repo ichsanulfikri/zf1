@@ -1,0 +1,116 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+		dijit.byId('DefaultLanguage').set('value','');
+		dijit.byId('DefaultLanguage').set('placeHolder','Select');
+	});
+
+
+
+function validateUsername( value, constraint )
+{
+	
+// I believe the whole reason you have to hack at control to get it to 
+// display an error is due to the nature of the xhrGet call. Since the
+// call is being made asychronously, the method would have already
+// returned a result to the html control before query has finished.
+// Therefore you have to do the extra method calls below. Also note
+// that when the form goes for submission, it calls each controls validator
+// method again! Meaning it will query the webpage again.
+var loginID = dijit.byId( "CountryName" );
+
+var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+if( "" == loginID.value ) {
+    // for some required=true is not kicking in, so we are forcing it.
+    bNoNameFound = false;
+}
+else {      
+    if( false == loginID._focused ) {
+        console.log( "Checking username..." );
+        dojo.xhrGet({
+            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/countrymaster/getcountryname/ContryName/"+value,
+            handleAs: 'text',
+            content: { l: value},
+            timeout: 10000, 
+            load: function( data ) {
+                if ( data ) {
+                    // setting the state to error since the username is already taken
+                    bNoNameFound = false;
+                    loginID.set( "state", "Error" );
+                    loginID.displayMessage( "The Country is already taken..." );
+                    // used to change the style of the control to represent a error
+                    loginID._setStateClass();
+                    console.log( "Invalid username" ); 
+                }
+                else
+                {
+                    bNoNameFound = true;
+                    loginID.set( "state", "" );
+                    loginID.displayMessage( "" );
+                }
+            }
+        });
+    }
+}
+
+return bNoNameFound;
+}
+</script> 
+ <fieldset>
+    <legend><?php echo $this->translate("Country");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/countrymaster/newcountrymaster" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Country").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Country").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryName;?></td>
+                            <td ><?php echo $this->translate("Alias");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->Alias;?>
+                         		<?php echo $this->lobjCountrymasterForm->UpdDate;?>
+                           		<?php echo $this->lobjCountrymasterForm->UpdUser;?></td>
+                        </tr>
+                      	 <tr>
+                        	<td ><?php echo $this->translate("Country").' '.$this->translate("ISO");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryIso;?></td>
+                           <td ><?php echo $this->translate("Country").' '.$this->translate("ISO3");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryISO3;?></td>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Currency").' '.$this->translate("Name");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencyName;?></td>
+                            <td ><?php echo $this->translate("Currency").' '.$this->translate("Short").' '.$this->translate("Name");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencyShortName;?></td>
+                        </tr>
+                         <tr>
+                        	<td ><?php echo $this->translate("Currency").' '.$this->translate("Symbol");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CurrencySymbol;?></td>
+                            <td ><?php echo $this->translate("Active");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->Active;?></td>
+                        <tr>
+                        	<td ><?php echo $this->translate("Default").' '.$this->translate("Language");?></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->DefaultLanguage;?></td>
+                            <td ><?php echo $this->translate("Country").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjCountrymasterForm->CountryCode;?></td>
+                        <tr>
+                        
+                        </tr>
+                        <tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjCountrymasterForm->Save;?>
+                           <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'countrymaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

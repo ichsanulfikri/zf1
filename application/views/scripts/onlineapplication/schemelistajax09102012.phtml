@@ -1,0 +1,7 @@
+<select id="scheme_<?php echo $this->intake;?>" class="" style="width:200px;" name="scheme_<?php echo $this->intake?>">
+  <option value=''>select</option>
+<?php foreach($this->scheme as $scheme){?>
+  <option value='<?php echo $scheme['IdScheme'];?>'><?php echo $scheme['EnglishDescription']; ?></option>
+  <?php } ?>
+</select>
+<?php exit; ?>

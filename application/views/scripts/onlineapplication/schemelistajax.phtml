@@ -1,0 +1,9 @@
+<select id="scheme_<?php echo $this->intake;?>" class="" style="width:200px;" name="scheme_<?php echo $this->intake?>">
+<?php if(count($this->scheme) > 1 || count($this->scheme) == 0){?>
+  <option value=''>select</option>
+  <?php }?>
+<?php foreach($this->scheme as $scheme){?>
+  <option value='<?php echo $scheme['IdScheme'];?>'><?php echo $scheme['EnglishDescription']; ?></option>
+  <?php } ?>
+</select>
+<?php exit; ?>

@@ -1,0 +1,76 @@
+<div id="searchDiv">
+<fieldset>
+<legend><?php echo $this->translate("Email Template").' '.$this->translate("Search");?></legend>
+<div class="search" style="margin-left:20px;">
+
+<form dojoType="dijit.form.Form"  id="searchform" name="searchform" method="post" action="<?php echo $this->baseUrl();?>/generalsetup/emailtemplate/index/search/1">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+	<table width="100%">
+    <tr>
+    	<td><?php echo $this->translate("Template").' '.$this->translate("Name");?></td>
+     	<td><?php echo $this->form->field3;?></td>
+     	<td><?php echo $this->translate('From');?></td>
+     	<td><?php echo $this->form->field2;?></td>
+    </tr>
+    <tr>
+     	<td><?php echo $this->translate('Header');?></td>
+     	<td ><?php echo $this->form->field4;?></td>
+     	<td><?php echo $this->translate('Footer');?></td>
+     	<td><?php echo $this->form->field6;?></td>
+    </tr>      
+    <tr>
+     	<td class = "label"><?php echo $this->translate('Active');?></td>
+     	<td ><?php echo $this->form->field7;?></td>
+    </tr>     
+    <tr>
+    	<td colspan="4" align="center">
+		    	<?php echo $this->form->Search;?>
+				<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'emailtemplate', 'action'=>'newtemplate'),'default',true);?>';" />	
+		        <input name="Clear" type="submit" class="NormalBtn"  dojoType=dijit.form.Button label=<?php echo $this->translate("Clear") ?> value=<?php echo $this->translate("Clear") ?>>                   
+        </td>
+	</tr>
+	</table>
+</form>	
+</div>
+</fieldset> 
+</div>      
+ 
+<fieldset>
+
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    <tr>
+        <th><?php echo $this->translate("Template").' '.$this->translate("Name");?></th>
+        <th><?php echo $this->translate('From');?></td>
+        <th><?php echo $this->translate('Header');?></td>
+        <th><?php echo $this->translate('Footer');?></th>
+    </tr>
+        <?php if (count($this->paginator)): ?>
+        <?php foreach ($this->paginator as $emailTemplate ): ?>
+    <tr>
+        <td>
+        	<a href="<?php echo $this->baseUrl();?>/generalsetup/emailtemplate/edittemplate/id/<?php echo $this->escape($emailTemplate['idTemplate']);?>" rel="lyteframe" 
+   				rev="width: 840px; height: 610px; scrolling = "auto"><?php echo $this->escape($emailTemplate['TemplateName']);?>
+   			</a>
+   		</td>
+    	<td><?php echo $this->escape($emailTemplate['TemplateFrom']);?></td>
+    	<td><?php echo $this->escape($emailTemplate['TemplateHeader']);?></td>
+    	<td><?php echo $this->escape($emailTemplate['TemplateFooter']);?></td>    
+        <?php endforeach; ?>
+        <?php endif; ?>
+    </tr>
+    <tr>
+        <td colspan="8" align="right">
+        	<div class="pagination">
+        		<?php echo $this->paginationControl($this->paginator,'Sliding',
+        			'/partials/my_pagination_control.phtml'); ?>
+         	</div>
+    	</td>
+    </tr>
+</table>
+</fieldset>         

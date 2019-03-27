@@ -1,0 +1,20 @@
+<style type="text/css">
+
+
+
+</style>
+
+<div id="footer-boxes">
+<?php
+	foreach ($this->moduleList as $module):
+	
+?>		
+	<a href="<?php echo $this->url(array('module'=>$module['module'],'controller'=>$module['controller'], 'action'=>$module['action']),'default',true); ?>" class="footer-box">
+		<h5><?php echo $this->translate($module['label']); ?></h5>
+		<p><i><?php echo $this->translate($module['title']); ?></i></p>
+	</a>
+<?php 
+	endforeach;
+?>
+</div>
+<div style="clear: both;">&nbsp;</div>

@@ -1,0 +1,56 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field3').focus();	
+	});
+</script>
+</head>
+<body class="claro">
+	<fieldset>
+	<legend><?php echo $this->translate($this->Program).' '.$this->translate("Search");?></legend>
+                    <form action="<?php echo $this->baseUrl();?>/generalsetup/landscape/index/search/1" method="POST">
+                            <table width="100%">
+                                <tr>
+                                    <td><?php echo $this->translate("$this->Course").' '.$this->translate("Name");?></td>
+                                    <td><?php echo $this->lobjform->field3;?></td>
+                                    <td></td>
+                                    <td></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "center" colspan = "4">
+
+											<?php echo $this->lobjform->Search;?>	
+											<?php echo $this->lobjform->Clear;?>
+								</td>
+							    
+                                </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate($this->Program).' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Short").' '.$this->translate("Name");?></th>
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjlandscape): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/landscape/addlandscape/id/<?php echo $this->escape($lobjlandscape['IdProgram']);?>" ><?php print_r($this->escape($lobjlandscape['ProgramName']));?></a></td>
+	        	<td><?php print_r($this->escape($lobjlandscape['ShortName']));?></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+		</table>
+	</fieldset>
+</body>
+</html>

@@ -1,0 +1,55 @@
+<head>
+
+<script type="text/javascript">
+dojo.require("dijit.form.TimeTextBox");
+dojo.addOnLoad(function(){
+	});
+	
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate->_("Sponsor").' '.$this->translate->_("Template");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/sponsortemplate/sponsortemplatelist/id/<?php echo $this->idSponsortemplate; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					var sid = dijit.byId('idAccount').value;
+					if(sid == ''){
+					alert('Please Select Heads To Sponsor');
+					return false;
+		
+					}
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                       	<tr>
+							<th colspan = "4"><?php echo $this->translate("Template").' '.$this->translate("Details");?></th>
+						</tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Template").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+							<td><?php echo $this->lobjsponsortemplateform->templateName;?>
+                            <?php echo $this->lobjsponsortemplateform->idSponsortemplate;?>
+                            <?php echo $this->lobjsponsortemplateform->UpdDate;?>
+                            <?php echo $this->lobjsponsortemplateform->UpdUser;?></td>
+                        </tr>
+                      	<tr>
+							<td><?php echo $this->translate("Description");?></td>
+							<td ><?php echo $this->lobjsponsortemplateform->Description;?></td>
+
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Heads").' '.$this->translate("To").' '.$this->translate("Sponsor");?><span class="reqMark">*</span></td>
+							<td><?php echo $this->lobjsponsortemplateform->idAccount;?></td>
+						</tr>		
+						<tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjsponsortemplateform->Save;?>
+                           <input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'sponsortemplate', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

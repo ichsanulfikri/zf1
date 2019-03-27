@@ -1,0 +1,166 @@
+<script>
+var rowids = 1;
+var batchArray1  = new Array();
+var batchArray2  = new Array();
+dojo.addOnLoad(function() {
+	dijit.byId('AgentType').set('value','');
+	dijit.byId('AgentType').set('placeHolder','Select');
+	dijit.byId('Intake').set('value','');
+	dijit.byId('Intake').set('placeHolder','Select');
+});
+
+Array.prototype.unique = function () {
+    var r = new Array();
+    o:for(var i = 0, n = this.length; i < n; i++)
+    {
+        for(var x = 0, y = r.length; x < y; x++)
+        {
+                if(r[x]==this[i])
+                {
+                	continue o;
+                }
+                
+        }
+        r[r.length] = this[i];
+    }
+    return r;
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+function addPayment() {
+	var flag = true;
+	
+    if(flag == true) {
+		PaymentInsertion();	
+	}			
+	return flag;
+}
+
+function PaymentInsertion() {
+	var AgentType = dijit.byId("AgentType").value;
+	var AgentTypeName = dijit.byId("AgentType").displayedValue;
+	var Intake = dijit.byId("Intake").value;
+	var IntakeName = dijit.byId("Intake").displayedValue;
+	var Amount = dijit.byId("Amount").value;
+	var AmountName = dijit.byId("Amount").displayedValue;
+
+	var duplication1 = AgentType;
+	var duplication2 = Intake;
+	batchArray1.push(duplication1);
+	batchArray2.push(duplication2);
+	if(arrHasDupes(batchArray1) && arrHasDupes(batchArray2))
+	{
+		batchArray1 = batchArray1.unique();
+		batchArray2 = batchArray2.unique();
+		alert("Duplicate Entry for Agent Payment");
+	} 
+	else 
+	{
+
+		var trow = document.getElementById('hor').insertRow(rowids);
+			
+		var tcol0=trow.insertCell(0);
+		var tcol1=trow.insertCell(1);
+	    var tcol2=trow.insertCell(2);
+		var tcol3=trow.insertCell(3);
+
+		tcol0.innerHTML="<input type='hidden' value='"+AgentType+"' name=AgentTypegrid[]>"+AgentTypeName;
+		tcol1.innerHTML="<input type='hidden' value='"+Intake+"' name=Intakegrid[]>"+IntakeName;
+		tcol2.innerHTML="<input type='hidden' value='"+Amount+"' name=Amountgrid[]>"+AmountName;
+		tcol3.innerHTML="<a href='#' onClick='deleteRows(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowids++;
+	}
+}
+
+function deleteRows(r)
+{
+	rowids--;
+	var i=r.parentNode.parentNode.rowIndex;
+	batchArray1.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+}
+
+function clearpayment() {
+	dijit.byId('AgentType').set("value","");
+    dijit.byId('Intake').set("value","");
+	dijit.byId('Amount').set("value","");
+}
+
+</script>
+
+<body class="claro">
+    <fieldset>
+		<legend><?php echo $this->translate("Agent").' '.$this->translate("Payment");?></legend>
+	</fieldset>	
+	<br/>
+	<fieldset>
+	<Form dojoType="dijit.form.Form"  id="myForm" action="" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } 
+				else {
+                    return false;
+                }
+				</script>
+	<table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Add").' '.$this->translate("Payment").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Agent").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjAgentpaymentForm->AgentType;?>
+                            	 <?php echo $this->lobjAgentpaymentForm->UpdDate;?>
+                            	 <?php echo $this->lobjAgentpaymentForm->UpdUser;?></td>
+                            <td ><?php echo $this->translate("Intake");?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjAgentpaymentForm->Intake;?></td>
+   
+                        </tr>
+                        <tr>
+                           <td><?php echo $this->translate("Amount");?></td>
+                           <td><?php echo $this->lobjAgentpaymentForm->Amount;?></td>
+                         </tr>
+                         <tr>
+                            	<td colspan="4" align = "right"><?php echo $this->lobjAgentpaymentForm->Insert;?><?php echo $this->lobjAgentpaymentForm->Erase;?></td> 
+                        </tr>
+    </table>
+	<table  class="table" width="100%"  id="hor">
+	                        <tr>
+	                        	<th><?php echo $this->translate("Agent").' '.$this->translate("Type");?></th>
+	                        	<th><?php echo $this->translate("Intake");?></th>
+	                        	<th><?php echo $this->translate("Amount");?></th>
+	                        	<th><?php echo $this->translate("Delete");?></th>
+	                        </tr>
+	                        <?php foreach($this->agentpayment as $agentpayment) {?>
+						      <tr>
+						      		<td><?php echo $agentpayment['AgentType']?></td>
+						      		<td><?php echo $agentpayment['IntakeId'];?></td>
+						      		<td><?php echo $agentpayment['Amount'];?></td>
+						      		<td><a href="<?php echo $this->baseUrl();?>/generalsetup/agentpaymentdetail/deletepayment/id/<?php echo $this->escape($agentpayment['IdPayment']);?>"" onClick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'agentpaymentdetail', 'action'=>'deletepayment'),'default',true);?>';">
+						      		<img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+						      		
+
+						      </tr>
+						 <?php }?>
+						 
+	</table>  
+	                    
+	<table class="table" width="100%">                        
+	                        <tr>
+	                        	<td colspan="4" align = "right"><?php echo $this->lobjAgentpaymentForm->Save;?>
+	                        		<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back");?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'agentmaster', 'action'=>'index'),'default',true);?>';" /></td>	
+	                        </tr>
+	</table>  
+	</form>     
+	</fieldset>           
+</body>

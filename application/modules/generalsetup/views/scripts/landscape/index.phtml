@@ -1,0 +1,60 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+<div style="width:100%;">
+
+<?php echo $this->form; ?>
+
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationTop.phtml');
+?>
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate($this->Program).' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Short").' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Program Code");?></th>
+	        	<th><?php echo $this->defaultlanguage;?></th>
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjlandscape): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/landscape/landscape-list/id/<?php echo $this->escape($lobjlandscape['IdProgram']);?>" ><?php print_r($this->escape($lobjlandscape['ProgramName']));?></a></td>
+	        	<td><?php print_r($this->escape($lobjlandscape['ShortName']));?></td>
+	        	<td><?php echo $lobjlandscape["ProgramCode"]; ?></td>
+	        	<td><?php print_r($this->escape($lobjlandscape['ArabicName']));?></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			</table>
+<?php 
+	echo $this->paginationControl($this->paginator,'Sliding','paginationBottom.phtml');
+?>
+</div>
+
+
+</div>

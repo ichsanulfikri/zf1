@@ -1,0 +1,155 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field3').focus();
+	});
+        
+function activeLandscapeonlyone(idlandscape,idprogram,idintake,idscheme) {
+   
+    var xhrArgs = {
+			url: "<?php echo $this->baseUrl();?>"+"/generalsetup/landscape/makeactive/idprogram/"+idprogram+"/idintake/"+idintake+"/idscheme/"+idscheme,
+			handleAs:'text',
+			load:function(data){                            
+                             if(data=='ONEActive') {
+                                    var Msg = "Only one landscape can be ACTIVE for a combination of INTAKE, PROGRAM & SCHEME.";
+                                    alert(Msg);                          
+                                } else {   
+                                   window.location.href="<?php echo $this->baseUrl();?>/generalsetup/landscape/active/idlandscape/"+idlandscape+"/idprogram/"+idprogram+"/idintake/"+idintake+"/idscheme/"+idscheme;
+                                
+                                }
+                        }
+                  }
+    dojo.xhrPost(xhrArgs);      
+}        
+        
+</script>
+</head>
+<body class="claro">
+	<fieldset>
+		<legend>
+			<?php echo $this->translate($this->Landscape);?>
+		</legend>
+
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Program).' '.$this->translate("Name");?>
+				</th>
+				<th colspan="4"><?php echo $this->translate('Credit').' '.$this->translate("Hours");?>
+				</th>
+			</tr>
+			<tr>
+				<td colspan="4"><?php echo $this->program;?></td>
+				<td colspan="4"><?php echo $this->TotalCreditHours;?></td>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate($this->Landscape).' '.$this->translate("Type");?>
+				</th>
+				<th><?php echo $this->translate("Description");?></th>
+				<th><?php echo $this->translate("Intake");?></th>
+				<th><?php echo $this->translate("Scheme");?></th>
+				<th><?php echo $this->translate("Created").''.$this->translate("Date");?>
+				</th>
+				<th><?php echo $this->translate("Active");?></th>
+				<th><?php echo $this->translate("Edit").'/'.$this->translate("View");?>
+				</th>
+				<th><?php echo $this->translate("Status");?></th>
+			</tr>
+			<?php if (count($this->paginator)):?>
+			<?php foreach ($this->paginator as $lobjlandscape): ?>
+			<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+				<td><?php print_r($this->escape($lobjlandscape['DefinitionDesc']));?>
+				</td>
+				<td width="20%"><?php print_r($this->escape($lobjlandscape['ProgramDescription']));?>
+				</td>
+				<td><?php echo $this->escape($lobjlandscape['IntakeId']);?></td>
+				<td><?php echo $this->escape($lobjlandscape['SchemeName']);?></td>
+				<td><?php echo $this->escape(date('d-m-Y',strtotime($lobjlandscape['UpdDate'])));?>
+				</td>
+
+				<?php if($lobjlandscape['Active'] == 123) {?>
+				<td><?php echo "Active";?></td>
+				<?php } elseif($lobjlandscape['Active'] == 124) { ?>
+				<td><?php echo "InActive";?></td>
+				<?php }  else {?>
+				<td><?php echo "Draft";?></td>
+				<?php } ?>
+
+				<?php if($lobjlandscape['LandscapeType'] == 42) {?>
+				<td><a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/levellandscapelist/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/edit.gif' border=0
+						width='16' height='16'> </a> <a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/viewlevellandscape/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/view.png' title="view"
+						border=0 width='16' height='16'> </a></td>
+				</td>
+				<?php } elseif($lobjlandscape['LandscapeType'] == 44) { ?>
+				<td><a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/blocklandscapelist/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/edit.gif' border=0
+						width='16' height='16'> </a> <a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/viewblocklandscape/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/view.png' title="view"
+						border=0 width='16' height='16'> </a></td>
+				</td>
+				<?php } else {?>
+				<td><a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/editlandscapelist/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/edit.gif' border=0
+						width='16' height='16'> </a> <a
+					href="<?php echo $this->baseUrl();?>/generalsetup/landscape/viewsemesterlandscape/idlandscape/<?php echo $this->escape($lobjlandscape['IdLandscape']);?>/id/<?php echo $this->IdProgram;?>"><img
+						src='<?php echo $this->baseUrl();?>/images/view.png' title="view"
+						border=0 width='16' height='16'> </a></td>
+				</td>
+				<?php }?>
+
+
+
+				<td><?php if($lobjlandscape['Active'] != 123) {?> <input
+					type="button" class="NormalBtn" dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Active"); ?>"
+					onclick="activeLandscapeonlyone('<?php echo $lobjlandscape['IdLandscape'];?>','<?php echo $lobjlandscape['IdProgram'];?>','<?php echo $lobjlandscape['IdStartSemester'];?>','<?php echo $lobjlandscape['Scheme'];?>');" />
+					<?php } ?> <?php if($lobjlandscape['Active'] != 124) {?> <input
+					type="button" class="NormalBtn" dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("InActive"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'inactive','idlandscape' =>$lobjlandscape['IdLandscape'],'idprogram' =>$lobjlandscape['IdProgram']),'default',true);?>';" />
+				</td>
+				<?php }?>
+				<?php endforeach; ?>
+				<?php endif; ?>
+			</tr>
+			<tr>
+				<td colspan="8" align="right"><div class="pagination">
+						<?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+								'/partials/my_pagination_control.phtml'); ?>
+					</div></td>
+			</tr>
+
+		</table>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<td><input type="button" class="NormalBtnauto"
+					dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Add Semester Landscape"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'editlandscape','id' => $this->id),'default',true);?>';" />
+					<input type="button" class="NormalBtnauto"
+					dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Add Block Landscape"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'blocklandscape','id' => $this->id),'default',true);?>';" />
+					<?php if($this->LandscapeLevel){?> <input type="button"
+					class="NormalBtnauto" dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Add Level Landscape"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'levellandscape','id' => $this->id),'default',true);?>';" />
+					<?php }?>
+				</td>
+				<td align="right"><input type="button" class="NormalBtn"
+					dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Back"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'index'),'default',true);?>';" />
+				</td>
+
+			</tr>
+		</table>
+	</fieldset>
+</body>
+</html>

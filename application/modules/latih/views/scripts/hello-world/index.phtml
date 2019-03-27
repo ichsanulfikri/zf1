@@ -1,0 +1,41 @@
+<script>
+	function getData(){
+		$('#form').submit();
+		}
+</script>
+<form  method="post" id="form" name="form">
+<input type="hidden" name="id" id="id" value="<?php echo $this->student['idNama']; ?>">
+<table class="table">
+	<tr><th><?php echo "Form Entry Nama"?></th></tr>
+	<tr><td>Nama</td><td>:<input type="text" name="nama" id="nama" value="<?php echo $this->student['nama'];?>"></td></tr>
+	<tr><td>NIM</td><td>:<input type="text" name="nim" id="nim" value="<?php echo $this->student['nim'];?>"></td></tr>
+	<tr><td>Kelas</td><td>:<input type="text" name="kelas" id="kelas" value="<?php echo $this->student['kelas'];?>"></td></tr>
+	<tr><td>Jurusan</td><td>:<input type="text" name="jurusan" id="jurusan" value="<?php echo $this->student['jurusan'];?>"></td></tr>
+	<tr><td><input type="submit" name="Save" value="Save"><input type="submit" name="Delete" value="Delete"><input type="submit" name="Cancel" value="Cancel"><input type="submit" name="Search" value="Search"></td>
+	<td>Pencarian :
+	<select name="idNama" onchange="getData()">
+		<option value="">--Silahkan Pilih--</option>
+        <?php foreach ($this->listnama as $value) { ?>
+        <option value="<?php echo $value['idNama'] ?>"><?php echo $value['nama']?></option>
+        <?php } ?>
+        </select>
+    </td></tr>
+</table>
+</form>
+<table class="table">
+<tr><th> Nama </th>
+<th>Nim</th>
+<th>Kelas</th>
+<th>Jurusan</th></tr>
+<?php foreach ($this->namalist as $value) { ?>
+	<tr><td><?php echo $value['nama']?></td>
+	<td><?php echo $value['nim']?></td>
+	<td><?php echo $value['kelas']?></td>
+	<td><?php echo $value['jurusan']?></td></tr>
+	<?php }?>
+</table>
+<fieldset>
+<?php 
+echo $this->form;
+?>
+</fieldset>

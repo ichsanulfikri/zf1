@@ -1,0 +1,140 @@
+<script>
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+
+	$( "#dialog-add-program-requirement" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 650		
+	});
+
+	$( "#dialog-edit-program-requirement" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 650		
+	});
+
+	
+});
+
+function addDetail(id){	
+	$('#dialog-add-program-requirement').dialog('open');
+}
+
+function editDetail(id){
+	url = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'edit-program-requirement','landscapeId'=>$this->landscapeId,'programId'=>$this->programId),'default',true); ?>/IdProgramReq/"+id;
+	$('#dialog-edit-program-requirement').load(url);
+	$('#dialog-edit-program-requirement').dialog('open');
+}
+
+function delDetail(id){	
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'delete-program-requirement','landscapeId'=>$this->landscapeId,'programId'=>$this->programId),'default',true); ?>/IdProgramReq/"+id;
+}
+
+function back(){
+
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'landscape-list','id'=>$this->programId),'default',true);?>";
+}
+
+</script>
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Info"); ?></a></div></li>
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'program-requirement','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Program Requirments"); ?></a></div></li>
+		<?php if($this->landscape["LandscapeType"]==44){?>
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'manage-block-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php }else{?>
+			
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php } ?>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+			<li>
+				<a href="#" onclick="addDetail()" >
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+		  	<li>
+				<a href="#" onclick="back()" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+
+<div id="dialog-add-program-requirement" title="Add Program Requirement">
+<?php 
+	$this->form->setAction($this->url());
+	echo  $this->form;
+?>
+</div>
+<div id="dialog-edit-program-requirement" title="Edit Program Requirement"></div>
+
+
+<div>
+	<h2><?php echo $this->translate("Program Requirement List")?></h2>
+	<!--<span class="buttons">
+	    <a class="positive addLink" href="#" onClick="javscript:addDetail();">
+	    	Add Requirement       
+	    </a>
+	</span>
+	-->
+	<br />
+	<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="200">Course Type</th>
+			<th width="100px">Compulsory</th>
+			<th width="100px">Minimum Credit Hours</th>
+			<th width="110px"><i>options</i></th>
+		</tr>
+		  
+		  
+		   <?php 
+		   if(count($this->programrequirement)>0){
+		   	 $total_credit_hours=0;
+		  	 foreach($this->programrequirement as $req){
+		  	 	
+		  	 $total_credit_hours = $total_credit_hours + $req["CreditHours"];
+		  	?>
+			<tr class='shade'>
+				<td><?php echo $req["DefinitionDesc"]?></td>
+				<td align="center"><?php echo ($req["Compulsory"]==1) ? $this->translate("Yes"): $this->translate("No")?></td>
+				<td align="center"><?php echo $req["CreditHours"]?></td>				
+				<td >
+					<a class="editLink" href="#" onClick="editDetail('<?php echo $req["IdProgramReq"]?>')">Edit</a>&nbsp;
+					<a class="delLink2" href="#" onClick="delDetail('<?php echo $req["IdProgramReq"]?>')">Delete</a>
+				</td>
+			</tr>
+			<?php } //end foreach ?>
+		   
+						
+		<tr>
+			<td align="right" colspan=2>Total : </td>
+			<td align="center"><strong><?php echo $total_credit_hours;?></strong></td>
+			<td>&nbsp;</td>
+		</tr>
+		<?php }//end if ?>
+	</table>
+</div>
+

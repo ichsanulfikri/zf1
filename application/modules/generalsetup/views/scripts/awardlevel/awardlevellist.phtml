@@ -1,0 +1,44 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+
+	});
+
+</script>
+<fieldset>
+<legend><?php echo $this->translate("Program Subject").' '.$this->translate("Marks Requirments");?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php echo $this->lobjAwardlevelform->UpdDate;?>
+		<?php echo $this->lobjAwardlevelform->UpdUser;?>
+		<?php echo $this->lobjAwardlevelform->IdAllowance;?>
+		
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Subject").' '.$this->translate("Program").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Award").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjAwardlevelform->IdLevel;?></td>
+				<td><?php echo $this->translate("Allowed Level");?></td>
+				<td><?php echo $this->lobjAwardlevelform->IdAllowanceLevel;?></td>
+			</tr>					
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjAwardlevelform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'awardlevel', 'action'=>'awardlevel'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>	
+
+	

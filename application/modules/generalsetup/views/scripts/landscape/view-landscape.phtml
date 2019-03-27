@@ -1,0 +1,337 @@
+<script type="text/javascript">
+
+	$(function() {
+		 $( "#tabs" ).tabs();
+	});
+
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+	
+		$( "#dialog-view" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+			buttons: {
+				'Close': function() {
+				$( this ).dialog( "close" );
+				}
+			}
+		});
+	 });
+
+	 function view(idSubject,idLandscapeSub,idMajoring){
+
+			url = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'view-prerequisite','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>/idSubject/"+idSubject+"/idLandscapeSub/"+idLandscapeSub+"/idMajoring/"+idMajoring;
+
+			$('#dialog-view').load(url);
+			$( "#dialog-view" ).dialog('open');
+	 }
+	
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+<div style="width:100%;">
+
+<h2><?php echo $this->translate("Landscape Info")?></h2>
+	<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="30%"><?php echo $this->translate("Program Name")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["ArabicName"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Landscape Type")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["DefinitionDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Intake")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["IntakeDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Semester")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["SemsterCount"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Credit Hours")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["TotalCreditHours"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Add / Drop")?></th>
+			<td width="5px">:</td>
+			<td><?php  echo ($this->landscape["AddDrop"] == 1 ? $this->translate("Yes"): $this->translate("No"))?></td>
+		</tr>
+		
+	</table>
+
+<br><br><br>
+
+<fieldset><legend><?php echo $this->translate("Program Requirement List")?></legend>
+<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="200">Course Type</th>
+			<th width="100px">Compulsory</th>
+			<th width="100px">Minimum Credit Hours</th>
+			
+		</tr>
+		  
+		  
+		   <?php 
+		   if(count($this->programrequirement)>0){
+		   	 $total_credit_hours=0;
+		  	 foreach($this->programrequirement as $req){
+		  	 	
+		  	 $total_credit_hours = $total_credit_hours + $req["CreditHours"];
+		  	?>
+			<tr class='shade'>
+				<td><?php echo $req["DefinitionDesc"]?></td>
+				<td align="center"><?php echo ($req["Compulsory"]==1) ? $this->translate("Yes"): $this->translate("No")?></td>
+				<td align="center"><?php echo $req["CreditHours"]?></td>
+			</tr>
+			<?php } //end foreach ?>
+		   
+						
+		<tr>
+			<td align="right" colspan=2>Total : </td>
+			<td align="center"><strong><?php echo $total_credit_hours;?></strong></td>			
+		</tr>
+		<?php }//end if ?>
+	</table>
+</fieldset>
+
+<br><br><br><br>
+
+<fieldset><legend><?php echo $this->translate("Common Courses")?></legend>
+
+  <h1><?php echo $this->translate("Compulsory Courses")?></h1><br>
+  
+  <br>
+   <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>	
+					<th width="50px">Prerequsite</th>				
+				</tr>
+				
+				<?php 
+				if(is_array($this->compulsory_course)){
+					$total_credit_hours=0;
+					foreach($this->compulsory_course as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+												
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $common["IdSemester"]?></td>
+						<td align="left"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+						<td align="center"><a href="#" onclick="view('<?php echo $common["IdSubject"];?>','<?php echo $common["IdLandscapeSub"]; ?>');">View</a></td>
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		   </table>
+		   
+  <br>
+  
+  <h1><?php echo $this->translate("Not Compulsory Courses")?></h1><br>
+  
+   <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>
+					<th width="50px">Prerequsite</th>						
+				</tr>
+				
+				<?php 
+				if(is_array($this->elective_course)){
+					$total_elective_credit_hours=0;
+					foreach($this->elective_course as $elective) { 			
+								
+						$total_elective_credit_hours = $total_elective_credit_hours + $elective["CreditHours"];
+												
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $elective["IdSemester"]?></td>
+						<td align="left"><?php echo $elective["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $elective["SubCode"]?></td>
+						<td align="center"><?php echo $elective["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $elective["CreditHours"]?></td>		
+						<td align="center"><a href="#" onclick="view('<?php echo $elective["IdSubject"];?>','<?php echo $elective["IdLandscapeSub"]; ?>');">View</a></td>				
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_elective_credit_hours;?></strong></td>						
+				</tr>
+		   </table>
+  	      
+</fieldset>	
+
+<br><br><br><br>
+
+
+<fieldset><legend><?php echo $this->translate("Majoring Courses")?></legend>
+
+<div id="tabs">
+	<ul>    	
+	<?php 
+		if($this->majoring){		
+			$i=1;	
+			foreach($this->majoring as $major){
+	?>
+    		<li><a href="#tabs-<?php echo $i?>"><?php echo $major["BahasaDescription"]?></a></li>  
+    	  
+    <?php	$i++; } //end foreach 
+		} //end if
+	?>   		
+  	</ul>
+  	
+  	
+  	<?php 
+		if($this->majoring){		
+			$i=1;	
+			foreach($this->majoring as $major){
+				
+				$landscapeSubjectDb =  new GeneralSetup_Model_DbTable_Landscapesubject();
+				$compulsory_majoring_course = $landscapeSubjectDb->getMajoringCourse($this->programId,$this->landscapeId,$major["IDProgramMajoring"],1);
+				$notcompulsory_majoring_course = $landscapeSubjectDb->getMajoringCourse($this->programId,$this->landscapeId,$major["IDProgramMajoring"],2);
+				
+	?>
+  	<div id="tabs-<?php echo $i?>">  	       
+  	      
+  	    <br>
+		<h1><?php echo $this->translate("Compulsory Courses")?></h1><br>		
+		<br>
+		
+  	       <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>	
+					<th width="50px">Prerequsite</th>					
+				</tr>
+				
+				<?php 
+				if(is_array($compulsory_majoring_course)){
+					$total_major_credit_hours=0;
+					foreach($compulsory_majoring_course as $major) { 			
+								
+						$total_major_credit_hours = $total_major_credit_hours + $major["CreditHours"];
+												
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $major["IdSemester"]?></td>
+						<td align="left"><?php echo $major["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $major["SubCode"]?></td>
+						<td align="center"><?php echo $major["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $major["CreditHours"]?></td>
+						<td align="center"><a href="#" onclick="view('<?php echo $major["IdSubject"];?>','<?php echo $major["IdLandscapeSub"]; ?>','<?php echo $major["IDProgramMajoring"]?>');">View</a></td>
+						
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_major_credit_hours;?></strong></td>						
+				</tr>
+				
+		   </table>
+		   
+		   <br>
+		   
+		   <h1><?php echo $this->translate("Not Compulsory Courses")?></h1><br>
+		  
+			
+			 <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>	
+					<th width="50px">Prerequsite</th>					
+				</tr>
+				
+				<?php 
+				if(is_array($notcompulsory_majoring_course)){
+					$total_major_credit_hours=0;
+					foreach($notcompulsory_majoring_course as $major) { 			
+								
+						$total_major_credit_hours = $total_major_credit_hours + $major["CreditHours"];
+												
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $major["IdSemester"]?></td>
+						<td align="left"><?php echo $major["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $major["SubCode"]?></td>
+						<td align="center"><?php echo $major["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $major["CreditHours"]?></td>
+						<td align="center"><a href="#" onclick="view('<?php echo $major["IdSubject"];?>','<?php echo $major["IdLandscapeSub"]; ?>','<?php echo $major["IDProgramMajoring"]?>');">View</a></td>
+						
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_major_credit_hours;?></strong></td>						
+				</tr>
+				
+		   </table>
+		
+		<br>
+		
+  	</div>
+  	<?php	$i++; } //end foreach 
+		} //end if
+	?>   
+	
+</div>
+</fieldset>
+
+<div id="dialog-view" title="Course Prerequisite"></div>
+
+</div>
+<br><br>

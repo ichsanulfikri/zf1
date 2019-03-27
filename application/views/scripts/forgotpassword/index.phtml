@@ -1,0 +1,122 @@
+<?php
+$registry = Zend_Registry::getInstance();
+$locale = $registry->get('Zend_Locale');
+$this->locale = $locale->toString();
+$auth = Zend_Auth::getInstance();
+	
+if($locale == 'ar_YE'){
+	$this->direction = "rtl";
+	$this->float = "right";
+	$locale = 'ar';
+}elseif($locale == 'en_US'){
+	$this->direction = "ltr";
+	$this->float = "left";
+	$locale = 'en';
+}else {
+	$this->direction = "ltr";
+	$this->float = "left";
+	$locale = 'en';
+}
+?>
+<!--[if IE]>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<![endif]-->
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->locale; ?>" dir="<?php echo $this->direction; ?>">
+<head>
+
+<!-- ///////////////////////// DOJO ////////////////////////// -->
+<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true,locale:'<?php echo $locale;?>'"></script>
+<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/dojo/dojo/nls/dojo_<?php echo $locale;?>.js"></script>
+<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/dojo/dojo/i18n.js"></script>
+<link rel="stylesheet" type="text/css" href="<?php  echo $this->baseUrl();?>/js/dojo/dijit/themes/claro/claro.css" />
+<link rel="stylesheet" type="text/css" href="<?php  echo $this->baseUrl();?>/js/dojo/dojo/resources/dojo.css" />
+<link rel="stylesheet" type="text/css" href="<?php  echo $this->baseUrl();?>/js/dojo/dojox/grid/enhanced/resources/claro/EnhancedGrid.css" />
+
+<?php echo $this->headMeta(); ?>
+<?php echo $this->headTitle(); ?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/layout.css'); ?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/simpletree.css'); ?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/topmenu.css'); ?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/style.css'); ?>
+<?php echo $this->headLink()->prependStylesheet($this->baseUrl().'/css/usty/left-menu.css'); ?>
+
+
+<script language="JavaScript">
+
+dojo.addOnLoad(function() {
+	dijit.byId('email').focus();
+
+});
+function validateEmail( value )
+{
+
+// I believe the whole reason you have to hack at control to get it to 
+// display an error is due to the nature of the xhrGet call. Since the
+// call is being made asychronously, the method would have already
+// returned a result to the html control before query has finished.
+// Therefore you have to do the extra method calls below. Also note
+// that when the form goes for submission, it calls each controls validator
+// method again! Meaning it will query the webpage again.
+var loginID = dijit.byId( "email" );
+var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+if( "" == loginID.value ) {
+
+    bNoNameFound = false;
+}
+else {      
+    if( false == loginID._focused ) {
+        console.log( "Checking email..." );
+        dojo.xhrGet({
+            url: "<?php echo $this->baseUrl();?>"+"/forgotpassword/getemail/email/"+value,
+            handleAs: 'text',
+            content: { l: value},
+            timeout: 10000, 
+            load: function( data ) {
+                if (!data) {
+                    // setting the state to error since the username is already taken
+                    bNoNameFound = false;
+                    loginID.set( "state", "Error" );
+                    loginID.displayMessage( "The Email ID is not registered" );
+                    // used to change the style of the control to represent a error
+                    loginID._setStateClass();
+                }
+                else
+                {
+                    bNoNameFound = true;
+                    loginID.set( "state", "" );
+                    loginID.displayMessage( "" );
+                }
+            }
+        });
+    }
+}
+return bNoNameFound;
+}
+</script>
+
+</head>
+<body class = "claro">
+	<fieldset>
+		<form dojoType="dijit.form.Form"  action="<?php echo $this->baseUrl();?>/forgotpassword/index" method="post">  
+		                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+				<table class="table" width="100%">
+					<tr>
+						<td class = "label" colspan=2 align = "center"> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Email <span class="reqMark">*</span> : <?php echo $this->reterivepassword->email; ?></td>
+						
+					</tr>
+					<tr>
+						<td class = "label" colspan=2 align="center">
+							<?php echo $this->reterivepassword->retrievepassword;?>
+							<?php echo $this->lobjLoginForm->Reset; ?>
+						</td>
+					</tr>
+				</table>
+		</form>
+</body>
+</html>

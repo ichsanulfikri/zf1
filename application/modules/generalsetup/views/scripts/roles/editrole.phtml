@@ -1,0 +1,182 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+	//fnCheckboxonload();
+});
+function fnCheck(field)
+{
+	var fieldname = field.name;
+	var fieldnamearray = fieldname.split("_");
+	nodes = document.getElementsByName(fieldnamearray[1]+'[]');
+	dojo.forEach(nodes,
+	    function(node)
+	    {
+	    	var checknode = dijit.getEnclosingWidget(node);//alert(checknode);
+	    	if(field.checked)
+	    		checknode.set("checked",true);
+	    	else
+	    		checknode.set("checked",false);
+	    }
+	);
+}
+
+function fnCheckAll(cfield)
+{
+	nodes = dojo.query('[type=\"checkbox\"]');
+	dojo.forEach(nodes, function(node)
+	    {
+	    	
+	    	var checknode = dijit.getEnclosingWidget(node);
+	    	if(cfield.checked)
+	    		checknode.set("checked",true);
+	    	else
+	    		checknode.set("checked",false);
+	    }
+	);
+}
+
+function fnDisableGroupCheck(groupname) {
+
+	groupname = groupname.replace("[]", "");
+	namenodes = document.getElementsByName(groupname+'[]');
+	var namenodeslength = namenodes.length;
+	var node = dijit.byId(groupname);
+	var nodeschecked = 0;
+	if(node.checked)
+		node.set("checked",false);
+	else
+	{
+		dojo.forEach(namenodes, function(namenode)
+				{
+					//alert(namenode);
+					if(namenode.checked)
+						nodeschecked++;
+				}
+			);
+
+		if(parseInt(namenodeslength) == parseInt(nodeschecked))
+			node.set("checked",true);
+	}
+}
+
+function fnCheckboxonload()
+{
+	nodes = dojo.query('.rolescheckbox');//alert(nodes);
+	var mainnodecount = nodes.length;
+	var mainnodecheckedcount = 0;
+	dojo.forEach(nodes, function(node)
+		{
+			var nodename = dojo.attr(node, "widgetid");
+
+			if(dijit.byId(nodename).checked)
+				mainnodecheckedcount++;	
+	
+			namenodes = document.getElementsByName(nodename+'[]');
+			var namenodeslength = namenodes.length;
+			var nodeschecked = 0;
+			dojo.forEach(namenodes, function(namenode)
+				{
+					if(namenode.checked)
+						nodeschecked++;
+				}
+			);
+			if(parseInt(namenodeslength) == parseInt(nodeschecked))
+				dijit.byId(nodename).set("checked",true);		
+			else
+				dijit.byId(nodename).set("checked",false);
+			
+		}
+	);
+	if(mainnodecount == mainnodecheckedcount)
+		dijit.byId('checkAllAuto').set("checked",true);
+}
+
+
+</script> 
+
+
+</head>
+<BODY class = "claro">
+<fieldset>
+	<legend><?php echo $this->translate->_("Roles")?></legend>
+	<form action="" method="post" name="roles">	
+		<input name='idrole' type='hidden' value='<?php echo $this->roleid;$lstrdivheight="348px";?>'>
+		<?php echo $this->lobjform->UpdDate; ?>
+		<?php echo $this->lobjform->UpdUser; ?>
+		<input dojotype='dijit.form.CheckBox' type='checkbox' name='checkAllAuto' id='checkAllAuto' onclick='fnCheckAll(this);'/>
+		<?php echo $this->translate->_("Select All")?>	
+		<div  orientation="vertical" style="border:0px solid #b7b7b7">
+			<table class="table" width="100%">
+				<tr>
+					<th colspan=13><?php echo $this->translate->_("Role Details")?></th>
+				</tr>
+				<?php foreach($this->controller as $controllers):?>
+				<tr>
+					<td><b><?php
+							$controllername = explode(' ',$controllers['RouteName']);
+						//print_r($controllername);
+						switch($controllername[0])
+						{
+							
+							case 'SubjectAliasName':
+								{
+									$contname = str_replace('SubjectAliasName',$this->Subject,$controllers['RouteName']);
+									//echo $controllers['RouteName'];die();
+									break;
+								}
+							case 'ProgramAliasName':	
+								{
+									//echo "Hi";
+									$contname = str_replace('ProgramAliasName',$this->Program,$controllers['RouteName']);
+									break;
+								}
+							case 'CollegeAliasName':
+								{
+									$contname = str_replace('CollegeAliasName',$this->College,$controllers['RouteName']);
+									//echo $controllers['RouteName'];die();
+									break;
+								}
+							case 'DepartmentAliasName':	
+								{
+									//echo "Hi";
+									$contname = str_replace('DepartmentAliasName',$this->Department,$controllers['RouteName']);
+									break;
+								}
+							case 'LandscapeAliasName':
+								{
+									$contname = str_replace('LandscapeAliasName',$this->Landscape,$controllers['RouteName']);
+									//echo $controllers['RouteName'];die();
+									break;
+								}
+							default:
+								{
+									$contname = $controllers['RouteName'];
+									break;
+								}	
+						}
+				
+				echo $contname?></b></td>
+				<?php foreach($this->resultset as $result):
+					if($controllers['RouteName'] == $result['RouteName']):?>
+						<?php if(in_array($result['idResources'],$this->larridresource)){?>
+							<td width="2%"><input dojotype='dijit.form.CheckBox'  onClick='fnCheck(this);' name='Action[]' value = "<?php echo $result['idResources']?>" type='checkbox' class='rolescheckbox' checked="true"></td>
+							<td class='labelsOptionalStyle'><i><?php echo $result['Name']?></i></td>
+						<?php } else {?>
+							<td width="2%"><input dojotype='dijit.form.CheckBox'  onClick='fnCheck(this);' name='Action[]' value = "<?php echo $result['idResources']?>" type='checkbox' class='rolescheckbox' ></td>
+							<td class='labelsOptionalStyle' width="10%"><i><?php echo $result['Name']?></i></td>
+						<?php }?>	
+				<?php endif;endforeach;?>		
+			</tr>
+			<?php endforeach;?>
+			
+
+</table>
+</div>
+	<table align = "center">
+		<tr>	
+			<td colspan=14 align='right'>
+				<?php echo $this->lobjform->Save;?>
+				<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'roles', 'action'=>'index'),'default',true);?>';" /></td>
+		</tr>
+	</table>	
+</form>
+</fieldset>

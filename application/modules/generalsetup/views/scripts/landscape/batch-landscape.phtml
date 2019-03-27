@@ -1,0 +1,49 @@
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'program-requirement','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Program Requirments"); ?></a></div></li>
+		<?php if($this->landscape["LandscapeType"]==44){?>		  
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'manage-block-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php }else{?>			
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php } ?>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+			<li>
+				<a href="#" onclick="editLandscape()" >
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'batch-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>">
+					<span class='edit'></span>
+					<?php echo $this->translate("Batch");?>
+				</a>
+			</li>			
+		  	<li>
+				<a href="#" onclick="back()" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+<div>
+<?php echo $this->form;?>
+</div>

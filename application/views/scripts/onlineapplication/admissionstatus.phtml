@@ -1,0 +1,35 @@
+<table>
+</br>
+</table>
+<table align="center">
+<tr>
+<td>
+<?php if($this->status == "Entry"){?>
+<h1><?php echo $this->msg;?></h1>
+
+<h1><a href="<?php echo $this->baseUrl();?>/onlineapplication/studentoffer/id/<?php echo $this->idapplicant;?>" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'studentoffer'),'default',true);?>';">Conditional Offer Letter</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/summarystudentapplicant/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'summarystudentapplicant'),'default',true);?>';">Print</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/login/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'logout'),'default',true);?>';">Exit</a></h1>
+<?php } else if(($this->status) == "Reject"){?>
+
+<h1><?php echo $this->msg;?></h1>
+
+<h1><a href="<?php echo $this->baseUrl();?>/onlineapplication/summarystudentapplicant/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'summarystudentapplicant'),'default',true);?>';">Print</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/login/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'logout'),'default',true);?>';">Exit</a></h1>
+<?php } else if(($this->status) == "Provisional"){?>
+
+<h1><?php echo $this->msg;?></h1>
+
+<h1><a href="<?php echo $this->baseUrl();?>/onlineapplication/studentoffer/id/<?php echo $this->idapplicant;?>" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'studentoffer'),'default',true);?>';">Conditional Offer Letter</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/summarystudentapplicant/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'summarystudentapplicant'),'default',true);?>';">Print</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/login/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'logout'),'default',true);?>';">Exit</a></h1>
+<?php } else if(($this->status) == "Offered"){?>
+
+<h1><?php echo $this->msg;?> Please click here for further details.</h1>
+
+<h1><a href="#">Offer Letter</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/summarystudentapplicant/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'summarystudentapplicant'),'default',true);?>';">Print</a>|<a href="<?php echo $this->baseUrl();?>/onlineapplication/login/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'logout'),'default',true);?>';">Exit</a></h1>
+<?php } else if(($this->status) == "Activated"){?>
+
+<h1><?php echo $this->msg;?></h1>
+
+<h1><a href="<?php echo $this->baseUrl();?>/onlineapplication/login/" onClick="window.location.href='<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'logout'),'default',true);?>';">Exit</a></h1>
+<?php }?>
+</td>
+<tr>
+</table>
+

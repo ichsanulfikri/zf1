@@ -1,0 +1,79 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field3').focus();	
+	});
+</script>
+</head>
+<body class="claro">
+<div align="center" style="background: #fff;">
+	<ul class="stepsmenu">
+		<li class="second"><a href="/generalsetup/university">University</a></li>
+		<li class="third"><a href="/generalsetup/collegemaster">Faculty</a></li>
+	    <li class="fourth"><a href="/generalsetup/departmentmaster">Department</a></li>
+    	<li class="fifth"><a href="/generalsetup/branchofficevenue/index/idbrc/1">Branch</a></li>										
+	</ul>
+</div>
+<div style="clear:both"></div>
+	<fieldset>
+	<legend><?php echo $this->translate("University").' '.$this->translate("Search");?></legend>
+                    <form action="<?php echo $this->baseUrl();?>/generalsetup/university/index/search/1" method="POST">
+                            <table width="100%">
+                                <tr>
+                                    <td ><?php echo $this->translate("University").' '.$this->translate("Name");?></td>
+                                    <td ><?php echo $this->lobjform->field3;?></td>
+                                    <td ><?php echo $this->translate("Short Name");?></td>
+                                    <td ><?php echo $this->lobjform->field2;?></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("City");?></td>
+                                    <td ><?php echo $this->lobjform->field4;?></td>
+                                    <td ><?php echo $this->translate("Email");?></td>
+                                    <td ><?php echo $this->lobjform->field6;?></td>
+                                </tr>
+                                <tr>
+                                	<td ><?php echo $this->defaultlanguage;?></td>
+                                    <td ><?php echo $this->lobjform->field18;?></td>
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "center" colspan = "4">
+
+											<?php echo $this->lobjform->Search;?>
+											<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'university', 'action'=>'newuniversity'),'default',true);?>';" />	
+											<?php echo $this->lobjform->Clear;?>
+								</td>
+							    
+                                </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate("University").' '.$this->translate("Name");?></th>
+	       	    <th><?php echo $this->translate("Short Name");?></th>
+	        	<th><?php echo $this->translate("Email");?></th>
+	        	<th><?php echo $this->defaultlanguage ;?></th>
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjuser ): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/university/edituniversity/id/<?php echo $this->escape($lobjuser['IdUniversity']);?>" ><?php print_r($this->escape($lobjuser['Univ_Name']));?></a></td>
+	    	    <td><?php echo $this->escape($lobjuser['ShortName']);?></td>
+	
+	    		<td><?php echo $this->escape($lobjuser['Email']);?></div></td>
+	    		<td><?php echo $this->escape($lobjuser['Univ_ArabicName']);?></div></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+		</table>
+	</fieldset>
+</body>
+</html>

@@ -1,0 +1,245 @@
+<head>
+
+<script type="text/javascript"><!--
+	dojo.addOnLoad(function() {
+		dijit.byId('loginName').focus();
+		dijit.byId('IdStaff').set('value','');
+		dijit.byId('IdStaff').set('placeHolder','Select');
+		dijit.byId('IdRole').set('value','');
+		dijit.byId('IdRole').set('placeHolder','Select');
+		dijit.byId('gender').set('value','');
+		dijit.byId('gender').set('placeHolder','Select');
+		var idCountry = dijit.byId('country').value;
+		dijit.byId('state').set('value','');
+		dijit.byId('state').set('placeHolder','Select');
+		dijit.byId('city').set('value','');
+		dijit.byId('city').set('placeHolder','Select');
+		
+
+
+
+		
+
+	});
+
+
+	
+	function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("state",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+	function fnGetStateCityList(idState){ 
+		if(idState != "")
+			{ var xhrArgs = {
+						url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+						handleAs:'json',
+						load:function(data){ 
+							AutoFillNextEditableDropDown("city",data); 
+						}
+				   }
+				dojo.xhrGet(xhrArgs); 
+			} 
+		} 	
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+    	var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+
+	function fnGetStaffDetails(idStaff){ 
+		if(idStaff != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstafflist/idStaff/"+idStaff,
+					handleAs:'json',
+					load:function(data){ 
+						dijit.byId('country').set('value',data['Country']);
+						dijit.byId('fName').set('value',data['FirstName']);
+						dijit.byId('mName').set('value',data['ThirdName']);
+						dijit.byId('lName').set('value',data['SecondName']);
+						dijit.byId('email').set('value',data['Email']);
+						dijit.byId('addr1').set('value',data['Add1']);
+						dijit.byId('addr2').set('value',data['Add2']);
+						dijit.byId('city').set('value',data['City']);
+						dijit.byId('zipCode').set('value',data['Zip']);
+						dijit.byId('state').set('value',data['State']);
+						dijit.byId('DOB').set('value',data['DOB']);
+						dijit.byId('gender').set('value',data['gender']);
+				
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+
+
+
+	function validateUsername( value, constraint )
+	{
+	
+	var loginID = dijit.byId( "loginName" );
+
+	var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+	if( "" == loginID.value ) {
+	    // for some required=true is not kicking in, so we are forcing it.
+	    bNoNameFound = false;
+	}
+	else {      
+	    if( false == loginID._focused ) {
+	        console.log( "Checking username..." );
+	        dojo.xhrGet({
+	            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getvalidusername/UserName/"+value,
+	            handleAs: 'text',
+	            content: { l: value},
+	            timeout: 10000, 
+	            load: function( data ) {
+	                if ( data ) {
+	                    // setting the state to error since the username is already taken
+	                    bNoNameFound = false;
+	                    loginID.set( "state", "Error" );
+	                    loginID.displayMessage( "The Username is already taken" );
+	                    // used to change the style of the control to represent a error
+	                    loginID._setStateClass();
+	                    console.log( "Invalid username" ); 
+	                }
+	                else
+	                {
+	                    bNoNameFound = true;
+	                    loginID.set( "state", "" );
+	                    loginID.displayMessage( "" );
+	                }
+	            }
+	        });
+	    }
+	}
+
+	return bNoNameFound;
+	}
+
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("Users");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/user/newuser" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Login Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Username");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->loginName;?><?php echo $this->lobjuserForm->UpdDate;?><?php echo $this->lobjuserForm->UpdUser;?></td>
+                            <td><?php echo $this->translate("Staff").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjuserForm->IdStaff;?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("First Name");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjuserForm->fName;?></td>
+                            <td ><?php echo $this->translate("Middle Name");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->mName;?></td>
+                        </tr>
+						<tr>
+                            <td ><?php echo $this->translate("Last Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->lName;?></td>
+                            <?php if($this->Languageid == 1) {?>
+                            <td><?php echo $this->translate("Arabic").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->userArabicName;?></td>
+                            <?php } else {?>
+                            <td></td>
+                            <td></td>
+                            <?php }?>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Password");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->passwd;?></td>
+                            <td><?php echo $this->translate("Email Address");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->email;?></td>
+                        </tr>
+                        <tr>
+                            <td  ><?php echo $this->translate("Role");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->IdRole;?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Personal Details");?></th>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("DOB");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->DOB;?></td>
+                            <td ><?php echo $this->translate("Gender");?><span class="reqMark">*</span></td>
+                             <td ><?php echo $this->lobjuserForm->gender;?>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Address 1");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->addr1;?></td>
+                            <td ><?php echo $this->translate("Address 2");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->addr2;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->country;?></td>
+                            <td ><?php echo $this->translate("State");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->state;?></td>
+                            
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("City");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->city;?></td>
+                            <td ><?php echo $this->translate("Zip Code");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->zipCode;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Work Phone");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->workcountrycode;?><?php echo $this->lobjuserForm->workstatecode;?><?php echo $this->lobjuserForm->workPhone;?></td>
+                            <td ><?php echo $this->translate("Home Phone");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->homecountrycode;?><?php echo $this->lobjuserForm->homestatecode;?><?php echo $this->lobjuserForm->homePhone;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Cell Phone");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->countrycode;?><?php echo $this->lobjuserForm->cellPhone;?></td>
+                            <td ><?php echo $this->translate("Fax");?></td>
+                            <td ><?php echo $this->lobjuserForm->faxcountrycode;?><?php echo $this->lobjuserForm->faxstatecode;?><?php echo $this->lobjuserForm->fax;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->UserStatus;?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                          
+                        <tr>
+                         	<td></td>
+                          	<td></td>
+                            <td></td>        
+                            <td align = "right"><?php echo $this->lobjuserForm->Save;?>
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'user', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

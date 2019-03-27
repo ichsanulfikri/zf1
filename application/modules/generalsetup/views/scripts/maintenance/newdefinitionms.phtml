@@ -1,0 +1,144 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang;?>" lang="<?php echo $this->lang;?>" dir="<?php echo $this->rtl;?>">
+<head>
+	
+	<script type="text/javascript">
+	dojo.addOnLoad(function(){
+		dijit.byId("defTypeDesc").focus();		
+		 
+		 
+		});
+	
+		function fnValidate(){
+			flag = true;
+			if(document.getElementById("defTypeDesc").value==""){
+				$("#errDefDesc").addClass("errors");
+				document.getElementById("errDefDesc").innerHTML ="Value can't be empty";
+				flag = false;
+			}
+			return flag;
+		}
+		function duplicate(def)
+		{			
+			if(def != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/maintainance/getdefTypeDesclist/efTypeDesc/"+def,
+					handleAs:'text',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("state",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+		}
+
+
+		function validateDefinition(value,constraint)
+		{
+			
+		// I believe the whole reason you have to hack at control to get it to 
+		// display an error is due to the nature of the xhrGet call. Since the
+		// call is being made asychronously, the method would have already
+		// returned a result to the html control before query has finished.
+		// Therefore you have to do the extra method calls below. Also note
+		// that when the form goes for submission, it calls each controls validator
+		// method again! Meaning it will query the webpage again.
+			
+		var loginID = dijit.byId( "defTypeDesc" );
+
+		var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+		if( "" == loginID.value ) {
+		    // for some required=true is not kicking in, so we are forcing it.
+		    bNoNameFound = false;
+		}
+		else {      
+		    if( false == loginID._focused ) {
+		        
+		    	value=value.replace(/[$^?+*()|\\]/g,"*");  		
+		    	
+		        console.log( "Checking username..." );
+		        dojo.xhrGet({
+		            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/maintenance/getdefnitiontype/Deftype/"+value,
+		            handleAs: 'text',
+		            content: { l: value},
+		            timeout: 10000, 
+		            load: function( data ) {    			                   
+		                if ( data ) {
+		                    // setting the state to error since the username is already taken
+		                    console.log(loginID)
+		                    bNoNameFound = false;
+		                    loginID.set( "state", "Error" );
+		                    loginID.displayMessage( "The Definition is already taken..." );
+		                    // used to change the style of the control to represent a error
+		                    loginID._setStateClass();
+		                    console.log( "Invalid username" ); 
+		                }
+		                else
+		                {
+		                    bNoNameFound = true;
+		                    loginID.set( "state", "" );
+		                    loginID.displayMessage( "" );
+		                }
+		            }
+		        });
+		    }
+		}
+
+		return bNoNameFound;
+		}
+	</script>
+</head>
+<body class = "claro">
+	<fieldset>
+		<legend><?php echo $this->translate("New Maintenance");?></legend>
+		<div class="register">
+			<div class="profile_tab">
+                <form dojoType="dijit.form.Form" action="" method="POST"  name= "myform" id= "myform">
+<script type="dojo/method" event="onSubmit">
+  if (this.validate()) {
+return duplicate();
+//return true;
+} else {
+	return false;}
+</script>
+					 <table class="table" width="100%"  border="1">
+						<tr>
+							<td style="width:150px"><?php echo $this->translate("Definition")." ".$this->translate("Description");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->defTypeDesc;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+							<td style="width:150px"><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->Active;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+							<td style="width:150px"><?php echo $this->defaultlanguage;?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->BahasaIndonesia;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+							<td style="width:150px"><?php echo $this->translate("Description");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->Description;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+                               <td colspan="3"></td>   
+                            <td align = "center" ><?php echo $this->lobjMaintenanceForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'maintenance', 'action'=>'index'),'default',true);?>';" />	
+                           </td> 
+                               
+                        </tr>	
+					</table>
+                
+					
+				</form>
+			</div>
+		</div>
+	</fieldset>
+</body>

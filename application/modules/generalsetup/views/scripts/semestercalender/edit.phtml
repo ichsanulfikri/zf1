@@ -1,0 +1,61 @@
+<?php
+//echo "<pre>";
+//print_r($this->calenderDetail);
+?>
+<script type="text/javascript">
+ function confirmDelete(){
+   var r = confirm("Are you sure to delete this Activity");
+   if(r == true){
+    var url = '<?php echo $this->baseUrl();?>'+'/generalsetup/semestercalender/delete/id/'+<?php echo $this->calenderDetail['idcalender'];?>;
+    window.location = url;
+   }
+ }
+</script>
+<fieldset>
+  <legend><?php echo $this->translate("Calender");?></legend>
+  <form dojoType="dijit.form.Form"  id="myForm" name="myForm" action="" method="post">
+    <script type="dojo/method" event="onSubmit">
+      if (this.validate()) {
+        return true;
+      } else {
+        return false;
+      }
+    </script>
+    <?php echo $this->lobjsemestercalenderForm->id;?>    
+    <table class="table" width="100%" >
+      <tr>
+        <th colspan = "4"><?php echo $this->translate("Calender").' '.$this->translate("Details");?></th>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate("Semester");?><span class="reqMark">*</span></td>
+        <!--<td><?php echo $this->lobjsemestercalenderForm->IdSemester;?>-->
+        <td><?php echo $this->calenderDetail['SemesterCode'];?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate("Activity");?><span class="reqMark">*</span></td>
+        <!--<td><?php echo $this->lobjsemestercalenderForm->IdActivity;?>-->
+        <td><?php echo $this->calenderDetail['ActivityName'];?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate("Start Date");?><span class="reqMark">*</span></td>
+	<!--<td><?php echo $this->lobjsemestercalenderForm->StartDate;?></td>-->
+        <td><?php echo date('d/m/y',strtotime($this->calenderDetail['StartDate']));?></td>
+      </tr>
+      <tr>
+        <td><?php echo $this->translate("End Date");?><span class="reqMark">*</span></td>
+	<!--<td><?php echo $this->lobjsemestercalenderForm->EndDate;?></td>-->
+        <td><?php echo date('d/m/y',strtotime($this->calenderDetail['EndDate']));?></td>
+      </tr>
+      <tr>
+        <td colspan=4 align="right"><?php //echo $this->lobjsemestercalenderForm->Save;?>
+          <input type="button" class="NormalBtn" dojotype="dijit.form.Button"
+            label="<?php echo $this->translate("Back"); ?>"
+            onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'semestercalender', 'action'=>'index'),'default',true);?>';" />
+          <input type="button" class="NormalBtn" dojotype="dijit.form.Button"
+            label="<?php echo $this->translate("Delete"); ?>"
+            onclick="return confirmDelete()" />
+	</td>
+      </tr>
+    </table>
+  </form>
+</fieldset>

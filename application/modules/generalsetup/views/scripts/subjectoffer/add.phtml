@@ -1,0 +1,74 @@
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>		
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+<?php 
+echo $this->form;
+?>
+<div style="width:100%;">
+<form name="savefrm" action="/generalsetup/subjectoffer/run/type/add" method="POST">
+<table id="hor" class="table" width="100%">
+	<tr>
+		<th><?php echo $this->translate->_("Subject")?></th>
+		<th><?php echo $this->translate->_("Subject")." ".$this->translate->_("Code")?></th>
+		<th><?php echo $this->translate->_("Landscape")?></th>
+		<th><?php echo $this->translate->_("Minimum")." ".$this->translate->_("Quota")?></th>
+		<th><?php echo $this->translate->_("Maximum")." ".$this->translate->_("Quota")?></th>
+		<th><?php echo $this->translate->_("Offer")?></th>
+	</tr>
+	<?php 
+	foreach($this->courses as $coffered){
+	?>
+	<tr>
+<td><?php echo $coffered['SubjectName']?><?php echo "-"?><?php echo $coffered['SubCode']?></td>
+		<td><?php echo $coffered['SubCode']?></td>
+		<td><?php echo $coffered['ProgramDescription']?></td>
+		<td><input size=10 type="text" name="minquota[<?php echo $coffered['idsub']?>]"></td>
+		<td><input size=10 type="text" name="maxquota[<?php echo $coffered['idsub']?>]"></td>
+		<td>
+		<input type="checkbox" name="idsubject[<?php echo $coffered['idsub']?>]" value="<?php echo $coffered['idsub']?>">
+		</td>
+			
+	</tr>
+	<?php 
+	}
+	?>	
+	<tr class="shade">
+	<td>&nbsp;</td>
+	<td>&nbsp;</td>
+	<td><b>Set DEFAULT Quota:</b></td>
+	<td><input size=10 type="text" name="dminquota" value=10></td>
+	<td><input size=10 type="text" name="dmaxquota" value=100></td>
+	<td>&nbsp;</td>
+	</tr>
+	<tr class="shade">
+	<td colspan=6 align="right"><input type="submit" value="Save"></td>	
+	</tr>	
+</table>
+<input type="hidden" name="IdSemester" value="<?php echo $this->idsem;?>"> 
+<input type="hidden" name="IdCollege" value="<?php echo $this->idcol;?>">
+</form>
+</div>

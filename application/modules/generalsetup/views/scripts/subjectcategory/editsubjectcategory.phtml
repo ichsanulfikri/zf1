@@ -1,0 +1,42 @@
+<script>
+dojo.addOnLoad(function(){	
+	});
+</script>
+	<fieldset>
+	 <legend><?php echo $this->translate("Subject Category");?></legend>
+                 <Form dojoType="dijit.form.Form"  id="myForm" action="" method="post"  name= "myForm">
+                 <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+               		</script>
+                            <table width="100%" class = "table">
+                            	<tr>
+                            		<th colspan = "4"><?php echo $this->translate("Subject").' '.$this->translate("Category");?></th>
+                            	</tr>
+                                <tr>
+                                    <td><?php echo $this->translate("Subject").' '.$this->translate("Category").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                                    <td><?php echo $this->lobjsubjectcategoryform->SubjectCategoryName;?></td>
+                                         <?php echo $this->lobjsubjectcategoryform->IdSubjectCategory;?>
+                            		     <?php echo $this->lobjsubjectcategoryform->UpdDate;?>
+                                         <?php echo $this->lobjsubjectcategoryform->UpdUser;?>
+                                    <td ><?php echo $this->translate("Description");?></td>
+                                    <td ><?php echo $this->lobjsubjectcategoryform->Description;?></td>                                 
+                                </tr>                              
+                                <tr>                                   
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjsubjectcategoryform->Active;?></td>
+                                    <td></td><td></td>
+                                </tr>
+                                <tr>
+                                <td align = "right" colspan = "4"><?php echo $this->lobjsubjectcategoryform->Save;?>
+									<input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectcategory', 'action'=>'index'),'default',true);?>';" />	
+								</td>
+							    </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+    
+	

@@ -1,0 +1,68 @@
+<fieldset>
+    <legend><?php echo $this->translate("Email")." ".$this->translate("Template");?></legend>
+	<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="<?php echo $this->baseUrl();?>/generalsetup/emailtemplate/edittemplate">
+	<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+				var content = dijit.byId('content').attr('value');
+		 	    dijit.byId("TemplateBody").set('value',content);
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    	<tr>
+        	<th colspan = "4"><?php echo $this->translate("Email")." ".$this->translate("Template")." ".$this->translate("Details");?></th>
+		</tr>
+		<?php echo $this->form->idTemplate;?>
+        <?php echo $this->form->UpdDate;?>
+        <?php echo $this->form->UpdUser;?>						
+		<tr>
+			<td><?php echo $this->translate("Template")." ".$this->translate("Name");?><span class="reqMark">*</span></td>
+            <td><?php  echo $this->form->TemplateName;?></td>
+            <td><?php echo $this->translate("Template")." ".$this->translate("From")." ".$this->translate("Description");?><span class="reqMark"></span></td>
+            <td><?php echo $this->form->TemplateFromDesc;?></td>
+        </tr>
+        <tr>
+        	<td><?php echo $this->translate("Template")." ".$this->translate("From");?><span class="reqMark">*</span></td>
+            <td><?php echo $this->form->TemplateFrom;?></td>
+            <td><?php echo $this->translate("Template")." ".$this->translate("Subject");?><span class="reqMark"></span></td>
+            <td><?php echo $this->form->TemplateSubject;?></td>
+        </tr>
+		<tr>                            
+        	<td><?php echo $this->translate("Template")." ".$this->translate("Header");?><span class="reqMark"></span></td>
+            <td><?php echo $this->form->TemplateHeader;?></td>
+            <td><?php echo $this->translate("Template")." ".$this->translate("Footer");?><span class="reqMark"></span></td>
+            <td><?php echo $this->form->TemplateFooter;?></td>
+        </tr>
+        <tr> 
+            <td><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+            <td><?php echo $this->form->Deleteflag;?></td>   
+            <td><?php echo $this->translate("Module")." ".$this->translate("Name");?><span class="reqMark">*</span></td>   
+            <td><?php echo $this->form->idDefinition;?></td>                                                                    
+        </tr>                                                      
+	</table>  
+        <table width="100%">
+    		<script type="text/javascript">
+			dojo.require("dijit._editor.plugins.FontChoice");
+			</script>            
+			<input  dojoType = "dijit.form.TextBox" id = "TemplateBody" type = "hidden" name = "TemplateBody" value = ""> 
+			                        
+			<td dojoType="dijit.Editor" id="content" extraPlugins="['fontName', 'fontSize', 'formatBlock']">                           
+ 				<?php echo $this->TemplateBody;?> 	                                       
+			</td>
+    </table>
+	<table>
+    
+    <table align = "right">
+    	<tr>
+        	<td>
+			    	<?php echo $this->form->Save;?>
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'emailtemplate', 'action'=>'index'),'default',true);?>';" />	
+            </td>
+        </tr>
+    </table>
+    
+	</form>
+
+</fieldset>

@@ -1,0 +1,123 @@
+<script>
+	$(function() {
+		$( "#migrate-dialog" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 500,
+			height: 200,
+			buttons: { 
+				"Proceed": function() { 
+					$("#migrateform").submit(); 
+				},
+				"Cancel": function() { 
+					$(this).dialog("close"); 
+				}  
+			} 
+		});
+	});
+	
+	$(function() {
+		$( "#tabs" ).tabs();
+	});
+	
+	$(function() {
+		// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+		$( "#dialog-search" ).dialog({
+			modal: true,
+			autoOpen: false,
+			width: 600,
+//			buttons: {
+//				"Search": function() { 
+//					$("#search_form").submit(); 
+//				}, 
+//				"Cancel": function() { 
+//					$(this).dialog("close"); 
+//				}
+//				
+//			}
+		});
+	});
+
+	function searchbox(){
+		$( "#dialog-search" ).dialog('open');
+	}
+
+
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_student_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	
+	$(function() {
+		$( "#dialog:ui-dialog" ).dialog( "destroy" );
+		
+		
+		$( "#dialog_contact_edit" ).dialog({ 
+			autoOpen: false,
+			modal: true,
+			width: 615,
+	        buttons: { 
+	        
+		        "Save Changes": function() { 
+		        	$('#student_contact_form').submit(); 
+	        	},
+	        	"Cancel": function() { 
+		        	$(this).dialog("close"); 
+	        	}
+        	}
+	        
+		});
+		
+		
+		
+	});
+	
+	function delDetail(id){
+	if(confirm('Are you sure to delete ?')){
+		window.location = "<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'delete-attachment','app_id'=>$this->id),'default',true);?>/id/"+id;
+	}
+}
+
+</script>	
+	
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'application','controller'=>'manual', 'action'=>'index'),'default',true);?>">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>

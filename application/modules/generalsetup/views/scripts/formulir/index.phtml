@@ -1,0 +1,67 @@
+<head>
+</head>
+	<fieldset>
+		<legend><?php echo $this->translate("Formulir");?></legend>
+         <form dojoType="dijit.form.Form" action="" method="POST">
+          <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+            <table class width="100%">
+                <tr>
+                   <td><?php echo $this->translate("Year");?></td>
+                   <td ><?php echo $this->lobjform->Year;?></td>
+                   <td><?php echo $this->translate("Application Type");?></td>
+                   <td ><?php echo $this->lobjform->Apptype;?></td>
+                </tr>
+                <tr>
+                     <td><?php echo $this->translate("Enter No");?></td>
+                     <td ><?php echo $this->lobjform->EnterNo;?></td>
+                     <td></td>
+                     <td ></td>
+                <tr>
+					<td colspan="4" align="center">
+					
+				
+					<input name="submit" type="submit" class="NormalBtn" dojoType=dijit.form.Button label = <?php echo $this->translate("Generate");?> value=<?php echo $this->translate("Generate");?>>
+					</td>
+				</tr>
+	               
+                </tr>
+            </table>
+        </form>	
+    </fieldset>
+    </br>
+    <fieldset>
+     <form action="<?php echo $this->baseUrl();?>/generalsetup/formulir/exportcsv" method="POST">
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		
+	    	<tr>
+	        	<th><?php echo $this->translate("Formulir No");?></th>
+	       	    <th><?php echo $this->translate("Password");?></th>
+	       </tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjformilar): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	    	    <td><?php echo $this->escape($lobjformilar['FamulirNo']);?></td>
+	    		<td><?php echo $this->escape($lobjformilar['Password']);?></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+	    	<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+   			<tr>
+   				<td colspan = "2">
+   					<input name="submit" type="submit" class="NormalBtn" dojoType=dijit.form.Button label = <?php echo $this->translate("Export");?> value=<?php echo $this->translate("Export");?>>
+   				</td>
+   			</tr>
+   			
+		</table>
+		
+		</form>
+	</fieldset>

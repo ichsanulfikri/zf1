@@ -1,0 +1,360 @@
+<script type="text/javascript">
+$(function() {
+	<?php 
+	 for($i=1; $i<=$this->landscape["SemsterCount"]; $i++){ ?>
+		 $( "#semesterTabs-<?php echo $i; ?>").tabs();
+	 <?php } ?>
+});
+
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+
+	$( "#dialog-add-block" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 650		
+	});
+
+	$( "#dialog-add-course" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 650
+	});
+
+	
+});
+
+function addBlock(){
+	url= "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'add-block','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true); ?>";
+	$('#dialog-add-block').load(url);
+	$('#dialog-add-block').dialog('open');
+	
+}
+
+
+function editBlock(idBlock){
+	
+	url= "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-block','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true); ?>/idblock/"+idBlock;
+	$('#dialog-add-block').load(url);
+	$('#dialog-add-block').dialog('open');
+	
+}
+
+function addCourse(type,idBlock,sem){
+	
+	url= "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'add-block-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true); ?>/type/"+type+"/idblock/"+idBlock+"/semester/"+sem;
+	$('#dialog-add-course').load(url);
+	$('#dialog-add-course').dialog('open');
+	
+}
+
+
+function validateTotalCreditHours(){
+	
+	var IdProgramReq = $('select[name="IdProgramReq"]').val();
+	
+		
+		//check dah exceed ke credit hours
+		if(IdProgramReq!=''){
+			
+				$.ajax({
+					url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'ajax-get-program-requirement','idlandscape'=>$this->landscapeId,'idprogram'=>$this->programId),'default',true);?>",
+					data: {'IdProgramReq':IdProgramReq},
+					type: 'POST',
+					dataType: 'json'	
+				}).done(function ( data ) {	
+		
+					if(data.status==0){
+						alert("Sorry you have exceed total credit hours for this particular Subject Type");	
+						$('#IdProgramReq').get(0).selectedIndex = 0;
+					}else{
+						$('#SubjectType').val(data.SubjectType);
+					}
+					
+				});
+		}//end if
+	
+}
+
+
+function getCreditHours(e){
+
+	//var SubjectType = $('select[name="SubjectType"]').val();
+	var SubjectType = $('#SubjectType').val();
+
+	if(SubjectType!=''){
+			$.ajax({
+				url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'ajax-get-subject','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>",
+				data: {'IdSubject':$(e).val(),'SubjectType':SubjectType},
+				type: 'POST',
+				dataType: 'json'	
+			}).done(function ( data ) {
+		
+				if(data.status==0){
+					alert("Sorry you cannot choose this Subject. The Course Credit Hour has exceeded available balance Minimum Requirement Credit Hours. Available balance credit hours is "+data.available);
+					$('#IdSubject').get(0).selectedIndex = 0;						
+				}else{
+					$('#CreditHours').val(data.CreditHours);					
+				}
+			});
+	}else{
+		alert("Please Select Subject Type First.");
+		$('#IdSubject').get(0).selectedIndex = 0;
+	}
+}
+
+function back(){
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'landscape-list','id'=>$this->programId),'default',true);?>";
+}
+
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Info"); ?></a></div></li>
+	 	<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'program-requirement','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Program Requirments"); ?></a></div></li>	
+	 	<?php if($this->landscape["LandscapeType"]==44){?>
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'manage-block-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php }else{?>
+			
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php } ?>
+	</ul>
+	<div class="clear"></div>
+</div>
+<br>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		
+		   	<?php if($this->total_block < $this->landscape["Blockcount"]){ ?>
+		   	<li>
+				<a href="#" onclick="addBlock();">
+					<span class='add'></span>
+					Add Block
+				</a>
+			</li>
+			<?php } ?>
+		
+			<li>
+				<a href="#" onclick="back();">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<div id="dialog-add-block" title="Add Block"></div>
+<div id="dialog-add-course" title="Add Course"></div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+
+
+<div style="width:100%;">
+
+<?php 
+for($i=1; $i<=$this->landscape["SemsterCount"]; $i++){
+
+	$blockSemDB = new GeneralSetup_Model_DbTable_LandscapeBlockSemester();
+	$blocks = $blockSemDB->getlandscapeblockBySem($this->landscapeId,$i);
+?>
+
+ <img src="<?php echo "../images/icon/toggle_collapse_alt.png"?>"> <h4><?php echo $this->translate("Semester").' '.$i; ?></h4><br>
+
+<div id="semesterTabs-<?php echo $i;?>">
+	
+	<?php 
+	if(count($blocks)>0){
+		echo '<ul>';
+		$b=0; 
+		foreach($blocks as $block){?>
+	
+		<li><a href="#blockTab-<?php echo $b;?>"><?php echo 'Block '.$block["block"];?></a></li> 
+		 
+	<?php $b++; } //end loop block
+		echo '</ul>';
+	}//end isset block ?>
+	
+	
+	<?php 
+	if(count($blocks)>0){
+		$b=0; 
+		foreach($blocks as $block){
+		
+			//get course
+			$blockCourseDb = new GeneralSetup_Model_DbTable_LandscapeBlockSubject();
+		    $compulsory_course = $blockCourseDb->getBlockCourse($this->landscapeId,$block["idblock"],1);		   
+		    $notcompulsory_course = $blockCourseDb->getBlockCourse($this->landscapeId,$block["idblock"],2);
+			
+	?>
+		
+		<div id="blockTab-<?php echo $b;?>"> 
+		
+			<div class="message toolbar">	
+				<h2><?php echo $block["blockname"];?></h2>			
+				<div class="toolbar-button">
+					<ul>						  
+						<li>
+							<a href="#" onclick="editBlock('<?php echo $block["idblock"];?>');">
+								<span class='edit'></span>
+								Edit Block
+							</a>
+						</li>
+					</ul>
+				</div>
+			</div>	
+			
+			
+			<br>
+			
+			<h1><?php echo $this->translate("Compulsory Courses")?></h1><br>
+  			<div class="span-7 buttons">
+   				<a class="positive addLink" href="#" onClick="javscript:addCourse(1,'<?php echo $block["idblock"];?>','<?php echo $i?>');">Add Compulsory Course  </a> 
+  			</div>
+  			<br>
+   			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>		
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>
+					<th width="50px">Action</th>
+				</tr>
+				
+				<?php 
+				if(is_array($compulsory_course)){
+					$total_credit_hours=0;
+					foreach($compulsory_course as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+												
+				?>
+					<tr class='shade'>						
+						<td align="left" bgcolor="#F5F6CE"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center" bgcolor="#F5F6CE"><?php echo $common["SubCode"]?></td>
+						<td align="center" bgcolor="#F5F6CE"><?php echo $common["DefinitionDesc"]?></td>						
+						<td align="center" bgcolor="#F5F6CE"><?php echo $common["CreditHours"]?></td>
+						<td align="center" bgcolor="#F5F6CE">
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'delete-block-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId,'idLandscapeSub'=>$common["IdLandscapeblocksubject"]),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						
+						</td>
+					</tr>
+					<?php 
+						$childs=$blockCourseDb->getBlockCourseChild($common["IdLandscapeblocksubject"],1);
+							foreach($childs as $child) { 
+					?>
+					<tr class='shade'>						
+						<td align="left">&nbsp;&nbsp;&nbsp;- <?php echo $child["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $child["SubCode"]?></td>
+						<td align="center"><?php echo $child["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $child["CreditHours"]?></td>
+						<td align="center">
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'delete-block-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId,'idLandscapeSub'=>$child["IdLandscapeblocksubject"]),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						
+						</td>
+					</tr>					
+					<?php 
+							}
+					?>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		  	 </table>
+		  	 
+		  	 
+		  	 <br><br>
+			
+			<h1><?php echo $this->translate("Not Compulsory Courses")?></h1><br>
+  			<div class="span-7 buttons">
+   				<a class="positive addLink" href="#" onClick="javscript:addCourse(2,'<?php echo $block["idblock"];?>');">Add Not Compulsory Course  </a> 
+  			</div>
+  			<br>
+   			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>		
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>
+					<th width="50px">Action</th>
+				</tr>
+				
+				<?php 
+				if(is_array($notcompulsory_course)){
+					$total_credit_hours=0;
+					foreach($notcompulsory_course as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+												
+				?>
+					<tr class='shade'>						
+						<td align="left"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+						<td align="center">
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'delete-block-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId,'idLandscapeSub'=>$common["IdLandscapeblocksubject"]),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						</td>
+					</tr>
+					<?php 
+						$nchilds=$blockCourseDb->getBlockCourseChild($common["IdLandscapeblocksubject"]);
+							foreach($nchilds as $nchild) { 
+					?>
+					<tr class='shade'>						
+						<td align="left">&nbsp;&nbsp;&nbsp;- <?php echo $child["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $nchild["SubCode"]?></td>
+						<td align="center"><?php echo $nchild["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $nchild["CreditHours"]?></td>
+						<td align="center">
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'delete-block-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId,'idLandscapeSub'=>$nchild["IdLandscapeblocksubject"]),'default',true)?>"><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						
+						</td>
+					</tr>					
+					<?php 
+							}
+					?>					
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="4" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		  	 </table>
+
+		 </div>
+	
+	
+	<?php $b++; }//end loop block
+	}else{ echo 'There is no Block added. '; } //end isset block ?>
+	
+</div>
+
+<br><br>
+<?php } ?>
+
+</div>

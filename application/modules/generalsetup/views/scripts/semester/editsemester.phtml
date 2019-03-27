@@ -1,0 +1,601 @@
+
+<script type="text/javascript">
+	var rowid=1;
+	var batchArray2 = new Array();
+	dojo.addOnLoad(function() {
+		//dijit.byId('SemesterMainStatus').set('value','');
+		//dijit.byId('SemesterMainStatus').set('placeHolder','Select');
+		//dijit.byId('Scheme').set('value','');
+		//dijit.byId('Scheme').set('placeHolder','Select');
+		dijit.byId('StudentIntake').set('value','');
+		dijit.byId('StudentIntake').set('placeHolder','Select');
+		dijit.byId('Program').set('value','');
+		dijit.byId('Program').set('placeHolder','Select');
+		//dijit.byId('SemesterStatus').set('value','');
+		//dijit.byId('SemesterStatus').set('placeHolder','Select');
+		//disableCheck();
+	});
+	<?php foreach($this->larrsemesterDetails as $semData){ ?>
+		batchArray2.push('<?php echo $semData['IntakeId'].$semData['Program']; ?>');
+	  <?php }?>
+
+	var batchArray  = new Array();
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+	function validateSemesterMainDates() {
+		var startDate = new Date(dijit.byId("SemesterMainStartDate").value);
+		var endDate = new Date(dijit.byId("SemesterMainEndDate").value);
+		var result = dojo.date.compare(startDate, endDate);
+		if(result == 1) {
+			dijit.byId("SemesterMainStartDate").attr('required','true');
+			dijit.byId("SemesterMainStartDate").focus();
+			alert("Start date cannot be greater than end date");
+			return false;
+		}
+		return true;
+	}
+
+	function addSemesterentry() {
+		var flag = false;
+		var SemesterCode = dijit.byId("SemesterCode").value;
+
+
+		if(dijit.byId("SemesterCode").value==''){
+		    dijit.byId("SemesterCode").attr('required','true');
+			dijit.byId("SemesterCode").focus();
+			flag = false;
+		}
+
+
+		if(dijit.byId("StudentIntake").value==''){
+		    dijit.byId("StudentIntake").attr('required','true');
+			dijit.byId("StudentIntake").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("SemesterStartDate").value=='Invalid Date'){
+		    dijit.byId("SemesterStartDate").attr('required','true');
+			dijit.byId("SemesterStartDate").focus();
+			flag = false;
+		}
+
+		//if(dijit.byId("SemesterStatus").value==''){
+		//    dijit.byId("SemesterStatus").attr('required','true');
+		//	dijit.byId("SemesterStatus").focus();
+		//	flag = false;
+		//}
+
+		if(dijit.byId("SemesterEndDate").value=='Invalid Date'){
+		  dijit.byId("SemesterEndDate").attr('required','true');
+			dijit.byId("SemesterEndDate").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("Program").value==''){
+		    dijit.byId("Program").attr('required','true');
+			dijit.byId("Program").focus();
+			flag = false;
+		}
+
+		if((dijit.byId("SemesterStartDate").value != "Invalid Date") && (dijit.byId("SemesterEndDate").value != "Invalid Date")) {
+			var startDate = new Date(dijit.byId("SemesterStartDate").value);
+			var endDate = new Date(dijit.byId("SemesterEndDate").value);
+			var result = dojo.date.compare(startDate, endDate);
+			if(result == 1) {
+				dijit.byId("SemesterStartDate").attr('required','true');
+				dijit.byId("SemesterStartDate").focus();
+				flag = false;
+				alert("Start date cannot be greater than end date");
+			}
+		}
+		//alert(flag);
+
+        if(SemesterCode!=''){
+			$.post("<?php echo $this->baseUrl();?>/generalsetup/semester/checksemcode", { value: SemesterCode },
+		    function(data) {
+			     if(data=='false')
+			     {
+			     	document.getElementById('targetDiv').innerHTML = 'Semester Code already taken. Please try different.';
+			     	var flag = false;
+			     	dijit.byId("SemesterCode").set("value",null);
+			     	//dijit.byId("SemesterCode").attr('required','true');
+			     	dijit.byId("SemesterCode").focus();
+			     	return flag;
+			     } else if(data=='true') {
+			     	document.getElementById('targetDiv').innerHTML = '';
+			     	var flag = true;
+			     	semesterdetailsInsert();
+			     	}
+		    });
+		}
+
+
+        //alert(flag);
+		//if(flag == true) {
+		//	semesterdetailsInsert();
+		//}
+		//return flag;
+	}
+
+	function semesterdetailsInsert() {
+	  var label = dijit.byId('Add').get('label');
+	  if(label == "Add") {
+			var SemesterCode = dijit.byId("SemesterCode").value;
+
+			var StudentIntake = dijit.byId("StudentIntake");
+			var StudentIntakeName = dijit.byId("StudentIntake").displayedValue;
+	
+			var Program = dijit.byId("Program");
+			var ProgramName = dijit.byId("Program").displayedValue;
+			
+			//var SemesterStatus = dijit.byId("SemesterStatus");
+			//var SemesterStatusName = dijit.byId("SemesterStatus").displayedValue;
+
+			var SemesterStartDate = dijit.byId("SemesterStartDate");
+			var SemesterStartDateName = dijit.byId("SemesterStartDate").displayedValue;
+
+			var SemesterEndDate = dijit.byId("SemesterEndDate");
+			var SemesterEndDateName = dijit.byId("SemesterEndDate").displayedValue;
+
+			var duplication = SemesterCode;
+			var duplication1 = (StudentIntakeName+ProgramName);
+			batchArray.push(duplication);
+			batchArray2.push(duplication1);
+			if(arrHasDupes(batchArray))
+			{
+				batchArray = batchArray.unique();
+				batchArray2 = batchArray2.unique();
+				batchArray2.pop();
+				alert("Duplicate Semester Code");
+			}
+			else if(arrHasDupes(batchArray2)){
+				batchArray = batchArray.unique();
+				batchArray.pop();
+				batchArray2 = batchArray2.unique();
+				alert("Duplicate Intake + Program");
+			}
+			else{
+				var trow=document.getElementById('hor').insertRow(rowid);
+				var tcol1=trow.insertCell(0);
+				var tcol2=trow.insertCell(1);
+				var tcol3=trow.insertCell(2);
+				//var tcol4=trow.insertCell(3);
+				var tcol5=trow.insertCell(3);
+				var tcol6=trow.insertCell(4);
+				var tcol7=trow.insertCell(5);
+
+				tcol1.innerHTML="<input type='hidden' value='"+SemesterCode+"' name=SemesterCode[]>"+SemesterCode;
+				tcol2.innerHTML="<input type='hidden' value='"+StudentIntake+"' name=StudentIntake[]>"+StudentIntakeName;
+				tcol3.innerHTML="<input type='hidden' value='"+Program+"' name=Program[]>"+ProgramName;
+				tcol5.innerHTML="<input type='hidden' value='"+SemesterStartDate+"' name=SemesterStartDate[]>"+SemesterStartDateName;
+				//tcol4.innerHTML="<input type='hidden' value='"+SemesterStatus+"' name=SemesterStatus[]>"+SemesterStatusName;
+				tcol6.innerHTML="<input type='hidden' value='"+SemesterEndDate+"' name=SemesterEndDate[]>"+SemesterEndDateName;
+				tcol7.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+				rowid++;
+			}
+	  }
+	  else if(label == "Update") {
+		  console.log(this);
+	  }
+
+	}
+
+	var batchArray  = new Array();
+	var oldContent = "";
+	var NoCnt	=	0;
+
+
+	function deleteRow(r)
+	{
+		rowid--;
+
+		var i=r.parentNode.parentNode.rowIndex;
+		batchArray.splice(parseInt(i-1),1);
+		document.getElementById('hor').deleteRow(i);
+
+	}
+
+	function clearpageAdd() {
+		dijit.byId("SemesterCode").set("value",null);
+		dijit.byId("StudentIntake").set("value",null);
+		dijit.byId('StudentIntake').set('placeHolder','Select');
+                dijit.byId("Program").set("value",null);
+		dijit.byId('Program').set('placeHolder','Select');
+                
+		dijit.byId("SemesterStartDate").set("value",null);
+                //dijit.byId('SemesterStartDate').set('placeHolder','Select');
+		dijit.byId("SemesterEndDate").set("value",null);
+                //dijit.byId('SemesterEndDate').set('placeHolder','Select');                 
+		//dijit.byId("SemesterStatus").set("value","");
+		//dijit.byId('SemesterStatus').set('placeHolder','Select');
+                
+                //dojo.forEach(dijit.byId('myForm1').getDescendants(), function(widget) {
+                //        widget.attr('value', null);
+                //   });
+
+                
+                
+                
+	}
+
+	function changebutton() {
+		var form = dijit.byId("myForm");
+		var value=form.attr('value').IdProgramReq;
+
+		if(value == "" ) {
+			dijit.byId('Add').set('label','Add');
+		} else {
+			dijit.byId('Add').set('label','Update');
+		}
+	}
+
+	function getsemesterdetails(IdSemester,SemesterCode,StudentIntake,Program,SemesterStatus,SemesterStartDate,SemesterEndDate) {
+		dijit.byId("SemesterCode").set("value",SemesterCode);
+		dijit.byId("StudentIntake").set("value",StudentIntake);
+//		dijit.byId("SemesterStartDate").set("value",SemesterStartDate);
+//		dijit.byId("SemesterEndDate").set("value",SemesterEndDate);
+		dijit.byId("Program").set("value",Program);
+		//dijit.byId("SemesterStatus").set("value",SemesterStatus);
+		changebutton();
+	}
+
+	function deletesemesterdetails(IdSemesterDetails) {
+		var ans = confirm("Do you want to delete?")
+		if(ans) {
+			var xhrArgs = {url: "<?php echo $this->baseUrl();?>" + "/generalsetup/semester/deletesemesterdetails/id/" + IdSemesterDetails,
+					handleAs:'json',
+					load:function(data){
+						if(data == '1') {
+							window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/semester/editsemester/id/<?php echo $this->IdSemMas;?>"
+						}
+					}
+			}
+			dojo.xhrPost(xhrArgs);
+		}
+	}
+
+
+	function generateNameCode(){
+		var academic_year = $('#idacadyear').val();
+		var name1 = dijit.byId("SemesterCountType").value;
+		var name2 = dijit.byId("SemesterFunctionType").value;
+		
+		if( academic_year!="" && name1!="" && name2!="" ){
+
+			var data = getSemCode(academic_year,name1,name2);
+
+			dijit.byId("SemesterMainCode").set('value',data['code']);
+			dijit.byId("SemesterMainName").set('value',data['name']);
+			dijit.byId("SemesterMainDefaultLanguage").set('value',data['name_default_language']);
+			
+		}
+
+		
+	}
+
+	function getSemCode(acad_year, name1, name2){
+
+		var result = new Array();
+		
+		if(name1=='1' && name2=='0'){
+			result['name'] =  "Gasal "+acad_year+" (R)";
+			result['name_default_language'] =  "Gasal "+acad_year+" Reg";
+			result['code'] = acad_year.substring(0,4)+"1";
+		}else
+		if(name1=='1' && name2=='1'){
+			result['name'] =  "Gasal "+acad_year+" (P)";
+			result['name_default_language'] =  "Gasal "+acad_year+" Pem";
+			result['code'] = acad_year.substring(0,4)+"11";
+		}else
+		if(name1=='1' && name2=='2'){
+			result['name'] =  "Gasal "+acad_year+" (K)";
+			result['name_default_language'] =  "Gasal "+acad_year+" Kon";
+			result['code'] = acad_year.substring(0,4)+"21";
+		}else
+		if(name1=='1' && name2=='3'){
+			result['name'] =  "Gasal "+acad_year+" (V)";
+			result['name_default_language'] =  "Gasal "+acad_year+" Ver";
+			result['code'] = acad_year.substring(0,4)+"31";
+		}else
+		if(name1=='1' && name2=='4'){
+			result['name'] =  "Gasal "+acad_year+" (Vd)";
+			result['name_default_language'] =  "Gasal "+acad_year+" Vld";
+			result['code'] = acad_year.substring(0,4)+"41";
+		}else
+
+		if(name1=='2' && name2=='0'){
+			result['name'] =  "Genap "+acad_year+" (R)";
+			result['name_default_language'] =  "Genap "+acad_year+" Reg";
+			result['code'] = acad_year.substring(0,4)+"2";
+		}else
+		if(name1=='2' && name2=='1'){
+			result['name'] =  "Genap "+acad_year+" (P)";
+			result['name_default_language'] =  "Genap "+acad_year+" Pem";
+			result['code'] = acad_year.substring(0,4)+"12";
+		}else
+		if(name1=='2' && name2=='2'){
+			result['name'] =  "Genap "+acad_year+" (K)";
+			result['name_default_language'] =  "Genap "+acad_year+" Kon";
+			result['code'] = acad_year.substring(0,4)+"22";
+		}else
+		if(name1=='2' && name2=='3'){
+			result['name'] =  "Genap "+acad_year+" (V)";
+			result['name_default_language'] =  "Genap "+acad_year+" Ver";
+			result['code'] = acad_year.substring(0,4)+"32";
+		}else
+		if(name1=='2' && name2=='4'){
+			result['name'] =  "Genap "+acad_year+" (Vd)";
+			result['name_default_language'] =  "Genap "+acad_year+" Vld";
+			result['code'] = acad_year.substring(0,4)+"42";
+		}
+
+		return result;					
+	}
+
+</script>
+
+
+<!-- Form for Semester Main -->
+<fieldset>
+    <legend><?php echo $this->translate("Semester").' '.$this->translate("Main");?></legend>
+
+                <Form dojoType="dijit.form.Form"  id="myForm1" action="" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+if(validateSemesterMainDates()) {
+									return true;}
+									else {return false; }
+                } else {
+									return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Semester").' '.$this->translate("Main").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Academic Year");?><span class="reqMark">*</span></td>
+                            <td colspan="3">
+                              <?php echo $this->lobjsemesterForm->idacadyear;?>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                        	<td></td>
+                            <td colspan="3">
+                              <?php echo $this->lobjsemesterForm->SemesterCountType;?>
+                              <?php echo $this->lobjsemesterForm->SemesterFunctionType;?>
+                            </td>
+                        </tr>
+                        
+                        <tr>
+                            <td ><?php echo $this->translate("Semester Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjsemesterForm->SemesterMainName;?></td>
+                        	<td ><?php echo $this->translate("Semester Name") ." ". $this->translate($this->defaultlanguage);?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjsemesterForm->SemesterMainDefaultLanguage;?></td>
+                        </tr>
+                        <tr>
+                        	<td ><?php echo $this->translate("Semester").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td colspan="3"><?php echo $this->lobjsemesterForm->SemesterMainCode;?><?php echo $this->lobjsemesterForm->IdSemesterMaster; ?></td>
+                        </tr>
+                        
+                        <tr>
+                        		<td><?php echo $this->translate("Semester").' '.$this->translate("Start").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->SemesterMainStartDate;?></td>
+                            <td><?php echo $this->translate("Semester").' '.$this->translate("End").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->SemesterMainEndDate;?></td>
+
+                        </tr>
+                        <tr>
+                        		<!--  <td><?php //echo $this->translate("Semester").' '.$this->translate("Status");?><span class="reqMark">*</span></td>
+                            <td><?php //echo $this->lobjsemesterForm->SemesterMainStatus;?></td> -->
+                            <td><?php echo $this->translate("Scheme");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->Scheme;?></td>
+
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Is Countable");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjsemesterForm->IsCountable;?></td>
+                            <td colspan=2></td>
+                        </tr>
+
+                        <!--<tr>
+                        		<th colspan="4"><?php echo $this->translate("Semester").' '.$this->translate("Details").' ('.$this->translate("optional").')';?></th>
+                        </tr>
+                        <tr>
+                        		<td><?php echo $this->translate("Semester").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->SemesterCode;?></td>
+                            <td><?php echo $this->translate("Intake");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->StudentIntake;?></td>
+
+                        </tr>
+                        <tr>
+                        		<td><?php echo $this->translate("Start").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->SemesterStartDate;?></td>
+                            <td><?php echo $this->translate("End").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->SemesterEndDate;?></td>
+
+                        </tr>
+                        <tr>
+                        		<td><?php echo $this->translate("Program");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemesterForm->Program;?></td>
+                            <td><?php //echo $this->translate("Semester").' '.$this->translate("Status");?> <span class="reqMark">*</span> </td>
+                            <td><?php //echo $this->lobjsemesterForm->SemesterStatus;?><?php echo $this->lobjsemesterForm->UpdDate ;?>
+								<?php echo $this->lobjsemesterForm->UpdUser ;?></td>
+                        </tr>
+                        <tr>
+                            <td colspan="4" align = "right">
+                            <span id="targetDiv" style="float:left;color:red;"></span>
+                            <?php echo $this->lobjsemesterForm->Add;?><?php echo $this->lobjsemesterForm->Clear;?>
+                            </td>
+                        </tr>
+
+	              --></table>
+
+							<!--<table class="table" width="100%" id="hor">
+								<tr>
+									<th><?php echo $this->translate("Semester").' '.$this->translate("Code")?></th>
+									<th><?php echo $this->translate("Intake")?></th>
+									<th><?php echo $this->translate("Program")?></th>
+									<th><?php echo $this->translate("Start Date")?></th>
+									<th><?php echo $this->translate("End Date")?></th>
+									<th><?php echo $this->translate("Delete")?></th>
+								</tr>
+								<?php foreach($this->larrsemesterDetails as $semData) { ?>
+									<tr id="<?php echo $semData['IdSemester']; ?>" style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+										<td><?php echo $semData['SemesterCode'] ?><input type="hidden" value="<?php echo $semData['SemesterCode'] ?>" name="SemesterCode[]" /></td>
+										<td><?php echo $semData['IntakeId'] ?><input type="hidden" value="<?php echo $semData['IdIntake'] ?>" name="StudentIntake[]" /></td>
+										<td><?php echo $semData['Program'] ?><input type="hidden" value="<?php echo $semData['IdProgram'] ?>" name="Program[]" /></td>
+										 <td><?php //echo $semData['SemesterStatus'] ?><input type="hidden" value="<?php //echo $semData['IdSemesterStatus'] ?>" name="SemesterStatus[]" /></td> 
+										<td><?php echo $semData['SemesterStartDate'] ?><input type="hidden" value="<?php echo $semData['SemesterStartDate'] ?>" name="SemesterStartDate[]" /></td>
+										<td><?php echo $semData['SemesterEndDate'] ?><input type="hidden" value="<?php echo $semData['SemesterEndDate'] ?>" name="SemesterEndDate[]" /><input type="hidden" value="<?php echo $semData['IdSemester'] ?>" name="IdSemester[]" /></td>
+
+				        	<td><a href="#" onClick="deletesemesterdetails('<?php echo $semData['IdSemester'];?>');" >
+											<img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'>
+										</a></td>
+									</tr>
+								<?php }?>
+							</table>
+							-->
+                            <?php 
+                            /*
+                             * Loop for all active activity
+                             */ 
+                            foreach ($this->larractivitylist as $index => $activity):?>
+                            <table class="table" width="100%">
+                                <tr>
+                                    <th colspan = "4"><?php echo $activity['value'];?></th>
+                                </tr>
+                                <tr>
+                                    <td><?php echo $this->translate("Start").' '.$this->translate("Date");?></td>
+                                    <td><?php  
+                                        /*
+                                         * Assign date for dojo
+                                         */
+                                        
+                                        $month= date("m"); // Month value
+                                        $day= date("d"); //today's date
+                                        $year= date("Y"); // Year value
+                                        $yesterdaydate= date('Y-m-d', mktime(0,0,0,$month,($day),$year));
+                                        $dateformat = "{datePattern:'dd-MM-yyyy'}";
+                                        
+                                        /*
+                                         * Set start date name to be unique
+                                         */
+                                        
+                                        $startDate = 'StartDate'.$activity['key'];
+                                        
+                                        /*
+                                         * Create start date element
+                                         */
+                                        $SemesterAddDropStartDate = new Zend_Form_Element_Text($startDate);
+                                        $SemesterAddDropStartDate->setAttrib('dojoType',"dijit.form.DateTextBox");
+                                        $SemesterAddDropStartDate->setAttrib('onChange',"dijit.byId('EndDate').constraints.min = arguments[0];");
+                                        
+                                        /*
+                                         * Assign value 
+                                         */
+                                        if(isset($this->larraddDrop[$startDate])) :
+                                            $SemesterAddDropStartDate->setValue($this->larraddDrop[$startDate]);
+                                        endif;
+                                        
+                                        
+                                        $SemesterAddDropStartDate->setAttrib('required',"false")
+                                        ->setAttrib('constraints', "$dateformat");
+                                        $SemesterAddDropStartDate->removeDecorator("DtDdWrapper")
+                                        ->removeDecorator("Label")
+                                        ->removeDecorator('HtmlTag');
+                                        
+                                    echo $SemesterAddDropStartDate;
+                                    ?></td>
+                                    <td><?php echo $this->translate("End").' '.$this->translate("Date");?></td>
+                                    <td><?php
+                                       
+                                        /*
+                                         * Set end date name to be unique
+                                         */
+                                        
+                                        $endDate = 'EndDate'.$activity['key'];
+                                        $SemesterAddDropEndDate = new Zend_Form_Element_Text($endDate);
+                                        $SemesterAddDropEndDate->setAttrib('dojoType',"dijit.form.DateTextBox");
+                                        $SemesterAddDropEndDate->setAttrib('onChange',"dijit.byId('StartDate').constraints.max = arguments[0];") ;
+                                        
+                                        /*
+                                         * Assign value
+                                         */
+                                        
+                                        if(isset($this->larraddDrop[$startDate])) :
+                                            $SemesterAddDropEndDate->setValue($this->larraddDrop[$endDate]);
+                                        endif;
+                                        
+                                        $SemesterAddDropEndDate->setAttrib('required',"false")
+                                        ->setAttrib('constraints', "$dateformat");
+                                        
+                                        $SemesterAddDropEndDate->removeDecorator("DtDdWrapper")
+                                        ->removeDecorator("Label")
+                                        ->removeDecorator('HtmlTag');
+                                        
+                                        echo $SemesterAddDropEndDate;
+                                            
+                                        /*
+                                         * Set id name to be unique
+                                         */
+                                        $id = 'id'.$activity['key'];
+                                        $SemesterAddDropId = new Zend_Form_Element_Hidden($id);
+                                        
+                                        /*
+                                         * assign value
+                                         */
+                                        if(isset($this->larraddDrop[$id])) :
+                                            $SemesterAddDropId->setValue($this->larraddDrop[$id]);
+                                        endif;
+                                        
+                                        $SemesterAddDropId->removeDecorator("DtDdWrapper");
+                                        $SemesterAddDropId->removeDecorator("Label");
+                                        $SemesterAddDropId->removeDecorator('HtmlTag');
+                                        echo $SemesterAddDropId;
+                                        ?>
+                                        </td>
+                                </tr>
+                            </table>
+                            <?php endforeach;?>
+                            <table class="table" width="100%">
+								<tr>
+									<td align="right"><?php echo $this->lobjsemesterForm->Save;?> <input
+										type="button" class="NormalBtn" dojotype="dijit.form.Button"
+										label="<?php echo $this->translate("Back"); ?>"
+										onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'semester', 'action'=>'index'),'default',true);?>';" />
+									</td>
+								</tr>
+							</table>
+</Form>
+
+</fieldset>
+<!-- Form for Semester Main ends here -->
+
+

@@ -1,0 +1,187 @@
+<script>
+function add(){		
+	
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'add-landscape','landscapeId'=>$this->landscapeId,'programId'=>$this->programId),'default',true); ?>";
+	
+}
+
+$(function() {
+	// a workaround for a flaw in the demo system (http://dev.jqueryui.com/ticket/4375), ignore!
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+
+
+	$( "#dialog-change-status" ).dialog({
+		modal: true,
+		autoOpen: false,
+		width: 400,
+		buttons : 	{
+	          "Save": function() {
+	           	$("#landscape_status").submit();
+	          },
+	          Cancel: function() {
+	            $( this ).dialog( "close" );
+	          }	
+		}
+	});
+});
+
+function changeStatus(){
+	
+	var idLand = $('input[name=idLand]:checked').val();
+		
+	if(!idLand){
+		alert('Please select Landscape first.');
+	}else{
+		//popup dialog box
+		$('#idLandscape').val(idLand);
+		$('#dialog-change-status').dialog('open');
+	}
+}
+
+
+	
+</script>
+
+
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   <li>
+				<a href="#" onclick="add();" >
+					<span class='add'></span>
+					Create Landscape
+				</a>
+			</li>	
+			<li>
+				<a href="#" onclick="changeStatus();" >
+					<span class='edit'></span>
+					Change Status
+				</a>
+			</li>		
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+<div style="width:100%;">
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			
+	    	<tr>
+	    	    <th>&nbsp;</th>
+	        	<th><?php echo $this->translate("Landscape Type");?></th>
+	        	<th><?php echo $this->translate("Description");?></th>
+	        	<th><?php echo $this->translate("Intake");?></th>
+	        	<th><?php echo $this->translate("Created Date");?></th>
+	        	<th><?php echo $this->translate("Status");?></th>
+	        	<th><?php echo $this->translate("Default");?></th>
+	        	<th><?php echo $this->translate("Action");?></th>	        	
+	    	</tr>
+	    	
+	        <?php 
+	        if (count($this->paginator)):
+	         	foreach ($this->paginator as $lobjlandscape): 
+	        
+	         		if($lobjlandscape['Active'] == 1 ||  $lobjlandscape['Active'] == 2){
+	         			$disabled = "disabled";
+	         		}else{
+	         			$disabled = '';
+	         		}
+	        ?>
+	        
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	  		    <td><input type="radio" name="idLand" id="idLand" value="<?php echo $lobjlandscape["IdLandscape"];?>" <?php echo $disabled;?>></td>
+	        	<td><?php print_r($this->escape($lobjlandscape['DefinitionDesc']));?></td>
+	        	<td><?php print_r($this->escape($lobjlandscape['ProgramDescription']));?></td>
+				<td><?php echo $this->escape($lobjlandscape['IntakeId']);?></td>
+	       		<td><?php echo $this->escape(date('d-m-Y',strtotime($lobjlandscape['UpdDate'])));?></td>	       		
+				<td>
+				<?php 
+				if($lobjlandscape['Active'] == 1) {
+						echo "Active";
+				}elseif($lobjlandscape['Active'] == 2){
+						echo "InActive";
+				} else {
+						echo "Draft";
+				}
+				?>
+				</td>
+				<td align='center'>
+				<?php 
+					if($lobjlandscape['Default']==1){
+						$default = $this->translate("Yes");					
+					}else{
+						$default = $this->translate("No");		
+					}
+				?>	
+				
+				<?php if($lobjlandscape['Active'] == 1) { ?>
+				   		<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'set-default','id'=>$this->programId,'idlandscape'=>$lobjlandscape['IdLandscape']),'default',true);?>"><?php echo $default;?></a></td>
+				<?php } ?>				
+				
+				<td>
+				
+				<?php //if($lobjlandscape['Active'] != 1 && $lobjlandscape['Active'] != 2){?>
+	        		<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','id'=>$this->programId,'idlandscape'=>$lobjlandscape['IdLandscape']),'default',true);?>"><img src='<?php echo $this->baseUrl();?>/images/edit.png' title="Manage Landscape" ></a>&nbsp;
+	        	<?php //} ?>
+	        	
+					  <?php if($lobjlandscape['LandscapeType']==43){?>
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'view-landscape','id'=>$this->programId,'idlandscape'=>$lobjlandscape['IdLandscape']),'default',true);?>"><img src='<?php echo $this->baseUrl();?>/images/view_2.png' title="View Landscape" ></a>&nbsp;				   
+					<?php }elseif($lobjlandscape['LandscapeType']==44){?>
+						<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'view-block-landscape','id'=>$this->programId,'idlandscape'=>$lobjlandscape['IdLandscape']),'default',true);?>"><img src='<?php echo $this->baseUrl();?>/images/view_2.png' title="View Landscape" ></a>&nbsp;
+					<?php } ?>
+									   
+				</td>
+	        	
+	            <?php endforeach; ?>
+	            <?php endif; ?>
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+
+		</table>
+
+</div>
+<div id="dialog-change-status" title="Change Landscape Status">
+<form id="landscape_status" method="post" action="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'change-status','programId'=>$this->programId),'default',true); ?>">
+<input type="hidden" id="idLandscape" name="idLandscape" value="">
+<input type="hidden" id="idProgram" name="idProgram" value="<?php echo $this->programId; ?>">
+<table class="" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<td>Status</td>
+		<td width="5px">:</td>
+		<td>
+		<select name="Active" id="Active">
+			<option value="0"><?php echo $this->translate("Draft")?></option>
+			<option value="1"><?php echo $this->translate("Active")?></option>
+			<option value="2"><?php echo $this->translate("In-active")?></option>
+		</select>
+		</td>
+	</tr>	
+</table>
+</form>
+</div>
+

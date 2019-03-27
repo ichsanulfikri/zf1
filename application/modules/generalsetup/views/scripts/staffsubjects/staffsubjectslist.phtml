@@ -1,0 +1,190 @@
+<script type="text/javascript">
+
+var subjectArray  = new Array();
+
+dojo.addOnLoad(function(){
+	dijit.byId('IdSemester').set('value','');
+	dijit.byId('IdSemester').set('placeHolder','Select');
+	dijit.byId('IdSubject').set('value','');
+	dijit.byId('IdSubject').set('placeHolder','Select');	
+	});
+
+	var rowid = <?php echo count($this->paginator)+1;?>;
+	
+	<?php if($this->paginator) {?>	
+	<?php foreach($this->paginator as $larrcomponent) { ?>		
+		subjectArray.push("<?php echo $this->value.$larrcomponent['SemesterMasterName'].$this->value.$larrcomponent['SubjectName'];?>");				
+	<?php }} ?>
+
+function addStaffsubjectDetails() {
+	
+	var IdSemester = dijit.byId("IdSemester").value;
+	var IdSemesterName = dijit.byId("IdSemester").displayedValue;
+	var IdSubject = dijit.byId("IdSubject").value;
+	var IdSubjectName = dijit.byId("IdSubject").displayedValue;		
+	var EffectiveDate = dojo.byId("EffectiveDate").value;	
+	
+
+	if(IdSemester==''){
+	    dijit.byId("IdSemester").attr('required','true');
+		dijit.byId("IdSemester").focus();
+		return false;
+	}
+	if(IdSubject==''){
+	    dijit.byId("IdSubject").attr('required','true');
+		dijit.byId("IdSubject").focus();
+		return false;
+	}
+	if(EffectiveDate==''){
+	    dijit.byId("EffectiveDate").attr('required','true');
+		dijit.byId("EffectiveDate").focus();
+		return false;
+	}
+	
+	subjectArray.push(IdSemesterName+IdSubjectName);
+	var x=IdSemesterName+IdSubjectName;
+	if(arrHasDupes(subjectArray))
+	{
+		subjectArray = subjectArray.unique();
+		alert("Duplicate Entry");
+	} else {
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);
+		var tcol3=trow.insertCell(2);
+		var tcol4=trow.insertCell(3);
+			
+		tcol1.innerHTML= "<input type='hidden' value='"+IdSemester+"' name=IdSemestergrid[]>"+IdSemesterName;
+		tcol2.innerHTML= "<input type='hidden' value='"+IdSubject+"' name=IdSubjectgrid[]>"+IdSubjectName;
+		tcol3.innerHTML="<input type='hidden' value='"+EffectiveDate+"' name=EffectiveDategrid[]>"+EffectiveDate;		
+		tcol4.innerHTML="<a href='#' onClick='deleteRow(this,\""+x+"\"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowid++;
+	}
+}
+
+function deleteRow(r,x)
+{
+	
+	rowid--;
+	var len=subjectArray.length;
+	for(i=0;i<=len;i++){
+			if(subjectArray[i]==x)
+			{
+				subjectArray.splice(i,1);
+			}
+		}
+	var i=r.parentNode.parentNode.rowIndex;
+	//subjectArray.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+Array.prototype.unique = function () {
+    var r = new Array();
+    o:for(var i = 0, n = this.length; i < n; i++)
+    {
+        for(var x = 0, y = r.length; x < y; x++)
+        {
+                if(r[x]==this[i])
+                {
+                	continue o;
+                }
+                
+        }
+        r[r.length] = this[i];
+    }
+    return r;
+}
+
+</script>
+<fieldset>
+<legend><?php echo $this->translate("Staff Subject").' '.$this->translate("Set-Up");?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+              
+				</script>
+		<?php echo $this->Staffsubjectsform->UpdDate;?>
+		<?php echo $this->Staffsubjectsform->UpdUser;?>		
+		<?php echo $this->Staffsubjectsform->IdStaff;?>
+		
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Staff").' '.$this->translate("Subject").' '.$this->translate("Set Up");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Staff").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+				<td><?php echo $this->stafname; ?></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Select").' '.$this->translate("Semester");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->Staffsubjectsform->IdSemester; ?></td>
+				<td><?php echo $this->translate("Select Subject");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->Staffsubjectsform->IdSubject;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Effective").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->Staffsubjectsform->EffectiveDate;?></td>
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->Staffsubjectsform->Active;?>				
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4" align = "right"><?php echo $this->Staffsubjectsform->Add;?></td>
+			</tr>
+				
+		</table>
+		<table id="hor"  class="table" width="100%" cellpadding="5" cellspacing="1">
+						<tr>               
+							<th><?php echo $this->translate("Semester").' '.$this->translate("Name")?></th>    
+							<th><?php echo $this->translate("Subject").' '.$this->translate("Name")?></th>         							
+							<th><?php echo $this->translate("Effective").' '.$this->translate("Date")?></th>						
+							<th><?php echo $this->translate("Delete")?></th>							
+						</tr>
+			<?php
+			if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjStaffsubjects): ?>
+					<tr>
+						<td>											
+						<?php echo $this->escape($lobjStaffsubjects['SemesterMasterName'].' '.$lobjStaffsubjects['year']);?>							
+						</td>
+						<td><?php  echo ($this->escape($lobjStaffsubjects['SubjectName']));?></td>
+						<td><?php echo($this->escape(date ( "d-m-Y", strtotime ($lobjStaffsubjects['EffectiveDate']))));?>
+						<input type='hidden' value="<?php echo $this->escape($lobjStaffsubjects['IdSemester']);?>" name=IdSemestergrid[]>
+						<input type='hidden' value="<?php echo $this->escape($lobjStaffsubjects['IdSubject']);?>" name=IdSubjectgrid[]>
+						<input type='hidden' value="<?php echo $this->escape($lobjStaffsubjects['EffectiveDate']);?>" name=EffectiveDategrid[]>
+						<input type='hidden' value="<?php echo $this->escape($lobjStaffsubjects['EffectiveDate']);?>" name=EffectiveDategrid[]>
+						</td>						
+						<td><a href='#' onClick='deleteRow(this,"<?php echo $lobjStaffsubjects['SemesterMasterName'].$lobjStaffsubjects['year'].$lobjStaffsubjects['SubjectName'];?>");return false'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+						
+					</tr>
+				<?php endforeach;
+			endif; ?>
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->Staffsubjectsform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'staffsubjects', 'action'=>'index'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>	
+
+
+
+	

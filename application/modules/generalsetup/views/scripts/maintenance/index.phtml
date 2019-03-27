@@ -1,0 +1,58 @@
+
+<body class="claro">
+<div id="searchDiv">
+	<fieldset>
+	<legend><?php echo $this->translate("Maintenance").' '.$this->translate("Search");?></legend>
+	<div class="search" style="margin-left:20px;">
+<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/generalsetup/maintenance/index/search/1" method="POST"  name= "form1" id= "form1">
+<script type="dojo/method" event="onSubmit">
+  if (this.validate()) {
+	return true;
+} else {
+	return false;}
+</script>
+				<table width="100%">
+					<tr>
+						<td class="label" style="width:250px"><?php echo $this->translate("Definition Type Description");?></td>
+						<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjSearchForm->field3;?></td>
+						<td class="label" style="width:250px"><?php echo $this->defaultlanguage;?></td>
+						<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjSearchForm->field4;?></td>
+					</tr>
+					<tr>
+	               <td align = "center" colspan = "4">
+						<?php echo $this->lobjMaintenanceForm->Search;?>
+						<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'maintenance', 'action'=>'newdefinitionms'),'default',true);?>';" />	
+						<?php echo $this->lobjMaintenanceForm->Clear;?>
+				   </td>
+                 </tr>
+				</table>
+			</form>	
+		</div>
+	</fieldset> 
+	 <br/>
+	<fieldset>
+			<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th width="30%"><?php echo $this->translate("Definition Type");?></th>
+				<th ><?php echo $this->defaultlanguage;?></th>
+			</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjMaintenanceList ): ?>
+					<tr>
+						<!-- <td><?php echo $this->escape($lobjMaintenanceList['idDefType']);?></td>-->
+						<td>
+							<a href="<?php echo $this->baseUrl();?>/generalsetup/maintenance/maintenancelist/id/<?php echo $this->escape($lobjMaintenanceList['idDefType']);?>" rel="lyteframe" rev="width: 830px; height: 380px; scrolling: no;">
+								<?php echo $this->escape($lobjMaintenanceList['defTypeDesc']);?>
+							</a>
+						</td>
+						<td><?php echo $this->escape($lobjMaintenanceList['BahasaIndonesia']);?></td>
+					</tr>
+				<?php endforeach;
+			endif; ?>
+			<tr>
+				<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+			</tr>
+		</table>
+	</fieldset>
+</div>
+</body>

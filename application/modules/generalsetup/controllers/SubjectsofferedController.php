@@ -1,0 +1,196 @@
+<?php
+
+/**
+ * SubjectsofferedController
+ *
+ * @author	Arun
+ * @version 1.0
+ */
+
+class GeneralSetup_SubjectsofferedController extends Base_Base {
+	/**
+	 * The default action - show the home page
+	 */
+	private $_gobjlog;
+	public function init() {
+		$this->_gobjlog = Zend_Registry::get ( 'log' ); //instantiate log object
+		$this->fnsetObj();
+		$this->registry = Zend_Registry::getInstance();
+		$this->locale = $this->registry->get('Zend_Locale');
+		if(!$this->_getParam('search'))
+			unset($this->gobjsessionstudent->subjectsofferedpaginatorresult);
+	}
+
+	public function fnsetObj(){
+		$this->lobjsemester = new GeneralSetup_Model_DbTable_Semester();
+		$this->lobjsemesterForm = new GeneralSetup_Form_Semester ();
+		$this->lobjsemestermaster = new GeneralSetup_Model_DbTable_Semestermaster ();
+		$this->lobjsubjectmaster = new GeneralSetup_Model_DbTable_Subjectmaster();
+		$this->lobjsubjectsofferedform = new GeneralSetup_Form_Subjectsoffered();
+		$this->lobjsubjectsofferedmodel = new GeneralSetup_Model_DbTable_Subjectsoffered();
+		$this->lobjSubjectprerequisites = new GeneralSetup_Model_DbTable_Subjectprerequisites();
+	}
+
+	public function indexAction() {
+    	$this->view->title="Subjects Offered";
+		$this->view->lobjform = $this->lobjform; //send the lobjuniversityForm object to the view
+		$larrresult = $this->lobjsemestermaster->fngetSemestermainDetails();
+		$lintpagecount = $this->gintPageCount;// Definitiontype model
+		$lintpage = $this->_getParam('page',1); // Paginator instance
+		if(isset($this->gobjsessionstudent->subjectsofferedpaginatorresult)) {
+			$this->view->paginator = $this->lobjCommon->fnPagination($this->gobjsessionstudent->subjectsofferedpaginatorresult,$lintpage,$lintpagecount);
+		} else {
+			$this->view->paginator = $this->lobjCommon->fnPagination($larrresult,$lintpage,$lintpagecount);
+		}
+
+		if ($this->_request->isPost () && $this->_request->getPost ( 'Search' )) {
+			$larrformData = $this->_request->getPost ();
+			if ($this->lobjform->isValid ( $larrformData )) {
+				$larrresult = $this->lobjsemester->fnSearchSemester( $this->lobjform->getValues () ); //searching the values for the user
+				$this->view->paginator = $this->lobjCommon->fnPagination($larrresult,$lintpage,$lintpagecount);
+				$this->gobjsessionstudent->subjectsofferedpaginatorresult = $larrresult;
+			}
+		}
+		if ($this->_request->isPost () && $this->_request->getPost ( 'Clear' )) {
+			//$this->_redirect($this->view->url(array('module'=>'generalsetup' ,'controller'=>'semester', 'action'=>'index'),'default',true));
+			$this->_redirect( $this->baseUrl . '/generalsetup/subjectsoffered/index');
+		}
+	}
+
+	public function subjectsofferedlistAction()
+	{
+		$lintidsemester = $this->_getParam('idsemester');
+		$this->view->lintidsemester = $lintidsemester;
+		//$larrsubjectlist = $this->lobjsubjectmaster->fnGetSubjectList();
+
+		$larrCollegeList = $this->lobjSubjectprerequisites->fnGetCollegeList();
+		$this->lobjsubjectsofferedform->IdCollege->addMultiOptions($larrCollegeList);
+		$lintidbrc = 1;
+		$larrbranchset = $this->lobjsubjectsofferedmodel->fngetAllBranchset($lintidbrc);
+		$larrbranchset[1000]['key'] = 1000;
+		$larrbranchset[1000]['value'] = "All";
+		$this->lobjsubjectsofferedform->Branch->addMultiOptions($larrbranchset);
+
+		$auth = Zend_Auth::getInstance();
+//		$larrsubjectlist = $this->lobjSubjectprerequisites->fnGetSubjectsList();
+//		$this->lobjsubjectsofferedform->IdSubject->addMultiOptions($larrsubjectlist);
+		$this->lobjsubjectsofferedform->UpdUser->setValue ($auth->getIdentity()->iduser);
+		$this->lobjsubjectsofferedform->UpdDate->setValue ( date('Y-m-d H:i:s') );
+		$this->view->lobjform = $this->lobjsubjectsofferedform;
+
+		if($this->_getParam('update')!= 'true') {
+
+		}
+		
+		$larrsemester = $this->lobjsemester->fetchRow("Semester = $lintidsemester");
+		if(!empty($larrsemester)) {	
+			$this->view->larrsemester = $larrsemester->toArray();
+			$larrsemestermaster = $this->lobjsemestermaster->fetchRow("IdSemesterMaster = ".$this->view->larrsemester['Semester']);
+			if(!empty($larrsemestermaster)) {
+				$this->view->larrsemestermaster = $larrsemestermaster->toArray();
+			}
+		}
+		$larrresultset = $this->lobjsubjectsofferedmodel->fngetAllSubjectsOffered($lintidsemester);
+
+		$this->view->larrresultset = $larrresultset;
+		$this->view->larrresultset2 = $larrresultset;
+
+
+
+		if ($this->_request->isPost ())
+		{
+			$larrformData = $this->_request->getPost ();
+			$count = count($larrformData['Branch']);
+			$count1 = count($larrformData['IdSubjects']);
+			
+			for($i=0;$i<$count1;$i++)
+			{
+				if($larrformData['IdSubjects'][$i] == 1000 && $larrformData['Branch'][$i] == 1000)
+				{
+					echo "masuk1<br>";
+					$this->lobjsubjectsofferedmodel->fninsertMultipleBranchCourseOffered($larrformData,$lintidsemester,$count1,$count);
+				}
+				else if ($larrformData['IdSubjects'][$i] == 1000 && $larrformData['Branch'][$i] != 1000)
+				{
+					$this->lobjsubjectsofferedmodel->fninsertMultipleCourseOffered($larrformData,$lintidsemester);
+				}
+			}
+			for($i=0;$i<$count;$i++){
+				if ($larrformData['Branch'][$i] == 1000 && $larrformData['IdSubjects'][$i] != 1000)
+				{
+					$this->lobjsubjectsofferedmodel->fninsertMultipleSubjectsOffered($larrformData,$lintidsemester,$i);
+				}
+				else {
+					$this->lobjsubjectsofferedmodel->fninsertSubjectsOffered($larrformData,$lintidsemester);
+				}
+			}
+				// Write Logs
+					$priority=Zend_Log::INFO;
+					$larrlog = array ('user_id' => $auth->getIdentity()->iduser,
+									  'level' => $priority,
+									  'hostname' => gethostbyaddr($_SERVER['REMOTE_ADDR']),
+					                  'time' => date ( 'Y-m-d H:i:s' ),
+					   				  'message' => 'Subject offered Edit Id=' . $lintidsemester,
+									  'Description' =>  Zend_Log::DEBUG,
+									  'ip' => $this->getRequest ()->getServer ( 'REMOTE_ADDR' ) );
+					$this->_gobjlog->write ( $larrlog ); //insert to tbl_log
+
+				$this->_redirect( $this->baseUrl . '/generalsetup/subjectsoffered/subjectsofferedlist/idsemester/'.$lintidsemester);
+			}
+
+		//print_r($larrsemester->toArray());echo "</br>";print_r($larrsemestermaster->toArray());
+	}
+
+	public function getcolgdeptlistAction(){
+
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+
+		$lintIdCollege = $this->_getParam('IdCollege');
+
+		$larrColgDeptDetails = $this->lobjCommon->fnResetArrayFromValuesToNames($this->lobjSubjectprerequisites->fnGetColgDepartmentList($lintIdCollege));
+		$subject_list = $this->lobjCommon->fnResetArrayFromValuesToNames($this->lobjSubjectprerequisites->getSubjectsList($lintIdCollege));
+		
+		
+		//echo Zend_Json_Encoder::encode($larrColgDeptDetails);
+		echo Zend_Json_Encoder::encode(array('department'=>$larrColgDeptDetails,'course'=>$subject_list));
+	}
+	
+	
+	
+	
+	public function getdeptsubjectslistAction(){
+
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+
+		$lintIdCollege = $this->_getParam('IdCollege');
+		$subject_list = $this->lobjCommon->fnResetArrayFromValuesToNames($this->lobjSubjectprerequisites->getSubjectsList($lintIdCollege));
+		$subject_list[] =array('key'=>'1000','name'=>"All");
+		
+	//	$lintIdDepartment = $this->_getParam('IdDepartment');
+		/*if($lintIdDepartment == 0) {
+			$larrColgDeptDetails = $this->lobjCommon->fnResetArrayFromValuesToNames($this->lobjSubjectprerequisites->fnGetSubjectsList());
+			//$larrColgDeptDetails[] =array('key'=>'1000','name'=>"All");
+		} else {
+			$larrColgDeptDetails = $this->lobjCommon->fnResetArrayFromValuesToNames($this->lobjSubjectprerequisites->fnGetDeptSubjectsList($lintIdDepartment));
+			if(isset($larrColgDeptDetails[0])){
+			$larrColgDeptDetails[] =array('key'=>'1000','name'=>"All");
+			}
+		}*/
+		echo Zend_Json_Encoder::encode($subject_list);
+	}
+
+	public function deletesubjectAction()
+	{
+		$this->_helper->layout->disableLayout();
+		$this->_helper->viewRenderer->setNoRender();
+
+		$lintidsemester = $this->_getParam('idsemester');
+		$lintidsubject = $this->_getParam('idsubject');
+
+		$this->lobjsubjectsofferedmodel->delete("IdSemester = $lintidsemester AND IdSubject = $lintidsubject");
+	}
+
+	
+}

@@ -1,0 +1,519 @@
+<script type="text/javascript">
+	var rowid = 1;
+	var rowid1 = 1;
+	var ProgramCreditHours = <?php echo $this->programcredit ?>;
+	var TotalSubHours = 0;
+	var PRCreditH = 0;
+	var PRSubCreditH = new Array();
+	var LSubCreditH = new Array();
+	<?php foreach($this->programreqresult as $programreqresult) { ?>
+		PRSubCreditH[<?php echo $programreqresult['SubjectType']?>] = <?php echo $programreqresult['CreditHours']?>;
+		PRCreditH = parseFloat(<?php echo $programreqresult['CreditHours']?>) + parseFloat(PRCreditH);
+		LSubCreditH[<?php echo $programreqresult['SubjectType']?>] = 0;
+	<?php }?>
+	<?php foreach ($this->landscapesubresult as $landscapesubresult){ ?>
+		LSubCreditH[<?php echo $landscapesubresult['SubjectType']?>] = parseFloat(LSubCreditH[<?php echo $landscapesubresult['SubjectType']?>]) + parseFloat(<?php echo $landscapesubresult['CreditHours']?>);
+		TotalSubHours = parseFloat(TotalSubHours) + parseFloat(<?php echo $landscapesubresult['CreditHours']?>); 
+	<?php }?>
+
+	
+	dojo.addOnLoad(function() {
+		<?php if(!$this->idlandscape) {?>
+		dijit.byId('LandscapeType').set('value','');
+		dijit.byId('LandscapeType').set('placeHolder','Select');
+		dijit.byId('IdStartSemester').set('value','');
+		dijit.byId('IdStartSemester').set('placeHolder','Select');
+		<?php }?>
+		dijit.byId('IdSubject').set('value','');
+		dijit.byId('IdSubject').set('placeHolder','Select');
+		dijit.byId('LandscapeSubjectType').set('value','');
+		dijit.byId('LandscapeSubjectType').set('placeHolder','Select');	
+		dijit.byId('SubjectType').set('value','');
+		dijit.byId('SubjectType').set('placeHolder','Select');	
+		
+		
+		dijit.byId('LandscapeType').set('readOnly',true);
+	});
+
+
+	function addLandscapeDetails() {
+		var flag = true;
+
+		if(dijit.byId("SubjectType")==''){
+		    dijit.byId("SubjectType").attr('required','true');
+			dijit.byId("SubjectType").focus();flag = false;
+		}
+
+		var SubjectType = dijit.byId("SubjectType");
+		if(SubjectType.get('value')== "")
+		{
+			SubjectType.set('class','dijitTextBoxError dijitComboBoxError');
+			flag = false;
+		}
+
+		
+		if(!dijit.byId("CreditHours").isValid()){
+			dijit.byId("CreditHours").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("CreditHours").value==''){
+		    dijit.byId("CreditHours").attr('required','true');
+			dijit.byId("CreditHours").focus();flag = false;
+		}
+	
+		if(flag == true) {
+			podetailsInsert();	
+		}			
+		return flag;
+	}
+
+	var batchArray  = new Array();
+	var subjArray = new Array();
+	var oldContent = "";
+	var NoCnt	=	0;
+	
+	function podetailsInsert() {
+		var SubjectType = dijit.byId("SubjectType");
+		var SubjectTypename = dijit.byId("SubjectType").displayedValue;
+
+		var CreditHours = dijit.byId("CreditHours").value;
+
+		PRCreditH = parseFloat(PRCreditH) + parseFloat(CreditHours);
+
+		if(parseFloat(PRCreditH) <= parseFloat(ProgramCreditHours))
+		{		
+
+			batchArray.push(SubjectTypename);
+			if(arrHasDupes(batchArray))
+			{
+				batchArray = batchArray.unique();
+				PRCreditH = parseFloat(PRCreditH) - parseFloat(CreditHours);
+				alert("Duplicate Subject Type");
+			} 
+			else 
+			{
+	
+				var trow=document.getElementById('hor').insertRow(rowid1);
+				var tcol1=trow.insertCell(0);
+				var tcol2=trow.insertCell(1);
+				var tcol3=trow.insertCell(2);
+	
+				tcol1.innerHTML="<input type='hidden' value='"+SubjectType+"' name=SubjectTypegrid[]>"+SubjectTypename;
+				tcol2.innerHTML="<input type='hidden' value='"+CreditHours+"' name=CreditHoursgrid[]>"+CreditHours;
+				tcol3.innerHTML="<a href='#' onClick='deleteRowprogram(this,"+CreditHours+"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+				rowid1++;
+			}
+		}
+		else
+		{
+			PRCreditH = parseFloat(PRCreditH) - parseFloat(CreditHours);
+			alert("Subject Type Credit Hours Exceeds Program Credit Hours "+ parseInt(PRCreditH));
+		}	
+	}
+
+	function deleteRowprogram(r,CrHr)
+	{
+		rowid1--;
+		
+		var i=r.parentNode.parentNode.rowIndex;
+		batchArray.splice(parseInt(i-1),1);
+		document.getElementById('hor').deleteRow(i);
+		PRCreditH = parseFloat(PRCreditH) - parseFloat(CrHr);
+		
+	}
+
+	function addLandscapeprogDetails() {
+		var flag = true;
+		if(dijit.byId("IdSubject")==''){
+		    dijit.byId("IdSubject").attr('required','true');
+			dijit.byId("IdSubject").focus();flag = false;
+		}
+		var IdSubject = dijit.byId("IdSubject");
+		if(IdSubject.get('value')== "")
+		{
+			IdSubject.set('class','dijitTextBoxError dijitComboBoxError');
+			flag = false;
+		}
+
+		if(dijit.byId("IdSemester")==''){
+		    dijit.byId("IdSemester").attr('required','true');
+			dijit.byId("IdSemester").focus();flag = false;
+		}
+		var IdSemester = dijit.byId("IdSemester");
+		if(IdSemester.get('value')== "")
+		{
+			IdSemester.set('class','dijitTextBoxError dijitComboBoxError');
+			flag = false;
+		}
+
+
+		if(dijit.byId("LandscapeSubjectType")==''){
+		    dijit.byId("LandscapeSubjectType").attr('required','true');
+			dijit.byId("LandscapeSubjectType").focus();flag = false;
+		}
+		
+		var LandscapeSubjectType = dijit.byId("LandscapeSubjectType");
+		if(LandscapeSubjectType.get('value')== "")
+		{
+			LandscapeSubjectType.set('class','dijitTextBoxError dijitComboBoxError');
+			flag = false;
+		}
+
+		if(flag == true) {
+			LandscapeprogInsert();	
+		}			
+		return flag;
+	}
+	
+	function LandscapeprogInsert() {
+		
+		var IdSemester = 0;
+		
+		var IdSemester = dijit.byId("IdSemester");
+		var IdSemestername = dijit.byId("IdSemester").displayedValue;
+		
+
+		var IdSubject = dijit.byId("IdSubject");
+		var IdSubjectname = dijit.byId("IdSubject").displayedValue;
+
+
+		var LandscapeSubjectType = dijit.byId("LandscapeSubjectType");
+		var LandscapeSubjectTypename = dijit.byId("LandscapeSubjectType").displayedValue;
+		
+		var SubjectCreditHours = 0;
+		SubjectCreditHours = dojo.byId("subcredithours").value;
+
+		LSubCreditH[LandscapeSubjectType] = parseFloat(LSubCreditH[LandscapeSubjectType]) + parseFloat(SubjectCreditHours);
+		TotalSubHours = parseFloat(TotalSubHours) + parseFloat(SubjectCreditHours);
+		var count = 0;
+		if(parseFloat(LSubCreditH[LandscapeSubjectType]) <= parseFloat(PRSubCreditH[LandscapeSubjectType]))
+		{		
+			subjArray.push(IdSubjectname);
+
+			if(arrHasDupes(subjArray))
+			{
+				subjArray = subjArray.unique();
+				LSubCreditH[LandscapeSubjectType] = parseFloat(LSubCreditH[LandscapeSubjectType]) - parseFloat(SubjectCreditHours);
+				TotalSubHours = parseFloat(TotalSubHours) - parseFloat(SubjectCreditHours);
+				alert("Duplicate Subject");
+			} 
+			else 
+			{			
+				var trow=document.getElementById('hor1').insertRow(rowid);
+				var tcol1=trow.insertCell(count);count++;
+				var tcol2=trow.insertCell(count);count++;
+				var tcol3=trow.insertCell(count);count++;
+				var tcol3=trow.insertCell(count);count++;
+				var tcol4=trow.insertCell(count);count++;
+				var tcol5=trow.insertCell(count);count++;
+	
+				tcol1.innerHTML="<input type='hidden' value='"+IdSubject+"' name=IdSubjectgrid[]>"+IdSubjectname;
+				tcol2.innerHTML="<input type='hidden' value='"+IdSemester+"' name=IdSemestergrid[]>"+IdSemestername;
+				tcol3.innerHTML="<input type='hidden' value='"+LandscapeSubjectType+"' name=LandscapeSubjectTypegrid[]>"+LandscapeSubjectTypename;
+				tcol4.innerHTML="<input type='hidden' value='"+SubjectCreditHours+"' name=LandscapeCreditHoursgrid[]>"+SubjectCreditHours;
+				tcol5.innerHTML="<a href='#' onClick='deleteRowsubject(this,"+LandscapeSubjectType+","+SubjectCreditHours+"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+				rowid++;
+			}
+		}
+		else
+		{
+			LSubCreditH[LandscapeSubjectType] = parseFloat(LSubCreditH[LandscapeSubjectType]) - parseFloat(SubjectCreditHours);
+			TotalSubHours = parseFloat(TotalSubHours) - parseFloat(SubjectCreditHours);
+			alert("Subject Credit Hours Exceeds Subject Type Credit Hours ");
+		}
+			
+		
+	}
+
+	function deleteRowsubject(r,LType,SubCrHr)
+	{
+		rowid--;
+		
+		var i=r.parentNode.parentNode.rowIndex;
+		batchArray.splice(parseInt(i-1),1);
+		document.getElementById('hor1').deleteRow(i);
+		LSubCreditH[LType] = parseFloat(LSubCreditH[LType]) - parseFloat(SubCrHr);
+		TotalSubHours = parseFloat(TotalSubHours) - parseFloat(SubCrHr);
+		
+	}
+
+
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+	
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+	                
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+
+
+		function deleteprogreqdetails(IdTempProgReq) {
+			var xhrArgs = {url: "<?php echo $this->baseUrl();?>"+"/generalsetup/landscape/deleteprogramrequriments/IdTempProgReq/"+IdTempProgReq,
+					handleAs:'json',
+					load:function(data){ 
+						if(data == '1') {
+							window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/landscape/editlandscapelist/idlandscape/<?php echo $this->idlandscape;?>/update/true"
+						}
+					}
+			}
+			dojo.xhrPost(xhrArgs); 
+		}
+
+	function deletelandscaprsubdetails(IdTempLandscapesub) {
+		var xhrArgs = {url: "<?php echo $this->baseUrl();?>"+"/generalsetup/landscape/deletesubjectprerequisites/IdTempLandscapesub/"+IdTempLandscapesub,
+				handleAs:'json',
+				load:function(data){ 
+					if(data == '1') {
+						window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/landscape/editlandscapelist/idlandscape/<?php echo $this->idlandscape;?>/update/true"
+					}
+				}
+		}
+		dojo.xhrPost(xhrArgs); 
+	}
+
+	function fngetsubjectcredithours(idsubject)
+	{
+		if(idsubject != "")
+		{
+			var xhrArgs = {url: "<?php echo $this->baseUrl();?>"+"/generalsetup/landscape/fngetsubjectcredithours/idsubject/"+idsubject,
+					handleAs:'text',
+					load:function(data){ 
+						dojo.byId('subcredithours').value = parseFloat(data);
+						dojo.byId('chours').innerHTML = data;
+					}
+			}
+			dojo.xhrPost(xhrArgs); 	
+		}			
+	}
+	
+
+</script>
+<fieldset>
+	<legend>
+		<?php echo $this->translate($this->Landscape);?>
+	</legend>
+	<Form dojoType="dijit.form.Form" id="myForm" action="" method="post"
+		name="myForm">
+		<script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					if(TotalSubHours < ProgramCreditHours)
+					{
+						alert("Subjects Total Credit Hours Should be Equal to Program Total Credit Hours");
+						return false;
+					}
+					else
+						return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<table class="table" width="100%">
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Program).' '.$this->translate("Name");?>
+				</th>
+			</tr>
+			<tr>
+				<td colspan="2"><?php echo $this->program;?></td>
+				<td colspan="2"><?php echo $this->translate("Total")." ".$this->translate("Credit")." ".$this->translate("Hours")." : ".$this->programcredit?>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Landscape).' '.$this->translate("Details");?>
+				</th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate($this->Landscape);?><span
+					class="reqMark">*</span></td>
+				<td><?php echo $this->lobjlandscapeform->LandscapeType;?> <?php echo $this->lobjlandscapeform->UpdDate;?>
+					<?php echo $this->lobjlandscapeform->UpdUser;?> <?php echo $this->lobjlandscapeform->IdProgram;?>
+				</td>
+				<td colspan=2></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Start");?> <?php echo $this->translate("Semester");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->lobjlandscapeform->IdStartSemester;?></td>
+				<td><?php echo $this->translate("No").' '.$this->translate("of").' '.$this->translate("Semester");?>
+				</td>
+				<td><?php echo $this->lobjlandscapeform->SemsterCount;?></td>
+
+			</tr>
+			<tr style="height: 20px; overflow: auto;">
+				<td><?php echo $this->translate("Intake");?><span class="reqMark"></span>
+				</td>
+				<td><?php echo $this->lobjlandscapeform->Semester;?></td>
+				<td></td>
+				<td></td>
+			
+			
+			<tr>
+			
+			
+			<tr>
+				<td><?php echo $this->translate("Active");?><span class="reqMark"></span>
+				</td>
+				<td><?php echo $this->lobjlandscapeform->Active;?></td>
+				<td colspan=2></td>
+			</tr>
+			<?php if(!$this->idlandscape) {?>
+			<tr>
+				<td colspan=4 align="right"><?php echo $this->lobjlandscapeform->Save;?>
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Back"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'coursemaster', 'action'=>'index'),'default',true);?>';" />
+				</td>
+			</tr>
+			<?php } ?>
+
+			<?php if($this->idlandscape) {?>
+			<tr>
+				<th colspan="4"><?php echo $this->translate("Program").' '.$this->translate("Requirement");?>
+				</th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Subject");?> <?php echo $this->translate("Type");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->lobjlandscapeform->SubjectType;?> <?php echo $this->lobjlandscapeform->IdLandscape;?>
+				</td>
+				<td colspan=2></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Credit");?> <?php echo $this->translate("Hours");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->lobjlandscapeform->CreditHours;?></td>
+				<td colspan=2></td>
+			</tr>
+			<tr>
+				<td colspan=4 align="right"><?php echo $this->lobjlandscapeform->Add;?>
+				</td>
+			</tr>
+			<?php }?>
+		</table>
+		<table id="hor" class="table" width="100%">
+			<?php if($this->idlandscape) {?>
+			<tr>
+				<th><?php echo $this->translate->_("Subject").' '.$this->translate->_("Type")?>
+				</th>
+				<th><?php echo $this->translate->_("Credit").' '.$this->translate->_("Hours")?>
+				</th>
+				<th><?php echo $this->translate->_("Delete")?></th>
+			</tr>
+			<?php 
+						foreach($this->programreqresult as $programreqresult) { ?>
+			<tr>
+				<td><?php echo $programreqresult['DefinitionDesc'];?></td>
+				<td><?php echo $programreqresult['CreditHours'];?></td>
+				<td><a href="#"
+					onClick="deleteprogreqdetails('<?php echo $programreqresult['IdTempProgramReq'];?>');">
+						<img src='<?php echo $this->baseUrl();?>/images/delete.png'
+						border=0 width='16' height='16'>
+				</a>
+				</td>
+
+			</tr>
+			<?php } 
+}?>
+		</table>
+		<table class="table" width="100%">
+			<tr>
+				<th colspan="4"><?php echo $this->translate("Subject").' '.$this->translate("Details");?>
+				</th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Subject");?><span class="reqMark">*</span>
+				</td>
+				<td><?php echo $this->lobjlandscapeform->IdSubject;?> <input
+					type="hidden" name="subcredithours" id="subcredithours" value="" />
+				</td>
+				<td><?php echo $this->translate("Credit").' '.$this->translate("Hours");?>
+				</td>
+				<td><span id='chours'></span></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Subject").' '.$this->translate("Type");?><span
+					class="reqMark">*</span></td>
+				<td><?php echo $this->lobjlandscapeform->LandscapeSubjectType;?></td>
+				<td><?php echo $this->translate("Semester");?><span class="reqMark">*</span>
+				</td>
+				<td><?php echo $this->lobjlandscapeform->IdSemester;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Compulsory");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->lobjlandscapeform->Compulsory;?></td>
+				<td></td>
+				<td></td>
+			</tr>
+			<tr>
+				<td colspan=4 align="right"><?php echo $this->lobjlandscapeform->Add1;?>
+				</td>
+				<input type="hidden" name="IdProgramReq"
+					value="<?php echo $this->IdProgramReq;?>"?>
+			</tr>
+		</table>
+		<table id="hor1" class="table" width="100%">
+			<tr>
+				<th><?php echo $this->translate->_("Subject");?></th>
+				<th><?php echo $this->translate->_("Subject").' '.$this->translate->_("Type");?>
+				</th>
+				<th><?php echo $this->translate->_("Credit").' '.$this->translate->_("Hours");?>
+				</th>
+				<th><?php echo $this->translate->_("Compulsory")?></th>
+				<th><?php echo $this->translate->_("Delete")?></th>
+			</tr>
+			<?php foreach($this->landscapesubresult as $programreqresult) { ?>
+			<tr>
+				<td><?php echo $programreqresult['SubjectName'];?></td>
+				<td><?php echo $programreqresult['DefinitionDesc'];?></td>
+				<td><?php echo $programreqresult['CreditHours'];?></td>
+				<td><?php echo ($programreqresult['Compulsory'] == 1 ? "Yes":"No");?>
+				</td>
+
+
+				<td><a href="#"
+					onClick="deletelandscaprsubdetails('<?php echo $programreqresult['IdTempLandscapeSub'];?>');">
+						<img src='<?php echo $this->baseUrl();?>/images/delete.png'
+						border=0 width='16' height='16'>
+				</a>
+				</td>
+
+			</tr>
+			<?php } ?>
+		</table>
+		<table class="table" width="100%">
+			<tr align="right">
+				<td><?php echo $this->lobjlandscapeform->Save;?> <input
+					type="button" class="NormalBtn" dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Back"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'addlandscape','id'=>$this->IdProgram),'default',true);?>';" />
+
+
+				</td>
+			</tr>
+
+		</table>
+
+	</Form>
+
+</fieldset>

@@ -1,0 +1,60 @@
+<fieldset>
+<legend><?php echo $this->translate->_("Course").' '.$this->translate->_("Type").' '.$this->translate->_("Search");?></legend>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/coursetype/index/search/1" method="POST">
+		<table width="100%">
+			<tr>	
+				<td><?php echo $this->translate("Course").' '.$this->translate("Type");?></td>
+				<td><?php echo $this->lobjform->field2;?></td>		
+		    	<td ><?php echo $this->translate("Credit Hours Mandatory");?></td>
+                <td ><?php echo $this->lobjform->field14;?></td>
+            </tr>
+            <tr>
+            	<td><?php echo $this->defaultlanguage;?></td>
+                <td ><?php echo $this->lobjform->field3;?></td>
+            	<td ><?php echo $this->translate("Project");?></td>
+                <td ><?php echo $this->lobjform->field21;?></td>
+            	
+            </tr>
+            <tr>
+            	<td ><?php echo $this->translate("Active");?></td>
+                <td ><?php echo $this->lobjform->field7;?></td>
+            </tr>
+			<tr>
+				<td colspan="4" align="center">
+							<?php echo $this->lobjform->Search;?>
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'coursetype', 'action'=>'newcoursetype'),'default',true);?>';" />
+							<?php echo $this->lobjform->Clear;?>					
+				</td>
+			</tr>
+		</table>
+	</form>	
+</fieldset>
+</br>
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+	     <th><?php echo $this->translate("Course").' '.$this->translate("Type");?></th>
+	      <th ><?php echo $this->defaultlanguage;?></th>
+	</tr>
+	<?php if (count($this->paginator)): 
+		foreach ($this->paginator as $CourseType ): ?>
+	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td>
+			<a href="<?php echo $this->baseUrl();?>/generalsetup/coursetype/coursetypelist/id/<?php echo $this->escape($CourseType['IdCourseType']);?>" rel="lyteframe" rev="width: 870px; height: 475px; scrolling: auto" >
+			<?php echo $this->escape($CourseType['CourseType']);?>
+			</a>
+		</td>
+		<td><?php echo $this->escape($CourseType['Bahasaindonesia']);?></td>
+	</tr>
+		<?php endforeach;
+	endif; ?>
+	<tr>
+		<td colspan="8" align="right">
+			<div class="pagination">
+				<?php echo $this->paginationControl($this->paginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+			</div>																   
+		</td>
+	</tr>
+</table>
+</fieldset>
+</div>

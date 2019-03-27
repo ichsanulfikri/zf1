@@ -1,0 +1,64 @@
+
+<body class="claro">
+<div id="searchDiv">
+	<fieldset>
+	<legend><?php echo $this->translate("Subject Program").' '.$this->translate("Search");?></legend>
+	<div class="search" style="margin-left:20px;">
+<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/generalsetup/subjectprogram/index/search/1" method="POST"  name= "form1" id= "form1">
+<script type="dojo/method" event="onSubmit">
+  if (this.validate()) {
+	return true;
+} else {
+	return false;}
+</script>
+				<table width="100%">
+					<table width="100%">
+					<tr>	
+						<td><?php echo $this->translate("Program").' '.$this->translate("Name");?></td>
+						<td><?php echo $this->lobjform->field2;?></td>		
+						<td><?php echo $this->translate("Short").' '.$this->translate("Name");?></td>
+						<td><?php echo $this->lobjform->field3;?></td>	
+            	   </tr>     
+         		   <tr>
+           				
+						<td ><?php echo $this->translate("Active");?></td>
+               			<td ><?php echo $this->lobjform->field7;?></td>
+                		<td ></td>
+                 		<td ></td>
+           		 </tr>      
+				  <tr>
+	               <td align = "center" colspan = "4">
+						<?php echo $this->lobjform->Search;?>
+						<?php echo $this->lobjform->Clear;?>
+				   </td>
+                 </tr>
+				</table>
+			</form>	
+		</div>
+	</fieldset> 
+	 <br/>
+	<fieldset>
+			<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th><?php echo $this->translate("Program").' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Short").' '.$this->translate("Name");?></th>
+			</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjProgramList ): ?>
+					<tr>
+						<td>
+							<a href="<?php echo $this->baseUrl();?>/generalsetup/subjectprogram/subjectprogramlist/id/<?php echo $this->escape($lobjProgramList['IdProgram']);?>" >
+								<?php echo $this->escape($lobjProgramList['ProgramName']);?>
+							</a>
+						</td>
+						<td><?php print_r($this->escape($lobjProgramList['ShortName']));?></td>
+					</tr>
+				<?php endforeach;
+			endif; ?>
+			<tr>
+				<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+			</tr>
+		</table>
+	</fieldset>
+</div>
+</body>

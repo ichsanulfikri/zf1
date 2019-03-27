@@ -1,0 +1,172 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang;?>" lang="<?php echo $this->lang;?>" dir="<?php echo $this->rtl;?>">
+<head>
+	<script type="text/javascript">
+	function redirect(val){
+			//alert($("#lbOverlay").css("display"));
+			
+			if(val == 1){
+				parent.location.href='<?php  echo $this->baseUrl();?>/generalsetup/maintenance';
+				
+			}else{
+				<?php echo $this->lstrredirecturl; ?>
+			}
+			
+		}
+
+	function validateDefinitionCode( value, constraint )
+	{
+		
+	// I believe the whole reason you have to hack at control to get it to 
+	// display an error is due to the nature of the xhrGet call. Since the
+	// call is being made asychronously, the method would have already
+	// returned a result to the html control before query has finished.
+	// Therefore you have to do the extra method calls below. Also note
+	// that when the form goes for submission, it calls each controls validator
+	// method again! Meaning it will query the webpage again.
+		
+	var loginID = dijit.byId( "DefinitionCode" );
+	var deftypId=<?php echo $this->IdDefType?>;
+	
+	var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+	if( "" == loginID.value ) {
+	    // for some required=true is not kicking in, so we are forcing it.
+	    bNoNameFound = false;
+	}
+	else {      
+	    if( false == loginID._focused ) {
+	    
+	    	value=value.replace(/[$^?+*()|\\]/g,"*");  		
+	    	
+	        console.log( "Checking username..." );
+	        dojo.xhrGet({
+	            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/maintenance/getdefnitioncode/DefCode/"+value+"/Iddef/"+deftypId,
+	            handleAs: 'text',
+	            content: { l: value},
+	            timeout: 10000, 
+	            load: function( data ) {  
+		         	                   
+	                if ( data ) {
+	                    // setting the state to error since the username is already taken
+	                    console.log(loginID)
+	                    bNoNameFound = false;
+	                    loginID.set( "state", "Error" );
+	                    loginID.displayMessage( "The Definition Code is already taken..." );
+	                    // used to change the style of the control to represent a error
+	                    loginID._setStateClass();
+	                    console.log( "Invalid username" ); 
+	                }
+	                else
+	                {
+	                    bNoNameFound = true;
+	                    loginID.set( "state", "" );
+	                    loginID.displayMessage( "" );
+	                }
+	            }
+	        });
+	    }
+	}
+
+	return bNoNameFound;
+	}
+	</script>
+</head>
+<body class = "claro">
+	<fieldset>
+		<legend><?php echo $this->translate("Maintenance");?></legend>
+		<div class="register">
+			<div class="profile_tab">
+				
+<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/generalsetup/maintenance/ddmaintanancedetailsave<?php echo $this->lstrredirectaction?>" method="POST"  name= "myform" id= "myform">
+<script type="dojo/method" event="onSubmit">
+  if (this.validate()) {
+	return true;
+} else {
+	return false;}
+</script>	
+				
+					<?php echo $this->lobjMaintenanceForm->idDefinition;?>
+					<table class="table" width="100%">
+						<tr>
+							<td><?php echo $this->translate("Definition")." ".$this->translate("Code");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->DefinitionCode;?><br/><span id="errDefCode" class="error"></span></td>
+							<td><?php echo $this->translate("Definition")." ".$this->translate("Description");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->DefinitionDesc;?><br/><span id="errDefDesc" class="error"></span></td>
+						</tr>
+							<tr>
+							<td style="width:150px"><?php echo $this->defaultlanguage;?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->BahasaIndonesia;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+							<td style="width:150px"><?php echo $this->translate("Description");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->Description;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->Status;?><br/><span id="errDefCode" class="error"></span></td>
+							<td></td>
+							<td></td>
+						</tr>
+						<tr>
+							<td align = "right" colspan="4"><?php echo $this->lobjMaintenanceForm->Save;?>
+								<?php if(isset($this->lstrredirecturl)) {?>
+									<input type="button" class="NormalBtn"  dojoType=dijit.form.Button label=<?php echo $this->translate("Back");?> value=<?php echo $this->translate("Back");?> onclick="redirect('0')"/>
+								<?php } else {?>
+									<input type="button" class="NormalBtn" dojoType=dijit.form.Button label=<?php echo $this->translate("Back");?> value=<?php echo $this->translate("Back");?> onclick  = "redirect('1')" />
+								<?php } ?>
+								
+								
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</fieldset>
+	 <br/>
+	<fieldset>
+	<div id="hor-minimalist-b" style="height:140px;overflow:auto">
+		 <table class="table" width="100%" >
+			<tr>
+				 <th style="width:22%"><?php echo $this->translate("Definition")." ".$this->translate("Code");?></th>
+				 <th style="width:22%"><?php echo $this->translate("Definition")." ".$this->translate("Description");?></td>
+				 <th><?php echo $this->defaultlanguage;?></th>
+			</tr>
+		
+    	
+    	
+			<?php if (count($this->lobjPaginator)): ?>
+				<?php foreach ($this->lobjPaginator as $larrMaintainanceDetails ): ?>
+					<tr>
+						<td >
+							<a rel="lyteframe" title="" rev="width: 830px; height: 350px; scrolling: no;" href="<?php echo $this->baseUrl();?>/generalsetup/maintenance/maintenancedetail/idDefnType/<?php echo $this->escape($larrMaintainanceDetails['idDefType']);?>/idDefn/<?php echo $this->escape($larrMaintainanceDetails['idDefinition']);?><?php echo $this->lstrredirectaction?>">
+								<?php echo $this->escape($larrMaintainanceDetails['DefinitionCode']);?>
+							</a>
+						</td>
+						<td >
+							<?php echo $this->escape($larrMaintainanceDetails['DefinitionDesc']);?>
+						</td>
+												<td >
+							<?php echo $this->escape($larrMaintainanceDetails['BahasaIndonesia']);?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			<?php endif; ?>
+			
+		
+			<tr style="height:25px;border:1px solid #CCCCCC;color:#666699;padding:6px">
+				<td colspan="4" align="right">
+					<div class="pagination">
+						<?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+					</div>
+				</td>
+			</tr>
+		</table>
+			</div>
+	</fieldset>
+</body>
+</html>

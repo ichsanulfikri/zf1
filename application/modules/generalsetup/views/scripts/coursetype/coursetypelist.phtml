@@ -1,0 +1,84 @@
+<head>
+
+<script type="text/javascript">
+dojo.require("dijit.form.TimeTextBox");
+dojo.addOnLoad(function(){
+	});
+	
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate->_("Course").' '.$this->translate->_("Type");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/coursetype/coursetypelist/id/<?php echo $this->IdCourseType; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                       	<tr>
+							<th colspan = "4"><?php echo $this->translate->_("Course").' '.$this->translate->_("Type").' '.$this->translate("Details");?></th>
+						</tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Course").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+							<td><?php echo $this->lobjCoursetypeform->CourseType;?></td>
+                            <?php echo $this->lobjCoursetypeform->IdCourseType;?>
+                            <?php echo $this->lobjCoursetypeform->UpdDate;?>
+                            <?php echo $this->lobjCoursetypeform->UpdUser;?></td>
+                        </tr>
+                      	<tr>
+							<td><?php echo $this->defaultlanguage;?><span class="reqMark"></span></td>
+							<td><?php echo $this->lobjCoursetypeform->Bahasaindonesia;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Credit").' '.$this->translate("Hours").' '.$this->translate("Mandatory");?></td>
+							<td><?php echo $this->lobjCoursetypeform->MandatoryCreditHrs;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Amount").' '.$this->translate("Mandatory");?></td>
+							<td><?php echo $this->lobjCoursetypeform->MandatoryAmount;?></td>
+						</tr>
+						<tr>
+				            <td><?php echo $this->translate("Course").' '.$this->translate("Exam");?></td>
+				            <td><?php echo $this->lobjCoursetypeform->CourseExam;?></td>
+			            </tr>
+                        <tr>
+							<td><?php echo $this->translate("Audit");?></td>
+							<td><?php echo $this->lobjCoursetypeform->Audit;?></td>
+			           </tr>
+			            <tr>
+							<td><?php echo $this->translate("Project");?></td>
+							<td><?php echo $this->lobjCoursetypeform->Project;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Class").' '.$this->translate("Timetable");?></td>
+							<td><?php echo $this->lobjCoursetypeform->ClassTimetable;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Exam").' '.$this->translate("Timetable");?></td>
+							<td><?php echo $this->lobjCoursetypeform->ExamTimeTable;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Practical");?></td>
+							<td><?php echo $this->lobjCoursetypeform->Practical;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Pass/Fail").' '.$this->translate("Grade");?></td>
+							<td><?php echo $this->lobjCoursetypeform->PassFailGrade;?></td>
+						</tr>
+						<tr>
+							<td><?php echo $this->translate("Active");?></td>
+							<td><?php echo $this->lobjCoursetypeform->Active;?></td>
+						</tr>	
+						<tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjCoursetypeform->Save;?>
+                           <input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'coursetype', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

@@ -1,0 +1,6 @@
+<?php
+    	echo "You are not Authorized to view this page";	
+    	$this->url =  $_SERVER['HTTP_REFERER'];
+    	
+?>
+<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url; ?>';" />

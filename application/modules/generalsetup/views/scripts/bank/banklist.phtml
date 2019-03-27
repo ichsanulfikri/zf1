@@ -1,0 +1,151 @@
+<head>
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+	
+	});
+
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("State",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+
+function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("City",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+</script>
+</head>
+<fieldset>
+    <legend><?php echo $this->translate("Bank");?></legend>
+          <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/bank/banklist/id/<?php echo $this->IdBank; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                   <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Bank").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <?php echo $this->lobjBankForm->IdBank;?>
+                        <?php echo $this->lobjBankForm->UpdDate;?>
+                        <?php echo $this->lobjBankForm->UpdUser;?>
+                        <tr>
+                            <td ><?php echo $this->translate("Bank Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjBankForm->BankName;?></td>
+                            <td><?php echo $this->translate("Branch Name");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjBankForm->Branch;?></td>	                           
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Address1");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjBankForm->BankAdd1;?></td>
+                        	<td><?php echo $this->translate("Address2");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->BankAdd2;?></td>
+                        </tr>
+                        <tr>
+                           <td><?php echo $this->translate("Country");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->Country;?></td>
+                            <td><?php echo $this->translate("State");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->State;?></td>
+                        </tr>
+
+                        <tr>
+                        	 <td><?php echo $this->translate("City");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->City;?></td>
+                             <td><?php echo $this->translate("Phone");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->Phonecountrycode;?><?php echo $this->lobjBankForm->Phonestatecode;?><?php echo $this->lobjBankForm->Phone;?></td>
+                            
+                        </tr>
+
+                        <tr>
+                            <td><?php echo $this->translate("Fax");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->faxcountrycode;?><?php echo $this->lobjBankForm->faxstatecode;?><?php echo $this->lobjBankForm->Fax;?></td>  
+                             <td><?php echo $this->translate("Email");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->Email;?></td>                        
+                        </tr>
+                        <tr>                          	
+                             <td><?php echo $this->translate("URL");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->URL;?></td>
+                           <td><?php echo $this->translate("Contact Person");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->ContactPerson;?></td>                    
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Designation");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->Desgination;?></td> 
+                            <td><?php echo $this->translate("Contact Phone");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->ContactPhonecountrycode;?><?php echo $this->lobjBankForm->ContactPhonestatecode;?><?php echo $this->lobjBankForm->ContactPhone;?></td>                          
+                        </tr>
+                        <tr>
+                           <td><?php echo $this->translate("Contact cell");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->countrycode;?><?php echo $this->lobjBankForm->ContactCell;?></td>   
+                            <td></td>
+                            <td></td>                                                     
+                        </tr>
+                        <tr>
+                         	<td><?php echo $this->translate("MICR");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->MICR;?></td>   
+                             <?php $label_1 = $this->BKCode1;  if ($label_1) {?>                         
+                            <td>
+                               <?php echo $this->BKCode1; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjBankForm->BKCode1;  ?>
+                            </td>   
+                            <?php } ?>                        
+                        </tr>
+                        <tr>                         	
+                             <?php $label_2 = $this->BKCode2;  if ($label_2) {?>                         
+                            <td>
+                               <?php echo $this->BKCode2; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjBankForm->BKCode2;  ?>
+                            </td>   
+                            <?php } ?> 
+                            
+                            <td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjBankForm->Active;?></td>
+                        </tr>
+                         <tr>
+                           <td align = "right" colspan="4"><?php echo $this->lobjBankForm->Save;?>
+                           <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'bank', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+                </table>
+                
+           </Form>
+</fieldset>
+
+

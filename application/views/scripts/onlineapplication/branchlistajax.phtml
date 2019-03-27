@@ -1,0 +1,9 @@
+<select id="branch_<?php echo $this->intake;?>" class="" style="width:200px;" name="branch_<?php echo $this->intake?>">
+ <?php if(count($this->branch) > 1 || count($this->branch) == 0){?>
+ <option value=''>select</option>
+ <?php }?>
+<?php foreach($this->branch as $branch){?>
+  <option value='<?php echo $branch['IdBranch'];?>'><?php echo $branch['BranchName']; ?></option>
+  <?php } ?>
+</select>
+<?php exit; ?>

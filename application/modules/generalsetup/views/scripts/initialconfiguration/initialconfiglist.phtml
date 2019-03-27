@@ -1,0 +1,3393 @@
+<head>
+    <script type="text/javascript">
+        dojo.addOnLoad(function(){
+            $("#mainTabContainer_tablist").css('width','1110px');
+            //dijit.byId('DefaultCountry').set('value','');
+            //dijit.byId('DefaultCountry').set('placeHolder','Select Country');
+
+            var NoRefCode = dojo.byId('NoRefCode').value;
+            enablerefcodefields(NoRefCode);
+            disableCheck();
+
+            //dojo.forEach(dijit.byId("mainTabContainer").tablist.getChildren(), dojo.hitch(this, function(item, index, array)
+            //{
+            //dojo.attr(item, "disabled", true);
+            //item.onClick = function() {};
+            //}));
+
+
+
+            var POcode1 = <?php echo $this->Regcode1 ?>;
+            var POcode2 = <?php echo $this->Regcode2 ?>;
+            var POcode3 = <?php echo $this->Regcode3 ?>;
+            var POcode4 = <?php echo $this->Regcode4 ?>;
+            var POcode5 = <?php echo $this->Regcode5 ?>;
+            var POcode6 = <?php echo $this->Regcode6 ?>;
+            var POcode7 = <?php echo $this->Regcode7 ?>;
+            var POcode8 = <?php echo $this->Regcode8 ?>;
+            var POcode9 = <?php echo $this->Regcode9 ?>;
+            var POcode10 = <?php echo $this->Regcode10 ?>;
+            var POcode11 = <?php echo $this->Regcode11 ?>;
+            var POcode12 = <?php echo $this->Regcode12 ?>;
+            var POcode13 = <?php echo $this->Regcode13 ?>;
+            var POcode14 = <?php echo $this->Regcode14 ?>;
+            var POcode15 = <?php echo $this->Regcode15 ?>;
+
+            ledgerCodeType(POcode15,15);
+            ledgerCodeType(POcode14,14);
+            ledgerCodeType(POcode13,13);
+            ledgerCodeType(POcode12,12);
+            ledgerCodeType(POcode11,11);
+            ledgerCodeType(POcode10,10);
+            ledgerCodeType(POcode9,9);
+            ledgerCodeType(POcode8,8);
+            ledgerCodeType(POcode7,7);
+            ledgerCodeType(POcode6,6);
+            ledgerCodeType(POcode5,5);
+            ledgerCodeType(POcode4,4);
+            ledgerCodeType(POcode3,3);
+            ledgerCodeType(POcode2,2);
+            ledgerCodeType(POcode1,1);
+
+
+            var CodeText1 = '<?php echo $this->CodeText1 ?>';
+            var CodeText2 = '<?php echo $this->CodeText2 ?>';
+            var CodeText3 = '<?php echo $this->CodeText3 ?>';
+            var CodeText4 = '<?php echo $this->CodeText4 ?>';
+
+            showTextfield(CodeText1,1);
+            showTextfield(CodeText2,2);
+            showTextfield(CodeText3,3);
+            showTextfield(CodeText4,4);
+
+            var SemCodeText1 = '<?php echo $this->SemCodeText1 ?>';
+            var SemCodeText2 = '<?php echo $this->SemCodeText2 ?>';
+            var SemCodeText3 = '<?php echo $this->SemCodeText3 ?>';
+            var SemCodeText4 = '<?php echo $this->SemCodeText4 ?>';
+
+            showSemTextfield(SemCodeText1,1);
+            showSemTextfield(SemCodeText2,2);
+            showSemTextfield(SemCodeText3,3);
+            showSemTextfield(SemCodeText4,4);
+
+            var RegistrationCodeText1 = '<?php echo $this->RegistrationCodeText1 ?>';
+            var RegistrationCodeText2 = '<?php echo $this->RegistrationCodeText2 ?>';
+            var RegistrationCodeText3 = '<?php echo $this->RegistrationCodeText3 ?>';
+            var RegistrationCodeText4 = '<?php echo $this->RegistrationCodeText4 ?>';
+
+
+            showfield(RegistrationCodeText1,1);
+            showfield(RegistrationCodeText2,2);
+            showfield(RegistrationCodeText3,3);
+            showfield(RegistrationCodeText4,4);
+
+
+            var AccountCodeText1 = '<?php echo $this->AccountCodeText1 ?>';
+            var AccountCodeText2 = '<?php echo $this->AccountCodeText2 ?>';
+            var AccountCodeText3 = '<?php echo $this->AccountCodeText3 ?>';
+            var AccountCodeText4 = '<?php echo $this->AccountCodeText4 ?>';
+
+
+            showAccTextfield(AccountCodeText1,1);
+            showAccTextfield(AccountCodeText2,2);
+            showAccTextfield(AccountCodeText3,3);
+            showAccTextfield(AccountCodeText4,4);
+
+
+            var Blockcode = <?php echo $this->Blockcode ?>;
+            BlockShow(Blockcode);
+
+
+            var AccountGroup='<?php echo $this->AccountGroup ?>';//alert(AccountGroup);
+            var BaseType='<?php echo $this->BaseType ?>';
+            //alert(BaseType);
+            var LevelBased='<?php echo $this->LevelBased ?>';//alert(LevelBased);
+            var generalbaseField1='<?php echo $this->generalbaseField1 ?>';//alert(generalbaseField1);
+            var generalbaseField2='<?php echo $this->generalbaseField2 ?>';//alert(generalbaseField2);
+            var generalbaseField3='<?php echo $this->generalbaseField3 ?>';//alert(generalbaseField3);
+            var generalbaseField4='<?php echo $this->generalbaseField4 ?>';//alert(generalbaseField4);
+            var generalbaseText1='<?php echo $this->generalbaseText1 ?>';//alert(generalbaseText1);
+            var generalbaseText2='<?php echo $this->generalbaseText2 ?>';//alert(generalbaseText2);
+            var generalbaseText3='<?php echo $this->generalbaseText3 ?>';//alert(generalbaseText3);
+            var generalbaseText4='<?php echo $this->generalbaseText4 ?>';//alert(generalbaseText4);
+            if(AccountGroup==1){
+                if(BaseType==1){
+                    basesss(1);
+                    levelType(1);
+                    if(generalbaseField1 == "Text"){
+                        showgroupTextfield("Text",1);
+                    }
+                    if(generalbaseField2 == "Text"){
+                        showgroupTextfield("Text",2);
+                    }
+                    if(generalbaseField3 == "Text"){
+                        showgroupTextfield("Text",3);
+                    }
+                    if(generalbaseField4 == "Text"){
+                        showgroupTextfield("Text",4);
+                    }
+                }
+                else
+                {
+                    if(LevelBased==1)
+                    {
+                        level(1);
+                        basesss(1);
+                        levelType(0);
+                    }
+                    else
+                    {
+                        level(0);
+                        basesss(1);
+                        levelType(0);
+                    }
+
+                }
+            }
+            else{
+                basesss(0);
+            }
+            /////////////
+            var ItemCode='<?php echo $this->ItemCode ?>';//alert(AccountGroup);
+            var Itembase='<?php echo $this->Itembase ?>';
+            //alert(Itembase);
+            var itemlevelbase='<?php echo $this->itemlevelbase ?>';//alert(LevelBased);
+            var generalbaseitemField1='<?php echo $this->generalbaseitemField1 ?>';//alert(generalbaseField1);
+            var generalbaseitemField2='<?php echo $this->generalbaseitemField2 ?>';//alert(generalbaseField2);
+            var generalbaseitemField3='<?php echo $this->generalbaseitemField3 ?>';//alert(generalbaseField3);
+            var generalbaseitemField4='<?php echo $this->generalbaseitemField4 ?>';//alert(generalbaseField4);
+            var generalbaseitemText1='<?php echo $this->generalbaseitemText1 ?>';//alert(generalbaseText1);
+            var generalbaseitemText2='<?php echo $this->generalbaseitemText2 ?>';//alert(generalbaseText2);
+            var generalbaseitemText3='<?php echo $this->generalbaseitemText3 ?>';//alert(generalbaseText3);
+            var generalbaseitemText4='<?php echo $this->generalbaseitemText4 ?>';//alert(generalbaseText4);
+            if(ItemCode==1){
+                if(Itembase==1){
+                    itembasess(1);
+                    itemlevelType(1);
+                    if(generalbaseitemField1 == "Text"){
+                        showgroupTextitemfield("Text",1);
+                    }
+                    if(generalbaseitemField2 == "Text"){
+                        showgroupTextitemfield("Text",2);
+                    }
+                    if(generalbaseitemField3 == "Text"){
+                        showgroupTextitemfield("Text",3);
+                    }
+                    if(generalbaseitemField4 == "Text"){
+                        showgroupTextitemfield("Text",4);
+                    }
+                }
+                else
+                {
+                    if(itemlevelbase==1)
+                    {
+                        itemlevel(1);
+                        itembasess(1);
+                        itemlevelType(0);
+                    }
+                    else
+                    {
+                        itemlevel(0);
+                        itembasess(1);
+                        itemlevelType(0);
+                    }
+
+                }
+            }
+            else{
+                basesss(0);
+            }
+
+        });
+
+        /*function resetapplicationseq(){
+                    dijit.byId('ApplicationIdTypeSeqNo').set('readOnly',false);
+                    dijit.byId('ApplicationIdTypeSeqNo').set('value','');
+            }
+
+            function resetstudentseq(){
+                    dijit.byId('StudentIdTypeSeqNo').set('readOnly',false);
+                    dijit.byId('StudentIdTypeSeqNo').set('value','');
+            }*/
+
+        function fnToggleTabs(TabAction,CurrentTabId,NextTabId){
+            if(TabAction == "Next"){
+
+                var flag = Validateform(CurrentTabId);
+                if(flag)
+                {
+                    var mainTabContainerId = dijit.byId("mainTabContainer")
+                    var tabContainerId = dijit.byId(NextTabId);
+                    mainTabContainerId.selectChild(tabContainerId);
+                }
+
+            }else if(TabAction == "Back"){
+                var mainTabContainerId = dijit.byId("mainTabContainer")
+                var tabContainerId = dijit.byId(NextTabId);
+                mainTabContainerId.selectChild(tabContainerId);
+            }
+        }
+
+        function ShowThisTab(TabId){
+            var mainTabContainerId = dijit.byId("mainTabContainer")
+            var tabContainerId = dijit.byId(TabId);
+            mainTabContainerId.selectChild(tabContainerId);
+        }
+
+        function Validateform(TabId){
+            var flag = "";
+
+            if(TabId == "tab-one"){
+                flag = fnValidateTab1();
+            }else if(TabId == "tab-two"){
+                flag = fnValidateTab2();
+            }else if(TabId == "tab-five"){
+                flag = fnValidateTab5();
+            }
+            else if(TabId == "tab-six"){
+                flag = fnValidateTab6();
+            }
+            else
+
+
+            {
+                flag = true;
+            }
+            return flag;
+        }
+
+        function fnValidateTab1(){
+            var flag = true;
+
+            if(dijit.byId("DefaultCountry").value==''){
+                dijit.byId("DefaultCountry").attr('required','true');
+                dijit.byId("DefaultCountry").focus();
+                flag = false;
+            }else{
+                if(!dijit.byId("DefaultCountry").isValid()){
+                    dijit.byId("DefaultCountry").focus();
+                    flag = false;
+                }
+            }
+
+            if(dijit.byId("noofrowsingrid").value==''){
+                dijit.byId("noofrowsingrid").attr('required','true');
+                dijit.byId("noofrowsingrid").focus();
+                flag = false;
+            }
+
+
+
+            return flag;
+        }
+
+        function fnValidateTab2(){
+            var flag = true;
+            return flag;
+        }
+
+        function fnValidateTab3(){
+            var flag = true;
+            return flag;
+        }
+
+        function fnValidateTab4(){
+            var flag = true;
+            return flag;
+        }
+
+        function fnValidateTab5(){
+            var flag = true;
+            return flag;
+        }
+
+
+        function fnValidateTab11(){
+            var flag = true;
+            var dtlcount = document.getElementById('NameDtlCount').value;
+            var temp = false;
+            for(var i=1; i<=dtlcount; i++){
+                var temval = document.getElementById('NameDtl'+i).value;
+                if(temval == ''){
+                    dijit.byId('NameDtl'+i).attr('required','true');
+                    dijit.byId('NameDtl'+i).focus();
+                    temp = true;
+                }
+            }
+            if(temp){
+                flag = false;
+            }
+            return flag;
+        }
+
+        function fnValidateTab12(){
+            var flag = true;
+            var dtlcount = document.getElementById('ExtarIdDtlCount').value;
+            var temp = false;
+            for(var i=1; i<=dtlcount; i++){
+                var temval = document.getElementById('ExtarIdDtl'+i).value;
+                if(temval == ''){
+                    dijit.byId('ExtarIdDtl'+i).attr('required','true');
+                    dijit.byId('ExtarIdDtl'+i).focus();
+                    temp = true;
+                }
+            }
+            if(temp){
+                flag = false;
+            }
+            return flag;
+        }
+
+
+
+
+
+
+        function fnValidateTab6(){
+            var flag = true;
+            var form = dijit.byId("initconfig");
+            var CollegeCodeType= form.attr('value').CollegeCodeType;
+            if(CollegeCodeType == 1){
+                CollegeCodeField1   = document.getElementById('CollegeCodeField1').value;
+                CollegeCodeField2   = document.getElementById('CollegeCodeField2').value;
+                CollegeCodeField3   = document.getElementById('CollegeCodeField3').value;
+                if(CollegeCodeField1 != "Uniqueid" && CollegeCodeField2 != "Uniqueid" && CollegeCodeField3 != "Uniqueid") {
+                    dijit.byId("CollegeCodeField1").setValue('');
+                    dijit.byId("CollegeCodeField2").setValue('');
+                    dijit.byId("CollegeCodeField3").setValue('');
+                    dijit.byId("CollegeCodeField1").attr('required','true');
+                    dijit.byId("CollegeCodeField2").attr('required','true');
+                    dijit.byId("CollegeCodeField3").attr('required','true');
+                    dijit.byId("CollegeCodeField1").focus();
+                    return false;
+                }
+            }
+            var DepartmentCodeType= form.attr('value').DepartmentCodeType;
+            if(DepartmentCodeType == 1){
+                DepartmentCodeField1   = document.getElementById('DepartmentCodeField1').value;
+                DepartmentCodeField2   = document.getElementById('DepartmentCodeField2').value;
+                DepartmentCodeField3   = document.getElementById('DepartmentCodeField3').value;
+                DepartmentCodeField4   = document.getElementById('DepartmentCodeField4').value;
+                if(DepartmentCodeField1 != "Uniqueid" && DepartmentCodeField2 != "Uniqueid" && DepartmentCodeField3 != "Uniqueid" && DepartmentCodeField4 != "Uniqueid") {
+                    dijit.byId("DepartmentCodeField1").setValue('');
+                    dijit.byId("DepartmentCodeField2").setValue('');
+                    dijit.byId("DepartmentCodeField3").setValue('');
+                    dijit.byId("DepartmentCodeField4").setValue('');
+                    dijit.byId("DepartmentCodeField1").attr('required','true');
+                    dijit.byId("DepartmentCodeField2").attr('required','true');
+                    dijit.byId("DepartmentCodeField3").attr('required','true');
+                    dijit.byId("DepartmentCodeField4").attr('required','true');
+                    dijit.byId("DepartmentCodeField1").focus();
+                    return false;
+                }
+            }
+            var SemesterCodeType= form.attr('value').SemesterCodeType;
+            if(SemesterCodeType == 1){
+                SemesterCodeField1   = document.getElementById('SemesterCodeField1').value;
+                SemesterCodeField2   = document.getElementById('SemesterCodeField2').value;
+                SemesterCodeField3   = document.getElementById('SemesterCodeField3').value;
+                SemesterCodeField4   = document.getElementById('SemesterCodeField4').value;
+                if(SemesterCodeField1 != "Uniqueid" && SemesterCodeField2 != "Uniqueid" && SemesterCodeField3 != "Uniqueid" && SemesterCodeField4 != "Uniqueid") {
+                    dijit.byId("SemesterCodeField1").setValue('');
+                    dijit.byId("SemesterCodeField2").setValue('');
+                    dijit.byId("SemesterCodeField3").setValue('');
+                    dijit.byId("SemesterCodeField4").setValue('');
+                    dijit.byId("SemesterCodeField1").attr('required','true');
+                    dijit.byId("SemesterCodeField2").attr('required','true');
+                    dijit.byId("SemesterCodeField3").attr('required','true');
+                    dijit.byId("SemesterCodeField4").attr('required','true');
+                    dijit.byId("SemesterCodeField1").focus();
+                    return false;
+                }
+            }
+            var StudentCodeType= form.attr('value').StudentCodeType;
+            if(StudentCodeType == 1){
+                StudentCodeField1   = document.getElementById('StudentCodeField1').value;
+                StudentCodeField2   = document.getElementById('StudentCodeField2').value;
+                StudentCodeField3   = document.getElementById('StudentCodeField3').value;
+                StudentCodeField4   = document.getElementById('StudentCodeField4').value;
+                if(StudentCodeField1 != "Uniqueid" && StudentCodeField2 != "Uniqueid" && StudentCodeField3 != "Uniqueid" && StudentCodeField4 != "Uniqueid") {
+                    dijit.byId("StudentCodeField1").setValue('');
+                    dijit.byId("StudentCodeField2").setValue('');
+                    dijit.byId("StudentCodeField3").setValue('');
+                    dijit.byId("StudentCodeField4").setValue('');
+                    dijit.byId("StudentCodeField1").attr('required','true');
+                    dijit.byId("StudentCodeField2").attr('required','true');
+                    dijit.byId("StudentCodeField3").attr('required','true');
+                    dijit.byId("StudentCodeField4").attr('required','true');
+                    dijit.byId("StudentCodeField1").focus();
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function tabchange () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabstwo = dijit.byId("tab-two");
+                    maintab.selectChild(tabstwo);
+                }
+            });
+        }
+
+        function tabchange1 () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabsthree = dijit.byId("tab-three");
+                    maintab.selectChild(tabsthree);
+                }
+            });
+        }
+        function tabchange2 () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabsthree = dijit.byId("tab-four");
+                    maintab.selectChild(tabsthree);
+                }
+            });
+        }
+
+        function tabchange3 () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabsone = dijit.byId("tab-one");
+                    maintab.selectChild(tabsone);
+
+                }
+            });
+        }
+
+        function tabchange4 () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabstwo = dijit.byId("tab-two");
+                    maintab.selectChild(tabstwo);
+
+                }
+            });
+        }
+
+        function tabchange5 () {
+            dojo.addOnLoad(function(){
+                var retflag = validateform();
+                if(retflag)
+                {
+                    var maintab = dijit.byId("mainTabContainer")
+                    var tabsthree = dijit.byId("tab-three");
+                    maintab.selectChild(tabsthree);
+
+                }
+            });
+        }
+
+        ////////////////////item group code
+        function itembasess(val){
+            if(val==1)
+            {
+                var base1= dojo.byId('base1');
+                dojo.style(base1,'display','block');
+                var base2 = dojo.byId('base2');
+                dojo.style(base2,'display','block');
+
+            }
+            else
+            {
+                var base1= dojo.byId('base1');
+                dojo.style(base1,'display','none');
+                var base2 = dojo.byId('base2');
+                dojo.style(base2,'display','none');
+
+                var generalbaseitemField1= dojo.byId('generalbaseitemField1');
+                dojo.style(generalbaseitemField1,'display','none');
+                var generalbaseitemField2 = dojo.byId('generalbaseitemField2');
+                dojo.style(generalbaseitemField2,'display','none');
+                var generalbaseitemField3= dojo.byId('generalbaseitemField3');
+                dojo.style(generalbaseitemField3,'display','none');
+                var generalbaseitemField4 = dojo.byId('generalbaseitemField4');
+                dojo.style(generalbaseitemField4,'display','none');
+                var generalbaseitemField5= dojo.byId('generalbaseitemField5');
+                dojo.style(generalbaseitemField5,'display','none');
+                var generalbaseitemField6 = dojo.byId('generalbaseitemField6');
+                dojo.style(generalbaseitemField6,'display','none');
+                var generalbaseitemField7= dojo.byId('generalbaseitemField7');
+                dojo.style(generalbaseitemField7,'display','none');
+                var generalbaseitemField8 = dojo.byId('generalbaseitemField8');
+                dojo.style(generalbaseitemField8,'display','none');
+
+                var generalbaseitemSeperator1 = dojo.byId('generalbaseitemSeperator1');
+                dojo.style(generalbaseitemSeperator1,'display','none');
+                var generalbaseitemSeperator2 = dojo.byId('generalbaseitemSeperator2');
+                dojo.style(generalbaseitemSeperator2,'display','none');
+
+                var levelitem1= dojo.byId('levelitem1');
+                dojo.style(levelitem1,'display','none');
+                var levelitem2= dojo.byId('levelitem2');
+                dojo.style(levelitem2,'display','none');
+
+
+            }
+        }
+        function itembase(val){
+            if(val==1)
+            {
+                var base1= dojo.byId('base1');
+                dojo.style(base1,'display','block');
+                var base2 = dojo.byId('base2');
+                dojo.style(base2,'display','block');
+                var form = dijit.byId("initconfig");
+                var idbase=form.attr('value').Itembase;
+                //alert(idbase);
+                if(idbase==1){
+                    itemlevelType(1);
+                    var generalbaseitemFields1=form.attr('value').generalbaseitemField1;
+                    //alert(generalbaseitemFields1);
+                    //levelType(generalbaseField);
+                    if(generalbaseitemFields1=='Text')
+                        showgroupTextitemfield(generalbaseitemFields1,1);
+
+                    var generalbaseitemFields2=form.attr('value').generalbaseitemField2;
+                    //alert(generalbaseitemFields2);
+                    //levelType(generalbaseField);
+                    if(generalbaseitemFields2=='Text')
+                        showgroupTextitemfield(generalbaseitemFields2,2);
+
+                    var generalbaseitemFields3=form.attr('value').generalbaseitemField3;
+                    //alert(generalbaseitemFields3);
+                    //levelType(generalbaseField);
+                    if(generalbaseitemFields3=='Text')
+                        showgroupTextitemfield(generalbaseitemFields3,3);
+
+                    var generalbaseitemFields4=form.attr('value').generalbaseitemField4;
+                    //alert(generalbaseitemFields4);
+                    //levelType(generalbaseField);
+                    if(generalbaseitemFields4=='Text')
+                        showgroupTextitemfield(generalbaseitemFields4,4);
+
+                }
+                else
+                {
+                    itemlevelType(0);
+                    var idlevelbase=form.attr('value').itemlevelbase;
+                    //alert(idlevelbase);
+                    if(idlevelbase==1)
+                    {
+                        itemlevel(1);
+                    }
+                    else
+                    {
+                        itemlevel(0);
+                    }
+                }
+            }
+            else
+            {
+                var base1= dojo.byId('base1');
+                dojo.style(base1,'display','none');
+                var base2 = dojo.byId('base2');
+                dojo.style(base2,'display','none');
+                var generalbaseitemField1= dojo.byId('generalbaseitemField1');
+                dojo.style(generalbaseitemField1,'display','none');
+                var generalbaseitemField2 = dojo.byId('generalbaseitemField2');
+                dojo.style(generalbaseitemField2,'display','none');
+                var generalbaseitemField3= dojo.byId('generalbaseitemField3');
+                dojo.style(generalbaseitemField3,'display','none');
+                var generalbaseitemField4 = dojo.byId('generalbaseitemField4');
+                dojo.style(generalbaseitemField4,'display','none');
+                var generalbaseitemField5= dojo.byId('generalbaseitemField5');
+                dojo.style(generalbaseitemField5,'display','none');
+                var generalbaseitemField6 = dojo.byId('generalbaseitemField6');
+                dojo.style(generalbaseitemField6,'display','none');
+                var generalbaseitemField7= dojo.byId('generalbaseitemField7');
+                dojo.style(generalbaseitemField7,'display','none');
+                var generalbaseitemField8 = dojo.byId('generalbaseitemField8');
+                dojo.style(generalbaseitemField8,'display','none');
+
+                var generalbaseitemSeperator1 = dojo.byId('generalbaseitemSeperator1');
+                dojo.style(generalbaseitemSeperator1,'display','none');
+                var generalbaseitemSeperator2 = dojo.byId('generalbaseitemSeperator2');
+                dojo.style(generalbaseitemSeperator2,'display','none');
+
+                var levelitem1= dojo.byId('levelitem1');
+                dojo.style(levelitem1,'display','none');
+                var levelitem2= dojo.byId('levelitem2');
+                dojo.style(levelitem2,'display','none');
+
+                var levelbaseitem1= dojo.byId('levelbaseitem1');
+                dojo.style(levelbaseitem1,'display','none');
+                var levelbaseitem2= dojo.byId('levelbaseitem2');
+                dojo.style(levelbaseitem2,'display','none');
+                var levelbaseitem3= dojo.byId('levelbaseitem3');
+                dojo.style(levelbaseitem3,'display','none');
+                var levelbaseitem4= dojo.byId('levelbaseitem4');
+                dojo.style(levelbaseitem4,'display','none');
+                var itemfixedText1= dojo.byId('itemfixedText1');
+                dojo.style(itemfixedText1,'display','none');
+                var itemfixedText2= dojo.byId('itemfixedText2');
+                dojo.style(itemfixedText2,'display','none');
+
+                showgroupTextitemfield("xyz",1);
+                showgroupTextitemfield("xyz",2);
+                showgroupTextitemfield("xyz",3);
+                showgroupTextitemfield("xyz",4);
+            }
+        }
+
+        function itemlevelType(val){
+
+            if(val==1){
+
+                var generalbaseitemField1= dojo.byId('generalbaseitemField1');
+                dojo.style(generalbaseitemField1,'display','block');
+                var generalbaseitemField2 = dojo.byId('generalbaseitemField2');
+                dojo.style(generalbaseitemField2,'display','block');
+                var generalbaseitemField3= dojo.byId('generalbaseitemField3');
+                dojo.style(generalbaseitemField3,'display','block');
+                var generalbaseitemField4 = dojo.byId('generalbaseitemField4');
+                dojo.style(generalbaseitemField4,'display','block');
+                var generalbaseitemField5= dojo.byId('generalbaseitemField5');
+                dojo.style(generalbaseitemField5,'display','block');
+                var generalbaseitemField6 = dojo.byId('generalbaseitemField6');
+                dojo.style(generalbaseitemField6,'display','block');
+                var generalbaseitemField7= dojo.byId('generalbaseitemField7');
+                dojo.style(generalbaseitemField7,'display','block');
+                var generalbaseitemField8 = dojo.byId('generalbaseitemField8');
+                dojo.style(generalbaseitemField8,'display','block');
+                var generalbaseitemSeperator1 = dojo.byId('generalbaseitemSeperator1');
+                dojo.style(generalbaseitemSeperator1,'display','block');
+                var generalbaseitemSeperator2 = dojo.byId('generalbaseitemSeperator2');
+                dojo.style(generalbaseitemSeperator2,'display','block');
+
+                var levelitem1= dojo.byId('levelitem1');
+                dojo.style(levelitem1,'display','none');
+                var levelitem2= dojo.byId('levelitem2');
+                dojo.style(levelitem2,'display','none');
+
+                var levelbaseitem1= dojo.byId('levelbaseitem1');
+                dojo.style(levelbaseitem1,'display','none');
+                var levelbaseitem2= dojo.byId('levelbaseitem2');
+                dojo.style(levelbaseitem2,'display','none');
+                var levelbaseitem3= dojo.byId('levelbaseitem3');
+                dojo.style(levelbaseitem3,'display','none');
+                var levelbaseitem4= dojo.byId('levelbaseitem4');
+                dojo.style(levelbaseitem4,'display','none');
+                var itemfixedText1= dojo.byId('itemfixedText1');
+                dojo.style(itemfixedText1,'display','none');
+                var itemfixedText2= dojo.byId('itemfixedText2');
+                dojo.style(itemfixedText2,'display','none');
+
+                var form = dijit.byId("initconfig");
+                var generalbaseitemFields1=form.attr('value').generalbaseitemField1;
+                //alert(generalbaseitemFields1);
+                //levelType(generalbaseField);
+                if(generalbaseitemFields1=='Text')
+                    showgroupTextitemfield(generalbaseitemFields1,1);
+
+                var generalbaseitemFields2=form.attr('value').generalbaseitemField2;
+                //alert(generalbaseitemFields2);
+                //levelType(generalbaseField);
+                if(generalbaseitemFields2=='Text')
+                    showgroupTextitemfield(generalbaseitemFields2,2);
+
+                var generalbaseitemFields3=form.attr('value').generalbaseitemField3;
+                //alert(generalbaseitemFields3);
+                //levelType(generalbaseField);
+                if(generalbaseitemFields3=='Text')
+                    showgroupTextitemfield(generalbaseitemFields3,3);
+
+                var generalbaseitemFields4=form.attr('value').generalbaseitemField4;
+                //alert(generalbaseitemFields4);
+                //levelType(generalbaseField);
+                if(generalbaseitemFields4=='Text')
+                    showgroupTextitemfield(generalbaseitemFields4,4);
+
+
+            }
+            else
+            {
+
+                var generalbaseitemField1= dojo.byId('generalbaseitemField1');
+                dojo.style(generalbaseitemField1,'display','none');
+                var generalbaseitemField2 = dojo.byId('generalbaseitemField2');
+                dojo.style(generalbaseitemField2,'display','none');
+                var generalbaseitemField3= dojo.byId('generalbaseitemField3');
+                dojo.style(generalbaseitemField3,'display','none');
+                var generalbaseitemField4 = dojo.byId('generalbaseitemField4');
+                dojo.style(generalbaseitemField4,'display','none');
+                var generalbaseitemField5= dojo.byId('generalbaseitemField5');
+                dojo.style(generalbaseitemField5,'display','none');
+                var generalbaseitemField6 = dojo.byId('generalbaseitemField6');
+                dojo.style(generalbaseitemField6,'display','none');
+                var generalbaseitemField7= dojo.byId('generalbaseitemField7');
+                dojo.style(generalbaseitemField7,'display','none');
+                var generalbaseitemField8 = dojo.byId('generalbaseitemField8');
+                dojo.style(generalbaseitemField8,'display','none');
+
+                var generalbaseitemSeperator1 = dojo.byId('generalbaseitemSeperator1');
+                dojo.style(generalbaseitemSeperator1,'display','none');
+                var generalbaseitemSeperator2 = dojo.byId('generalbaseitemSeperator2');
+                dojo.style(generalbaseitemSeperator2,'display','none');
+
+                var levelitem1= dojo.byId('levelitem1');
+                dojo.style(levelitem1,'display','block');
+                var levelitem2= dojo.byId('levelitem2');
+                dojo.style(levelitem2,'display','block');
+
+                showgroupTextitemfield("xyz",1);
+                showgroupTextitemfield("xyz",2);
+                showgroupTextitemfield("xyz",3);
+                showgroupTextitemfield("xyz",4);
+
+            }
+
+        }
+
+        function showgroupTextitemfield(val,type){
+            //alert(type);
+            //alert("cx");
+            var fieldrow = dojo.byId('generalbaseitemText'+type);
+
+            if(val != "Text"){
+                //alert("xyz");
+                dojo.style(fieldrow,'display','none');
+                return;
+            }
+            else{
+                //alert("abc");
+                dojo.style(fieldrow,'display','block');
+                return;
+            }
+
+        }
+
+        function itemlevel(val){
+            if(val==1)
+            {
+                var levelbaseitem1= dojo.byId('levelbaseitem1');
+                dojo.style(levelbaseitem1,'display','block');
+                var levelbaseitem2= dojo.byId('levelbaseitem2');
+                dojo.style(levelbaseitem2,'display','block');
+                var levelbaseitem3= dojo.byId('levelbaseitem3');
+                dojo.style(levelbaseitem3,'display','none');
+                var levelbaseitem4= dojo.byId('levelbaseitem4');
+                dojo.style(levelbaseitem4,'display','none');
+                var itemfixedText1= dojo.byId('itemfixedText1');
+                dojo.style(itemfixedText1,'display','none');
+                var itemfixedText2= dojo.byId('itemfixedText2');
+                dojo.style(itemfixedText2,'display','none');
+            }
+            else{
+                var levelbaseitem1= dojo.byId('levelbaseitem1');
+                dojo.style(levelbaseitem1,'display','none');
+                var levelbaseitem2= dojo.byId('levelbaseitem2');
+                dojo.style(levelbaseitem2,'display','none');
+                var levelbaseitem3= dojo.byId('levelbaseitem3');
+                dojo.style(levelbaseitem3,'display','block');
+                var levelbaseitem4= dojo.byId('levelbaseitem4');
+                dojo.style(levelbaseitem4,'display','block');
+                var itemfixedText1= dojo.byId('itemfixedText1');
+                dojo.style(itemfixedText1,'display','block');
+                var itemfixedText2= dojo.byId('itemfixedText2');
+                dojo.style(itemfixedText2,'display','block');
+            }
+        }
+
+        ////////////////////
+
+        ////////////////////account group code
+
+
+        function basesss(val){
+            //alert (val);
+            //alert("hqrkhkewhrkh");
+
+            if(val==1)
+            {
+                var base1= dojo.byId('base123');
+                dojo.style(base1,'display','block');
+                var base2 = dojo.byId('base345');
+                dojo.style(base2,'display','block');
+
+            }
+            else
+            {
+                var base1= dojo.byId('base123');
+                dojo.style(base1,'display','none');
+                var base2 = dojo.byId('base345');
+                dojo.style(base2,'display','none');
+                var generalbaseField1= dojo.byId('generalbaseField1');
+                dojo.style(generalbaseField1,'display','none');
+                var generalbaseField2 = dojo.byId('generalbaseField2');
+                dojo.style(generalbaseField2,'display','none');
+                var generalbaseField3= dojo.byId('generalbaseField3');
+                dojo.style(generalbaseField3,'display','none');
+                var generalbaseField4 = dojo.byId('generalbaseField4');
+                dojo.style(generalbaseField4,'display','none');
+                var generalbaseField5= dojo.byId('generalbaseField5');
+                dojo.style(generalbaseField5,'display','none');
+                var generalbaseField6 = dojo.byId('generalbaseField6');
+                dojo.style(generalbaseField6,'display','none');
+                var generalbaseField7= dojo.byId('generalbaseField7');
+                dojo.style(generalbaseField7,'display','none');
+                var generalbaseField8 = dojo.byId('generalbaseField8');
+                dojo.style(generalbaseField8,'display','none');
+
+                var level1= dojo.byId('level1');
+                dojo.style(level1,'display','none');
+                var level2 = dojo.byId('level2');
+                dojo.style(level2,'display','none');
+
+            }
+        }
+
+
+
+        var falg=5;
+        function base(val){
+            if(val==1)
+            {
+                var base1= dojo.byId('base123');
+                dojo.style(base1,'display','block');
+                var base2 = dojo.byId('base345');
+                dojo.style(base2,'display','block');
+                var form = dijit.byId("initconfig");
+                var idbase=form.attr('value').base;
+                //alert(idbase);
+                if(idbase==1){
+                    levelType(1);
+                    var generalbaseField1=form.attr('value').generalbaseField1;
+                    //alert(generalbaseField1);
+                    //levelType(generalbaseField);
+                    if(generalbaseField1=='Text')
+                        showgroupTextfield(generalbaseField1,1);
+
+                    var generalbaseField2=form.attr('value').generalbaseField2;
+                    //alert(generalbaseField2);
+                    //levelType(generalbaseField);
+                    if(generalbaseField2=='Text')
+                        showgroupTextfield(generalbaseField2,2);
+
+                    var generalbaseField3=form.attr('value').generalbaseField3;
+                    //alert(generalbaseField3);
+                    //levelType(generalbaseField);
+                    if(generalbaseField3=='Text')
+                        showgroupTextfield(generalbaseField3,3);
+
+                    var generalbaseField4=form.attr('value').generalbaseField4;
+                    //alert(generalbaseField4);
+                    //levelType(generalbaseField);
+                    if(generalbaseField4=='Text')
+                        showgroupTextfield(generalbaseField4,4);
+                }
+                else{
+                    levelType(0);
+                    var idlevelbase=form.attr('value').levelbase;
+                    //alert(idlevelbase);
+                    if(idlevelbase==1)
+                    {
+                        level(1);
+                    }
+                    else
+                    {
+                        level(0);
+                    }
+                }
+
+
+            }
+            else
+            {
+                var base1= dojo.byId('base123');
+                dojo.style(base1,'display','none');
+                var base2 = dojo.byId('base345');
+                dojo.style(base2,'display','none');
+                var generalbaseField1= dojo.byId('generalbaseField1');
+                dojo.style(generalbaseField1,'display','none');
+                var generalbaseField2 = dojo.byId('generalbaseField2');
+                dojo.style(generalbaseField2,'display','none');
+                var generalbaseField3= dojo.byId('generalbaseField3');
+                dojo.style(generalbaseField3,'display','none');
+                var generalbaseField4 = dojo.byId('generalbaseField4');
+                dojo.style(generalbaseField4,'display','none');
+                var generalbaseField5= dojo.byId('generalbaseField5');
+                dojo.style(generalbaseField5,'display','none');
+                var generalbaseField6 = dojo.byId('generalbaseField6');
+                dojo.style(generalbaseField6,'display','none');
+                var generalbaseField7= dojo.byId('generalbaseField7');
+                dojo.style(generalbaseField7,'display','none');
+                var generalbaseField8 = dojo.byId('generalbaseField8');
+                dojo.style(generalbaseField8,'display','none');
+
+                var generalbaseSeperator1 = dojo.byId('generalbaseSeperator1');
+                dojo.style(generalbaseSeperator1,'display','none');
+                var generalbaseSeperator2 = dojo.byId('generalbaseSeperator2');
+                dojo.style(generalbaseSeperator2,'display','none');
+
+                var level1= dojo.byId('level1');
+                dojo.style(level1,'display','none');
+                var level2 = dojo.byId('level2');
+                dojo.style(level2,'display','none');
+
+                var levelbase1= dojo.byId('levelbase1');
+                dojo.style(levelbase1,'display','none');
+                var levelbase2= dojo.byId('levelbase2');
+                dojo.style(levelbase2,'display','none');
+
+                var levelbase3= dojo.byId('levelbase3');
+                dojo.style(levelbase3,'display','none');
+                var levelbase4= dojo.byId('levelbase4');
+                dojo.style(levelbase4,'display','none');
+
+                var fixedText1= dojo.byId('fixedText1');
+                dojo.style(fixedText1,'display','none');
+                var fixedText2= dojo.byId('fixedText2');
+                dojo.style(fixedText2,'display','none');
+
+                showgroupTextfield("xyz",1);
+                showgroupTextfield("xyz",2);
+                showgroupTextfield("xyz",3);
+                showgroupTextfield("xyz",4);
+
+            }
+        }
+
+
+
+        function showgroupTextfield(val,type){
+            //alert("abcd");
+            var fieldrow = dojo.byId('generalbaseText'+type);
+
+            if(val != "Text"){
+                //alert("xyz");
+                dojo.style(fieldrow,'display','none');
+            }
+            else{
+                //alert("abc");
+                dojo.style(fieldrow,'display','block');
+            }
+
+        }
+
+        function levelType(val){
+
+            if(val==1){
+
+                var generalbaseField1= dojo.byId('generalbaseField1');
+                dojo.style(generalbaseField1,'display','block');
+                var generalbaseField2 = dojo.byId('generalbaseField2');
+                dojo.style(generalbaseField2,'display','block');
+                var generalbaseField3= dojo.byId('generalbaseField3');
+                dojo.style(generalbaseField3,'display','block');
+                var generalbaseField4 = dojo.byId('generalbaseField4');
+                dojo.style(generalbaseField4,'display','block');
+                var generalbaseField5= dojo.byId('generalbaseField5');
+                dojo.style(generalbaseField5,'display','block');
+                var generalbaseField6 = dojo.byId('generalbaseField6');
+                dojo.style(generalbaseField6,'display','block');
+                var generalbaseField7= dojo.byId('generalbaseField7');
+                dojo.style(generalbaseField7,'display','block');
+                var generalbaseField8 = dojo.byId('generalbaseField8');
+                dojo.style(generalbaseField8,'display','block');
+                var generalbaseSeperator1 = dojo.byId('generalbaseSeperator1');
+                dojo.style(generalbaseSeperator1,'display','block');
+                var generalbaseSeperator2 = dojo.byId('generalbaseSeperator2');
+                dojo.style(generalbaseSeperator2,'display','block');
+
+                var levelbase1= dojo.byId('levelbase1');
+                dojo.style(levelbase1,'display','none');
+                var levelbase2= dojo.byId('levelbase2');
+                dojo.style(levelbase2,'display','none');
+                var levelbase3= dojo.byId('levelbase3');
+                dojo.style(levelbase3,'display','none');
+                var levelbase4= dojo.byId('levelbase4');
+                dojo.style(levelbase4,'display','none');
+                var fixedText1= dojo.byId('fixedText1');
+                dojo.style(fixedText1,'display','none');
+                var fixedText2= dojo.byId('fixedText2');
+                dojo.style(fixedText2,'display','none');
+
+                var level1= dojo.byId('level1');
+                dojo.style(level1,'display','none');
+                var level2 = dojo.byId('level2');
+                dojo.style(level2,'display','none');
+
+                var form = dijit.byId("initconfig");
+                var generalbaseField1=form.attr('value').generalbaseField1;
+                //alert(generalbaseField1);
+                //levelType(generalbaseField);
+                if(generalbaseField1=='Text')
+                    showgroupTextfield(generalbaseField1,1);
+
+                var generalbaseField2=form.attr('value').generalbaseField2;
+                //alert(generalbaseField2);
+                //levelType(generalbaseField);
+                if(generalbaseField2=='Text')
+                    showgroupTextfield(generalbaseField2,2);
+
+                var generalbaseField3=form.attr('value').generalbaseField3;
+                //alert(generalbaseField3);
+                //levelType(generalbaseField);
+                if(generalbaseField3=='Text')
+                    showgroupTextfield(generalbaseField3,3);
+
+                var generalbaseField4=form.attr('value').generalbaseField4;
+                //alert(generalbaseField4);
+                //levelType(generalbaseField);
+                if(generalbaseField4=='Text')
+                    showgroupTextfield(generalbaseField4,4);
+            }
+            else
+            {
+
+                var generalbaseField1= dojo.byId('generalbaseField1');
+                dojo.style(generalbaseField1,'display','none');
+                var generalbaseField2 = dojo.byId('generalbaseField2');
+                dojo.style(generalbaseField2,'display','none');
+                var generalbaseField3= dojo.byId('generalbaseField3');
+                dojo.style(generalbaseField3,'display','none');
+                var generalbaseField4 = dojo.byId('generalbaseField4');
+                dojo.style(generalbaseField4,'display','none');
+                var generalbaseField5= dojo.byId('generalbaseField5');
+                dojo.style(generalbaseField5,'display','none');
+                var generalbaseField6 = dojo.byId('generalbaseField6');
+                dojo.style(generalbaseField6,'display','none');
+                var generalbaseField7= dojo.byId('generalbaseField7');
+                dojo.style(generalbaseField7,'display','none');
+                var generalbaseField8 = dojo.byId('generalbaseField8');
+                dojo.style(generalbaseField8,'display','none');
+                var generalbaseSeperator1 = dojo.byId('generalbaseSeperator1');
+                dojo.style(generalbaseSeperator1,'display','none');
+                var generalbaseSeperator2 = dojo.byId('generalbaseSeperator2');
+                dojo.style(generalbaseSeperator2,'display','none');
+                var level1= dojo.byId('level1');
+                dojo.style(level1,'display','block');
+                var level2 = dojo.byId('level2');
+                dojo.style(level2,'display','block');
+                //alert("abcd");
+                showgroupTextfield("xyz",1);
+                showgroupTextfield("xyz",2);
+                showgroupTextfield("xyz",3);
+                showgroupTextfield("xyz",4);
+
+
+            }
+
+        }
+
+
+        function level(val){
+            if(val==1)
+            {
+                var levelbase1= dojo.byId('levelbase1');
+                dojo.style(levelbase1,'display','block');
+                var levelbase2= dojo.byId('levelbase2');
+                dojo.style(levelbase2,'display','block');
+                var levelbase3= dojo.byId('levelbase3');
+                dojo.style(levelbase3,'display','none');
+                var levelbase4= dojo.byId('levelbase4');
+                dojo.style(levelbase4,'display','none');
+                var fixedText1= dojo.byId('fixedText1');
+                dojo.style(fixedText1,'display','none');
+                var fixedText2= dojo.byId('fixedText2');
+                dojo.style(fixedText2,'display','none');
+            }
+            else{
+                var levelbase1= dojo.byId('levelbase1');
+                dojo.style(levelbase1,'display','none');
+                var levelbase2= dojo.byId('levelbase2');
+                dojo.style(levelbase2,'display','none');
+                var levelbase3= dojo.byId('levelbase3');
+                dojo.style(levelbase3,'display','block');
+                var levelbase4= dojo.byId('levelbase4');
+                dojo.style(levelbase4,'display','block');
+                var fixedText1= dojo.byId('fixedText1');
+                dojo.style(fixedText1,'display','block');
+                var fixedText2= dojo.byId('fixedText2');
+                dojo.style(fixedText2,'display','block');
+            }
+        }
+
+        ////////////////
+        function validateform()
+        {
+
+            var flag = true;
+
+            var email = dijit.byId('DefaultEmail');
+            if(!email.isValid()) {
+                flag = false;
+            }
+
+            if(dijit.byId("noofrowsingrid").value==''){
+                dijit.byId("noofrowsingrid").attr('required','true');
+                dijit.byId("noofrowsingrid").focus();
+                flag = false;
+            }
+
+
+            return flag;
+
+        }
+
+        function fnValidateForm(){
+            var flag = true;
+
+            if(fnValidateTab5() == false){
+                ShowThisTab("tab-five");
+                flag = false;
+            }
+
+            if(fnValidateTab2() == false){
+                ShowThisTab("tab-two");
+                flag = false;
+            }
+
+            if(fnValidateTab1() == false){
+                ShowThisTab("tab-one");
+                flag = false;
+            }
+
+            if(fnValidateTab11() == false){
+                ShowThisTab("tab-eleven");
+                flag = false;
+            }
+
+            if(fnValidateTab12() == false){
+                ShowThisTab("tab-twelve");
+                flag = false;
+            }
+
+            if(fnValidateTab6() == false){
+                ShowThisTab("tab-six");
+                flag = false;
+            }
+
+
+
+            return flag;
+        }
+        function ledgerCodeType(POcode,from){
+            //alert(from);
+            if(from == 1){
+                var fieldrow1 = dojo.byId('fieldrow1');
+                var fieldrow2 = dojo.byId('fieldrow2');
+                var fieldrow3 = dojo.byId('fieldrow3');
+                var fieldrow4 = dojo.byId('fieldrow4');
+                dijit.byId("ApplicantPrefix").attr('required','true');
+                dijit.byId("ApplicantIdFormat").attr('required','true');
+
+
+            }else if(from == 2){
+                var fieldrow1 = dojo.byId('fieldrows1');
+                var fieldrow2 = dojo.byId('fieldrows2');
+                var fieldrow3 = dojo.byId('fieldrows3');
+                var fieldrow4 = dojo.byId('fieldrows4');
+                dijit.byId("SemesterCodeField1").attr('required','false');
+                dijit.byId("SemesterCodeField2").attr('required','false');
+                dijit.byId("SemesterCodeField3").attr('required','false');
+                dijit.byId("SemesterCodeField4").attr('required','false');
+            }
+            else if(from == 3){
+                var fieldrow1 = dojo.byId('fieldrowss1');
+                var fieldrow2 = dojo.byId('fieldrowss2');
+                var fieldrow3 = dojo.byId('fieldrowss3');
+                var fieldrow4 = dojo.byId('fieldrowss4');
+                dijit.byId("SubjectPrefix").attr('required','true');
+                dijit.byId("SubjectIdFormat").attr('required','true');
+            }
+            else if(from == 4){
+                var fieldrow1 = dojo.byId('fieldrowsss1');
+                var fieldrow2 = dojo.byId('fieldrowsss2');
+                var fieldrow3 = dojo.byId('fieldrowsss3');
+                var fieldrow4 = dojo.byId('fieldrowsss4');
+                dijit.byId("DepartmentCodeField1").attr('required','false');
+                dijit.byId("DepartmentCodeField2").attr('required','false');
+                dijit.byId("DepartmentCodeField3").attr('required','false');
+                dijit.byId("DepartmentCodeField4").attr('required','false');
+            }
+            else if(from == 5){
+                var fieldrow1 = dojo.byId('fieldrowssss1');
+                var fieldrow2 = dojo.byId('fieldrowssss2');
+                var fieldrow3 = dojo.byId('fieldrowssss3');
+                var fieldrow4 = dojo.byId('fieldrowssss4');
+                dijit.byId("CollegeCodeField1").attr('required','false');
+                dijit.byId("CollegeCodeField2").attr('required','false');
+                dijit.byId("CollegeCodeField3").attr('required','false');
+            }
+            else if(from == 6){
+                var fieldrow1 = dojo.byId('fieldrowsssss1');
+                var fieldrow2 = dojo.byId('fieldrowsssss2');
+                var fieldrow3 = dojo.byId('fieldrowsssss3');
+                var fieldrow4 = dojo.byId('fieldrowsssss4');
+                dijit.byId("StaffPrefix").attr('required','true');
+                dijit.byId("StaffIdFormat").attr('required','true');
+            }
+            else if(from == 7){
+                var fieldrow1 = dojo.byId('fieldrowReg1');
+                var fieldrow2 = dojo.byId('fieldrowReg2');
+                var fieldrow3 = dojo.byId('fieldrowReg3');
+                var fieldrow4 = dojo.byId('fieldrowReg4');
+                dijit.byId("RegistrationPrefix").attr('required','true');
+                dijit.byId("RegistrationIdFormat").attr('required','true');
+            }
+            else if(from == 8){
+
+                var fieldrow1 = dojo.byId('fieldrowAcc1');
+                var fieldrow2 = dojo.byId('fieldrowAcc2');
+                var fieldrow3 = dojo.byId('fieldrowAcc3');
+                var fieldrow4 = dojo.byId('fieldrowAcc4');
+                dijit.byId("AccountCodeField1").attr('required','false');
+                dijit.byId("AccountCodeField2").attr('required','false');
+                dijit.byId("AccountCodeField3").attr('required','false');
+            }
+            else if(from == 9){
+                var fieldrow1 = dojo.byId('fieldrowAppeal1');
+                var fieldrow2 = dojo.byId('fieldrowAppeal2');
+                var fieldrow3 = dojo.byId('fieldrowAppeal3');
+                var fieldrow4 = dojo.byId('fieldrowAppeal4');
+                dijit.byId("AppealCodeField1").attr('required','false');
+                dijit.byId("AppealCodeField2").attr('required','false');
+                dijit.byId("AppealCodeField3").attr('required','false');
+            }
+
+            else if(from == 10){
+                var fieldrow1 = dojo.byId('fieldrowBill1');
+                var fieldrow2 = dojo.byId('fieldrowBill2');
+                var fieldrow3 = dojo.byId('fieldrowBill3');
+                var fieldrow4 = dojo.byId('fieldrowBill4');
+                dijit.byId("BillNoTypeField1").attr('required','false');
+                dijit.byId("BillNoTypeField2").attr('required','false');
+                dijit.byId("BillNoTypeField3").attr('required','false');
+            }
+
+
+
+
+            else if(from == 11){
+                var fieldrow1 = dojo.byId('fieldrowReceipt1');
+                var fieldrow2 = dojo.byId('fieldrowReceipt2');
+                var fieldrow3 = dojo.byId('fieldrowReceipt3');
+                var fieldrow4 = dojo.byId('fieldrowReceipt4');
+                dijit.byId("ReceiptTypeField1").attr('required','false');
+                dijit.byId("ReceiptTypeField2").attr('required','false');
+                dijit.byId("ReceiptTypeField3").attr('required','false');
+            }else if(from == 12){
+                var fieldrow1 = dojo.byId('fieldrowStudent1');
+                var fieldrow2 = dojo.byId('fieldrowStudent2');
+                var fieldrow3 = dojo.byId('fieldrowStudent3');
+                var fieldrow4 = dojo.byId('fieldrowStudent3');
+                dijit.byId("StudentIdPrefix").attr('required','true');
+                dijit.byId("StudentIdFormat").attr('required','true');
+                dijit.byId("ResetStudentIdSeq").attr('required','true');
+            }else if(from == 13){
+                var fieldrow1 = dojo.byId('fieldrowCourse1');
+                var fieldrow2 = dojo.byId('fieldrowCourse2');
+                var fieldrow3 = dojo.byId('fieldrowCourse3');
+                var fieldrow4 = dojo.byId('fieldrowCourse4');
+                dijit.byId("CoursePrefix").attr('required','true');
+                dijit.byId("CourseIdFormat").attr('required','true');
+            }else if(from == 14){
+                var fieldrow1 = dojo.byId('fieldrowAgent1');
+                var fieldrow2 = dojo.byId('fieldrowAgent2');
+                var fieldrow3 = dojo.byId('fieldrowAgent3');
+                var fieldrow4 = dojo.byId('fieldrowAgent4');
+                dijit.byId("AgentPrefix").attr('required','true');
+                dijit.byId("AgentIdFormat").attr('required','true');
+            }else if(from == 15){
+                var fieldrow1 = dojo.byId('fieldrowInventory1');
+                var fieldrow2 = dojo.byId('fieldrowInventory2');
+                var fieldrow3 = dojo.byId('fieldrowInventory3');
+                var fieldrow4 = dojo.byId('fieldrowInventory4');
+                dijit.byId("inventoryPrefix").attr('required','true');
+                dijit.byId("inventoryIdFormat").attr('required','true');
+            }
+
+            /*dojo.style(fieldrow1,'display','none');
+            dojo.style(fieldrow2,'display','none');
+            dojo.style(fieldrow3,'display','none');
+            dojo.style(fieldrow4,'display','none');*/
+            if(POcode == 1){
+                dojo.removeAttr(fieldrow1,'style');
+                dojo.removeAttr(fieldrow2,'style');
+                dojo.removeAttr(fieldrow3,'style');
+                dojo.removeAttr(fieldrow4,'style');
+
+
+                /*	dojo.style(fieldrow1,'display','block');
+                    dojo.style(fieldrow2,'display','block');
+                    dojo.style(fieldrow3,'display','block');
+                    dojo.style(fieldrow4,'display','block');*/
+
+            }
+            else if(POcode == 0){
+                dojo.attr(fieldrow1, "style", {"display": "none"});
+                dojo.attr(fieldrow2, "style", {"display": "none"});
+                dojo.attr(fieldrow3, "style", {"display": "none"});
+                dojo.attr(fieldrow4, "style", {"display": "none"});
+
+                /*dojo.style(fieldrow1,'display','none');
+                    dojo.style(fieldrow2,'display','none');
+                    dojo.style(fieldrow3,'display','none');
+                    dojo.style(fieldrow4,'display','none');*/
+            }
+        }
+        function showTextfield(val,type){
+
+            var fieldrow = dojo.byId('textspan'+type);
+            if(val != "Text"){
+                dojo.style(fieldrow,'display','none');
+            }
+            else{
+                //document.getElementById('StudentCodeText'+type).value="";
+                dojo.style(fieldrow,'display','');
+            }
+        }
+
+        function showfield(val,type){
+            var fieldrow = dojo.byId('span'+type);
+            if(val != "Text"){
+                dojo.style(fieldrow,'display','none');
+            }
+            else{
+                //document.getElementById('StudentCodeText'+type).value="";
+                dojo.style(fieldrow,'display','');
+            }
+
+        }
+
+        function showSemTextfield(val,type){
+            var fieldrow = dojo.byId('Semestertextspan'+type);
+            if(val != "Text"){
+                //document.getElementById('SemesterCodeText'+type).value="";
+                dojo.style(fieldrow,'display','none');
+            }
+            else{
+                dojo.style(fieldrow,'display','');
+            }
+        }
+        function BlockShow(POcode){
+            var fieldrow1 = dojo.byId('blockrow1');
+
+            if(POcode == 1){
+                dojo.removeAttr(fieldrow1,'style');
+
+            }
+            else{
+                dojo.style(fieldrow1,'display','none');
+            }
+        }
+        function showAccTextfield(val,type){
+            var fieldrow = dojo.byId('Acctextspan'+type);
+
+            if(val != "Text"){
+                dojo.style(fieldrow,'display','none');
+            }
+            else{
+                dojo.style(fieldrow,'display','');
+            }
+
+        }
+
+        function enablerefcodefields(NoRefCode){
+            dijit.byId('RefCodeField1').setAttribute("disabled", true);
+            dijit.byId('RefCodeField2').setAttribute("disabled", true);
+            dijit.byId('RefCodeField3').setAttribute("disabled", true);
+            dijit.byId('RefCodeField4').setAttribute("disabled", true);
+
+            for(loop = 1;loop<=NoRefCode;loop++)
+            {
+                var refer = "RefCodeField"+loop;
+                dijit.byId(refer).setAttribute("disabled", false);
+            }
+        }
+        function disableCheck(){
+            if(dojo.byId('InternationalPlacementTest').checked == true && dojo.byId('InternationalCertification').checked == true ) {
+                dijit.byId('InternationalAndOr').setAttribute("disabled", false);
+            }
+            else{
+                dojo.byId('InternationalAndOr').checked = false;
+                dijit.byId('InternationalAndOr').setAttribute("disabled", true);
+            }
+            if(dojo.byId('LocalPlacementTest').checked == true && dojo.byId('LocalCertification').checked == true ) {
+                dijit.byId('LocalAndOr').setAttribute("disabled", false);
+            }
+            else{
+                dojo.byId('LocalAndOr').checked = false;
+                dijit.byId('LocalAndOr').setAttribute("disabled", true);
+            }
+        }
+
+        function fnValidateTab6(){
+            var flag = true;
+            var tem = '';
+            if(dijit.byId('ApplicantIdFormat').value != ''){
+                tem = validateapplicantcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('StaffIdFormat').value != ''){
+                tem = validatestaffIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('RegistrationIdFormat').value != ''){
+                tem = validateregistrationIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('StudentIdFormat').value != ''){
+                tem = validatestudentIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('AgentIdFormat').value != ''){
+                tem = validateagentIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('CourseIdFormat').value != ''){
+                tem = validatecourseIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('SubjectIdFormat').value != ''){
+                tem = validatesubjectIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+      
+            if(dijit.byId('inventoryIdFormat').value != ''){
+                tem = validateinventoryIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+              
+            return flag;
+        }
+
+
+        function validatecode(){
+            var flag = true;
+            var tem = '';
+            if(dijit.byId('ApplicantIdFormat').value != ''){
+                tem = validateapplicantcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('StaffIdFormat').value != ''){
+                tem = validatestaffIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('RegistrationIdFormat').value != ''){
+                tem = validateregistrationIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(dijit.byId('StudentIdFormat').value != ''){
+                tem = validatestudentIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('AgentIdFormat').value != ''){
+                tem = validateagentIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('CourseIdFormat').value != ''){
+                tem = validatecourseIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+
+            if(dijit.byId('SubjectIdFormat').value != ''){
+                tem = validatesubjectIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+              
+            if(dijit.byId('inventoryIdFormat').value != ''){
+                tem = validateinventoryIdcode();
+                if(flag){
+                    flag = tem;
+                }
+            }
+            if(flag){
+                //alert(flag);
+                fnToggleTabs('Next','tab-six','tab-seven');
+            }
+        }
+
+        function include(arr, obj) {
+            for(var i=0; i<arr.length; i++) {
+                if (arr[i] == obj) return true;
+            }
+            return false;
+        }
+
+        function validatecourseIdcode(){
+            var courseId = dijit.byId('CourseIdFormat').value;
+            n = courseId.indexOf("-");
+            var searchArray = new Array("ch","a","seqno","f", "l");
+            if(n == '-1'){
+                if(courseId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Course ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("CourseIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = courseId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Course ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("CourseIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Course ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("CourseIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        function validatesubjectIdcode(){
+            var subjectId = dijit.byId('SubjectIdFormat').value;
+            n = subjectId.indexOf("-");
+            var searchArray = new Array("ch","a","seqno","f", "l");
+            if(n == '-1'){
+                if(subjectId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Subject ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("SubjectIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = subjectId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Subject ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("SubjectIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('2');
+                        alert('Not a valid ID format for "Subject ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("SubjectIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        function validateagentIdcode(){
+            var agentId = dijit.byId('AgentIdFormat').value;
+            n = agentId.indexOf("-");
+            var searchArray = new Array("yyyy","yy","seqno","px", "b", "iid", "p", "a", "g");
+            if(n == '-1'){
+                if(agentId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Agent ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("AgentIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = agentId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Agent ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("AgentIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Agent ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("AgentIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+
+        }
+          
+        function validateinventoryIdcode(){
+            var inventoryId = dijit.byId('inventoryIdFormat').value;
+            n = inventoryId.indexOf("-");
+            var searchArray = new Array("seqno","px");
+            if(n == '-1'){
+                if(inventoryId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Inventory ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("inventoryIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = inventoryId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Inventory ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("inventoryIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('2');
+                        alert('Not a valid ID format for "Inventory ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("inventoryIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+        }
+
+
+        function validatestudentIdcode(){
+            var studentId = dijit.byId('StudentIdFormat').value;
+            n = studentId.indexOf("-");
+            var searchArray = new Array("yyyy","yy","seqno","px", "b", "iid", "p", "a", "g");
+            if(n == '-1'){
+                if(studentId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Student ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("StudentIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = studentId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Student ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("StudentIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Student ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("StudentIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        function validateregistrationIdcode(){
+            var registrationtId = dijit.byId('RegistrationIdFormat').value;
+            n = registrationtId.indexOf("-");
+            var searchArray = new Array("yyyy","yy","seqno","px", "b","a","p","iid","g");
+            var ResetRegistrationSeq = dijit.byId("ResetRegistrationSeq").get("value");
+            var strArray = registrationtId.split('-');
+            if(ResetRegistrationSeq != ""){
+                if(n==-1 && registrationtId != "seqno") {
+                    alert('Not a valid ID format for "Registration ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("RegistrationIdFormat").focus();
+                    return false;
+                }
+                var flag = true;
+                var msg = "";
+                switch(ResetRegistrationSeq) {
+                    case "year":
+                        var validateArray = new Array("p","iid");
+                        for(i = 0;i < validateArray.length; i++) {
+                            if(include(strArray,validateArray[i])) {
+                                flag = false;
+                                msg = "Not a valid ID format for 'Registration ID'. For reset by year only px,seqno,yy,yyyy,a,g,b are allowed ";
+                            }
+                        }
+                        break;
+                    case 'program':
+                        var validateArray = new Array("yy","yyyy","iid");
+                        for(i = 0;i < validateArray.length; i++) {
+                            if(include(strArray,validateArray[i])) {
+                                flag = false;
+                                msg = "Not a valid ID format for 'Registration ID'. For reset by program only px,seqno,p,a,g,b are allowed ";
+                            }
+                        }
+                        break;
+                    case 'intake':
+                        var validateArray = new Array("yy","yyyy","p");
+                        for(i = 0;i < validateArray.length; i++) {
+                            if(include(strArray,validateArray[i])) {
+                                flag = false;
+                                msg = "Not a valid ID format for 'Registration ID'. For reset by intake only px,seqno,iid,a,g,b are allowed ";
+                            }
+                        }
+                        break;
+                    case 'progintake' :
+                        var validateArray = new Array("yy","yyyy");
+                        for(i = 0;i < validateArray.length; i++) {
+                            if(include(strArray,validateArray[i])) {
+                                flag = false;
+                                msg = "Not a valid ID format for 'Registration ID'. For reset by program and Intake only px,seqno,iid,p,a,g,b are allowed ";
+                            }
+                        }
+                        break;
+                }
+
+                if(!flag) {
+                    alert(msg);
+                    dijit.byId("RegistrationIdFormat").focus();
+                    return flag;
+                }
+                
+                /*var fl = false;
+                fl = (include(strArray,'yyyy'));
+                if(!fl){
+                    fl = (include(strArray,'yy'));
+                }
+                if(!fl){
+                    alert('Please insert Year in the ID format');
+                    return false;
+                }*/
+            }
+        	  
+            if(n == '-1'){
+                if(registrationtId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Registration ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("RegistrationIdFormat").focus();
+                    return false;
+                }
+            }else{
+
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Registration ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("RegistrationIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Registration ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("RegistrationIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        function validatestaffIdcode(){
+            var stafftId = dijit.byId('StaffIdFormat').value;
+            n = stafftId.indexOf("-");
+            var searchArray = new Array("yyyy","yy","seqno","px", "b");
+            if(n == '-1'){
+                if(stafftId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Staff ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("StaffIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = stafftId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Staff ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("StaffIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Staff ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("StaffIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+
+        }
+
+        function validateapplicantcode(){
+            var applicantId = dijit.byId('ApplicantIdFormat').value;
+            n = applicantId.indexOf("-");
+            var searchArray = new Array("yyyy","yy","seqno","px");
+            var ResetApplicantSeq = dijit.byId("ResetApplicantSeq").get("value");
+            if(ResetApplicantSeq){
+                var strArray = applicantId.split('-');
+                var fl = false;
+                fl = (include(strArray,'yyyy'));
+                if(!fl){
+                    fl = (include(strArray,'yy'));
+                }
+                if(!fl){
+                    alert('Please insert Year in the ID format');
+                    return false;
+                }
+            }
+            if(n == '-1'){
+                if(applicantId == 'seqno'){
+                    return true
+                }else{
+                    // Not Exist
+                    alert('Not a valid ID format for "Applicant ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("ApplicantIdFormat").focus();
+                    return false;
+                }
+            }else{
+                var strArray = applicantId.split('-');
+                var ret = false;
+                if(!include(strArray,'seqno')){
+                    alert('Not a valid ID format for "Applicant ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                    dijit.byId("ApplicantIdFormat").focus();
+                    return false;
+                }else{
+                    for(var i = 0; i < strArray.length ;i++){
+                        if(include(searchArray,strArray[i])){
+                            ret =  true;
+                        }else{
+                            ret =  false;
+                        }
+                    }
+                    if(ret){
+                        return true;
+                    }else{
+                        alert('Not a valid ID format for "Applicant ID". Please choose from given options of code. A minimum of "seqno" is required.');
+                        dijit.byId("ApplicantIdFormat").focus();
+                        return false;
+                    }
+                }
+            }
+        }
+
+        function checkNamefields(){
+            var ret = true;
+            ret = fnValidateTab11();
+            if(ret){
+                fnToggleTabs('Next','tab-eleven','tab-twelve');
+            }
+        }
+
+
+
+
+
+    </script>
+
+</head>
+<body class="claro">
+    <fieldset><legend><?php echo $this->translate("Initial") . ' ' . $this->translate("Configuration"); ?></legend>
+        <form dojoType="dijit.form.Form" id='initconfig'  action="<?php echo $this->baseUrl(); ?>/generalsetup/initialconfiguration/initialconfiglist" name="initconfig" method="POST" onsubmit="return fnValidateForm()">
+            <?php echo $this->lobjInitialConfigForm->idConfig; ?>
+            <?php echo $this->lobjInitialConfigForm->UpdDate; ?>
+            <?php echo $this->lobjInitialConfigForm->UpdUser; ?><?php echo $this->lobjInitialConfigForm->idUniversity; ?>
+
+            <div id="mainTabContainer" dojoType="dijit.layout.TabContainer" doLayout="false" tabPosition="top" overflow="auto" style= "width:auto">
+                <div dojoType="dijit.layout.ContentPane" id="tab-one" title='<?php echo $this->translate("Initial Settings"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>" >
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Initial Settings"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("No of Rows in Grid"); ?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->noofrowsingrid; ?><span id="errRowCount" class="errors label"></td>
+                            <td ><?php echo $this->translate("Default Country"); ?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->DefaultCountry; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Default") . ' ' . $this->translate("Drop") . ' ' . $this->translate("Down") . ' ' . $this->translate("Language"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->DefaultDropDownLanguage; ?></td>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Captions"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("College"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->CollegeAliasName; ?></td>
+                            <td ><?php echo $this->translate("Dean"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->DeanAliasName; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Landscape"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->LandscapeAliasName; ?></td>
+                            <td ><?php echo $this->translate("Registrar"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->RegisterAliasName; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Subject"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SubjectAliasName; ?></td>
+                            <td ><?php echo $this->translate("Department"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->DepartmentAliasName; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Program"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ProgramAliasName; ?></td>
+                            <td ><?php echo $this->translate("Branch"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->BranchAliasName; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Completion Of Years"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->Completionofyears; ?></td>
+                            <td><?php echo $this->translate("Language"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Language; ?></td>
+
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Show Branch"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Branch; ?></td>
+                            <td><?php echo $this->translate("Show Office"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Office; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Show Venue"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Venue; ?></td>
+                            <td><?php echo $this->translate("Show Scheme"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Scheme; ?></td>
+
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Show Level Based Landscape"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Landscape; ?></td>
+                        </tr>
+                        <tr>
+                            <td align="right"  colspan="4">
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-one','tab-two')">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" id="tab-two" title='<?php echo $this->translate("Visa & Passport Captions"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Visa and Passport Captions Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Passport") . ' ' . $this->translate("Field") . ' ' . $this->translate("Label 1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->PPField1; ?></td>
+                            <td ><?php echo $this->translate("Passport") . ' ' . $this->translate("Field") . ' ' . $this->translate("Label 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->PPField2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Passport") . ' ' . $this->translate("Field") . ' ' . $this->translate("Label 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->PPField3; ?></td>
+                            <td ><?php echo $this->translate("Passport") . ' ' . $this->translate("Field") . ' ' . $this->translate("Label 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->PPField4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Passport") . ' ' . $this->translate("Field") . ' ' . $this->translate("Label 5"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->PPField5; ?></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Visa Detail Field1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->VisaDetailField1; ?></td>
+                            <td ><?php echo $this->translate("Visa Detail Field 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->VisaDetailField2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Visa Detail Field 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->VisaDetailField3; ?></td>
+                            <td ><?php echo $this->translate("Visa Detail Field 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->VisaDetailField4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Visa Detail Field 5"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->VisaDetailField5; ?></td>
+                            <td >&nbsp;</td>
+                            <td>&nbsp;</td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-two','tab-one')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-two','tab-three')">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" id="tab-three" title='<?php echo $this->translate("Accredition") . " " . $this->translate("Labels"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Accredition  Labels Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No") . ' ' . $this->translate("of") . ' ' . $this->translate("Fields"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AccDtlCount; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl1; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl3; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 5"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl5; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 6"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl6; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 7"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl7; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 8"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl8; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 9"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl9; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 10"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl10; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 11"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl11; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 12"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl12; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 13"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl13; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 14"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl14; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 15"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl15; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 16"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl16; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 17"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl17; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 18"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl18; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Accredition Detail Field 19"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl19; ?></td>
+                            <td ><?php echo $this->translate("Accredition Detail Field 20"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccDtl20; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-three','tab-two')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-three','tab-four')">
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" id="tab-four" title='<?php echo $this->translate("MOHE") . " " . $this->translate("Labels"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("MOHE  Labels Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No") . ' ' . $this->translate("of") . ' ' . $this->translate("Fields"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->MoheDtlCount; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl1; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl3; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 5"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl5; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 6"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl6; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 7"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl7; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 8"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl8; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 9"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl9; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 10"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl10; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 11"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl11; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 12"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl12; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 13"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl13; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 14"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl14; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 15"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl15; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 16"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl16; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 17"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl17; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 18"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl18; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("MOHE Detail Field 19"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl19; ?></td>
+                            <td ><?php echo $this->translate("MOHE Detail Field 20"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->MoheDtl20; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-four','tab-three')"></td>
+                            <td></td>
+                            <td></td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-four','tab-five')">
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-five" title='<?php echo $this->translate("Email"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Email Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("SMTP") . " " . $this->translate("Server"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SMTPServer; ?><span id="errSMTPServ" class="errors label"></span></td>
+                            <td ><?php echo $this->translate("SMTP") . " " . $this->translate("Username"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SMTPUsername; ?><span id="errSMTPUsrNm" class="errors label"></span></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("SMTP") . " " . $this->translate("Password"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SMTPPassword; ?></td>
+                            <td ><?php echo $this->translate("Default") . ' ' . $this->translate("From") . ' ' . $this->translate("Email"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->DefaultEmail; ?><span id="errDefEmail" class="errors label"></span></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("SMTP") . " " . $this->translate("Port"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SMTPPort; ?><span id="errSMTPPort" class="errors label"></td>
+                            <td ><?php echo $this->translate("SSL"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->SSL; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-five','tab-four')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-five','tab-five1')">
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
+
+
+
+
+
+
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-five1" title='<?php echo $this->translate("General Setup Code Generation"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("College") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CollegeCodeType; ?></td>
+                            <td id="fieldrowssss3" style="display:block;"><?php echo $this->translate("Seperator"); ?> </td>
+                            <td id="fieldrowssss4" style="display:block;"><?php echo $this->lobjInitialConfigForm->CollegeSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowssss1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CollegeCodeField1; ?></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CollegeCodeField2; ?></td>
+                        </tr>
+                        <tr id="fieldrowssss2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CollegeCodeField3; ?></td>
+                            <td ><?php //echo $this->translate("Code").' '.$this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php //echo $this->lobjInitialConfigForm->CollegeCodeField4; ?></td>
+                        </tr>
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Department") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->DepartmentCodeType; ?></td>
+                            <td id="fieldrowsss3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td id="fieldrowsss4" style="display:block;"><?php echo $this->lobjInitialConfigForm->DepartmentSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowsss1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->DepartmentCodeField1; ?></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->DepartmentCodeField2; ?></td>
+                        </tr>
+                        <tr id="fieldrowsss2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->DepartmentCodeField3; ?></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->DepartmentCodeField4; ?></td>
+                        </tr>
+
+                                        <!--  <tr>
+                            <th colspan = "4"><?php echo $this->translate("Subject") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                    </tr>
+                                        <tr>
+                                                <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                                                <td><?php echo $this->lobjInitialConfigForm->SubjectCodeType; ?></td>
+                                                <td id="fieldrowss3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                                                <td id="fieldrowss4" style="display:block;"><?php echo $this->lobjInitialConfigForm->SubjectSeparator; ?></td>
+					</tr>
+                                         <tr id="fieldrowss1" style="display:block;">
+                                                <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                                                <td><?php echo $this->lobjInitialConfigForm->SubjectCodeField1; ?></td>
+                                                <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                                                <td><?php echo $this->lobjInitialConfigForm->SubjectCodeField2; ?></td>
+					</tr>
+                                        <tr id="fieldrowss2" style="display:block;">
+                                                <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                                                <td><?php echo $this->lobjInitialConfigForm->SubjectCodeField3; ?></td>
+                                                <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                                                <td><?php echo $this->lobjInitialConfigForm->SubjectCodeField4; ?></td>
+					</tr>-->
+
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Semester") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SemesterCodeType; ?></td>
+                            <td id="fieldrows3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td id="fieldrows4" style="display:block;"><?php echo $this->lobjInitialConfigForm->SemesterSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrows1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SemesterCodeField1; ?><span id="Semestertextspan1" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->SemesterCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SemesterCodeField2; ?><span id="Semestertextspan2" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->SemesterCodeText2; ?></span></td>
+                        </tr>
+                        <tr id="fieldrows2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SemesterCodeField3; ?><span id="Semestertextspan3" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->SemesterCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SemesterCodeField4; ?><span id="Semestertextspan4" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->SemesterCodeText4; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-five1','tab-five')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-five1','tab-ten')">
+                            </td>
+
+                        </tr>
+
+                    </table>
+                </div>
+
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-ten" title='<?php echo $this->translate("Student Finance Settings"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <!-- 
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Account") . ' ' . $this->translate("Group") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->AccountCode; ?></td>
+                            <td><span id="base123" style="display:none;"><?php echo $this->translate("Basetype"); ?></span> </td>
+                            <td><span id="base345" style="display:none;"><?php echo $this->lobjInitialConfigForm->base; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseSeperator1" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="generalbaseSeperator2" style="display:none;"><?php echo $this->lobjInitialConfigForm->GeneralbaseSeparator; ?></td>
+                            <td>
+                            </td>
+                            <td>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseField1" style="display:none;"><?php echo $this->translate("GeneralbaseField1"); ?></span></td>
+                            <td><span id="generalbaseField5" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseField1; ?></span>
+                                <span id="generalbaseText1" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseText1; ?></span></td>
+                            <td><span id="generalbaseField2" style="display:none;"><?php echo $this->translate("GeneralbaseField2"); ?></span></td>
+                            <td><span id="generalbaseField6" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseField2; ?></span>
+                                <span id="generalbaseText2" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseText2; ?></span></td>
+
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseField3" style="display:none;"><?php echo $this->translate("GeneralbaseField3"); ?></span></td>
+                            <td><span id="generalbaseField7" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseField3; ?></span>
+                                <span id="generalbaseText3" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseText3; ?></span></td>
+                            <td><span id="generalbaseField4" style="display:none;"><?php echo $this->translate("GeneralbaseField4"); ?></span></td>
+                            <td><span id="generalbaseField8" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseField4; ?></span>
+                                <span id="generalbaseText4" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseText4; ?></span></td>
+
+                        </tr>
+                        <tr>
+                            <td><span id="level1" style="display:none;"><?php echo $this->translate("Level"); ?></span></td>
+                            <td><span id="level2" style="display:none;"><?php echo $this->lobjInitialConfigForm->levelbase; ?></span></td>
+                            <td><span id="levelbase1" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="levelbase2" style="display:none;"><?php echo $this->lobjInitialConfigForm->FirstletterSeparator; ?></td>
+                        </tr>
+                        <tr>
+                            <td><span id="levelbase3" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="levelbase4" style="display:none;"><?php echo $this->lobjInitialConfigForm->FixedSeparator; ?></td>
+                            <td><span id="fixedText1" style="display:none;"><?php echo $this->translate("Fixed Text Field"); ?> </span></td>
+                            <td><span id="fixedText2" style="display:none;"><?php echo $this->lobjInitialConfigForm->FixedText; ?></td>
+                        </tr>
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Account") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->AccountCodeType; ?></td>
+                            <td width="20%" id="fieldrowAcc3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td width="30%" id="fieldrowAcc4" style="display:block;"><?php echo $this->lobjInitialConfigForm->AccountSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowAcc1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AccountCodeField1; ?> <span id="Acctextspan1" style="display:none;">&nbsp; <?php echo $this->lobjInitialConfigForm->AccountCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AccountCodeField2; ?> <span id="Acctextspan2" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->AccountCodeText2; ?></span></td>
+                        </tr>
+                        <tr id="fieldrowAcc2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AccountCodeField3; ?> <span id="Acctextspan3" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->AccountCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AccountCodeField4; ?> <span id="Acctextspan4" style="display:none;"> &nbsp; <?php echo $this->lobjInitialConfigForm->AccountCodeText4; ?></span></td>
+                        </tr>
+
+
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Item") . ' ' . $this->translate("Group") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ItemCode; ?></td>
+                            <td><span id="base1" style="display:none;"><?php echo $this->translate("Basetype"); ?></span> </td>
+                            <td><span id="base2" style="display:none;"><?php echo $this->lobjInitialConfigForm->Itembase; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseitemSeperator1" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="generalbaseitemSeperator2" style="display:none;"><?php echo $this->lobjInitialConfigForm->GeneralbaseitemSeparator; ?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseitemField1" style="display:none;"><?php echo $this->translate("GeneralbaseField1"); ?></span></td>
+                            <td><span id="generalbaseitemField5" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseitemField1; ?></span>
+                                <span id="generalbaseitemText1" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseitemText1; ?></span></td>
+                            <td><span id="generalbaseitemField2" style="display:none;"><?php echo $this->translate("GeneralbaseField2"); ?></span></td>
+                            <td><span id="generalbaseitemField6" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseitemField2; ?></span>
+                                <span id="generalbaseitemText2" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseitemText2; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td><span id="generalbaseitemField3" style="display:none;"><?php echo $this->translate("GeneralbaseField3"); ?></span></td>
+                            <td><span id="generalbaseitemField7" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseitemField3; ?></span>
+                                <span id="generalbaseitemText3" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseitemText3; ?></span></td>
+                            <td><span id="generalbaseitemField4" style="display:none;"><?php echo $this->translate("GeneralbaseField4"); ?></span></td>
+                            <td><span id="generalbaseitemField8" style="display:none;"><?php echo $this->lobjInitialConfigForm->generalbaseitemField4; ?></span>
+                                <span id="generalbaseitemText4" style="display:none;"> <?php echo $this->lobjInitialConfigForm->generalbaseitemText4; ?></span></td>
+
+                        </tr>
+                        <tr>
+                            <td><span id="levelitem1" style="display:none;"><?php echo $this->translate("Level"); ?></span></td>
+                            <td><span id="levelitem2" style="display:none;"><?php echo $this->lobjInitialConfigForm->itemlevelbase; ?></span></td>
+                            <td><span id="levelbaseitem1" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="levelbaseitem2" style="display:none;"><?php echo $this->lobjInitialConfigForm->FirstletteritemSeparator; ?></td>
+                        </tr>
+                        <tr>
+                            <td><span id="levelbaseitem3" style="display:none;"><?php echo $this->translate("Seperator"); ?> </span></td>
+                            <td><span id="levelbaseitem4" style="display:none;"><?php echo $this->lobjInitialConfigForm->FixeditemSeparator; ?></td>
+                            <td><span id="itemfixedText1" style="display:none;"><?php echo $this->translate("Fixed Text Field"); ?> </span></td>
+                            <td><span id="itemfixedText2" style="display:none;"><?php echo $this->lobjInitialConfigForm->FixeditemText; ?></td>
+                        </tr>
+                        -->
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Invoice") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td colspan="3"><?php echo $this->lobjInitialConfigForm->InvoiceSeparator; ?></td>
+                        </tr>
+                        <tr >
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->InvoiceCodeField1; ?><span id="Invoicetextspan1" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->InvoiceCodeField2; ?><span id="Invoicetextspan2" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText2; ?></span></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->InvoiceCodeField3; ?><span id="Invoicetextspan3" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->InvoiceCodeField4; ?><span id="Invoicetextspan4" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText4; ?></span></td>
+                        </tr>
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Receipt") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->ReceiptType; ?></td>
+                            <td width="20%" id="fieldrowReceipt3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td width="30%" id="fieldrowReceipt4" style="display:block;"><?php echo $this->lobjInitialConfigForm->ReceiptTypeSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowReceipt1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ReceiptTypeField1; ?><span id="Invoicetextspan1" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ReceiptTypeField2; ?><span id="Invoicetextspan2" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText2; ?></span></td>
+                        </tr>
+                        <tr id="fieldrowReceipt2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ReceiptTypeField3; ?><span id="Invoicetextspan3" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ReceiptTypeField4; ?><span id="Invoicetextspan4" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText4; ?></span></td>
+                        </tr>
+
+
+
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-ten','tab-five1')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-ten','tab-six')">
+                            </td>
+
+                        </tr>
+
+
+                    </table>
+                </div>
+
+
+
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-six" title='<?php echo $this->translate("Code-Generation") . ' ' . $this->translate("Setting"); ?>' style="padding:10px;overflow:auto;height:<?php echo "510px" ?>">
+                    <table border="1" class="table" width = "100%">
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Applicant") . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->ApplicantCodeType; ?></td>
+                            <td width="20%" id="fieldrow3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrow4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (4 digit)</td>
+                                        <td>YYYY</td>
+                                        <td>2012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (2 digit)</td>
+                                        <td>YY</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan='2'>-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrow1" style="display:block;">
+                            <td><?php echo $this->translate("Course") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ApplicantPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ApplicantIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrow2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->lobjInitialConfigForm->ResetApplicantSeq; ?>
+                                <?php echo $this->translate("Reset By Year"); ?><span class="reqMark"></span>
+                            </td>
+                        </tr>
+                        <tr>
+
+
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Staff") . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->StaffIdType; ?></td>
+                            <!--<td id="fieldrowsssss3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td id="fieldrowsssss4" style="display:block;"><?php echo $this->lobjInitialConfigForm->StaffSeparator; ?></td>-->
+                            <td width="20%" id="fieldrowsssss3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrowsssss4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (4 digit)</td>
+                                        <td>YYYY</td>
+                                        <td>2012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (2 digit)</td>
+                                        <td>YY</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Branch</td>
+                                        <td>b</td>
+                                        <td>01</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan='2'>-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowsssss1" style="display:block;">
+                            <td><?php echo $this->translate("Course") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->StaffPrefix ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->StaffIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowsssss2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->lobjInitialConfigForm->ResetStaffSeq; ?>
+                                <?php echo $this->translate("Reset By Year"); ?><span class="reqMark"></span>
+                            </td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Registration") . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->RegistrationCodeType; ?></td>
+                            <td width="20%" id="fieldrowReg3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrowReg4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (4 digit)</td>
+                                        <td>YYYY</td>
+                                        <td>2012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (2 digit)</td>
+                                        <td>YY</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Running Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Intake Id</td>
+                                        <td>iid</td>
+                                        <td>2012A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Branch</td>
+                                        <td>b</td>
+                                        <td>01</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Program</td>
+                                        <td>p</td>
+                                        <td>PROG</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Award</td>
+                                        <td>a</td>
+                                        <td>AA-1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>g</td>
+                                        <td>F</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan="2">-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowReg1" style="display:block;">
+                            <td><?php echo $this->translate("Course") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RegistrationPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RegistrationIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowReg2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->translate("Reset By"); ?>
+                                <?php echo $this->lobjInitialConfigForm->ResetRegistrationSeq; ?>
+                            </td>
+                        </tr>
+
+
+
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Appeal") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->AppealCodeType; ?></td>
+                            <td width="20%" id="fieldrowAppeal3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td width="30%" id="fieldrowAppeal4" style="display:block;"><?php echo $this->lobjInitialConfigForm->AppealCodeSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowAppeal1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AppealCodeField1; ?><span id="Invoicetextspan1" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AppealCodeField2; ?><span id="Invoicetextspan2" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText2; ?></span></td>
+                        </tr>
+                        <tr id="fieldrowAppeal2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AppealCodeField3; ?><span id="Invoicetextspan3" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AppealCodeField4; ?><span id="Invoicetextspan4" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText4; ?></span></td>
+                        </tr>
+
+
+
+
+
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Bill") . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="20%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="30%"><?php echo $this->lobjInitialConfigForm->BillNoType; ?></td>
+                            <td width="20%" id="fieldrowBill3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td>
+                            <td width="30%" id="fieldrowBill4" style="display:block;"><?php echo $this->lobjInitialConfigForm->BillNoTypeSeparator; ?></td>
+                        </tr>
+                        <tr id="fieldrowBill1" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 1"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->BillNoTypeField1; ?><span id="Invoicetextspan1" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText1; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 2"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->BillNoTypeField2; ?><span id="Invoicetextspan2" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText2; ?></span></td>
+                        </tr>
+                        <tr id="fieldrowBill2" style="display:block;">
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 3"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->BillNoTypeField3; ?><span id="Invoicetextspan3" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText3; ?></span></td>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Field 4"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->BillNoTypeField4; ?><span id="Invoicetextspan4" style="display:none;"> &nbsp; <?php //echo $this->lobjInitialConfigForm->SemesterCodeText4; ?></span></td>
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Student") . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="10%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="10%" colspan="3"><?php echo $this->lobjInitialConfigForm->StudentIdType; ?></td>
+                        <tr id="fieldrowStudent3" style="display:block;">
+                            <td width="20%"><?php echo $this->translate("You can choose from following codes"); ?></span></td>
+                            <td width="50%"colspan="3">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (4 digit)</td>
+                                        <td>YYYY</td>
+                                        <td>2012</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (2 digit)</td>
+                                        <td>YY</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Intake Id</td>
+                                        <td>iid</td>
+                                        <td>021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Branch</td>
+                                        <td>b</td>
+                                        <td>01</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Program</td>
+                                        <td>p</td>
+                                        <td>02</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Award</td>
+                                        <td>a</td>
+                                        <td>021</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Gender</td>
+                                        <td>g</td>
+                                        <td>F</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan="2">-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowStudent2" style="display:block;">
+                            <td><?php echo $this->translate("Student") . " " . $this->translate("ID") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->StudentIdPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format"); ?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->StudentIdFormat; ?></td>
+                        <tr>
+                        <tr id="fieldrowStudent1" style="display:block;">
+                            <td><?php echo $this->translate("Reset By Year/Intake"); ?><span class="reqMark"></td>
+                            <td colspan="3"><?php echo $this->lobjInitialConfigForm->ResetStudentIdSeq; ?></td>
+
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Agent") . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+
+                        <tr>
+                            <td width="10%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="10%"><?php echo $this->lobjInitialConfigForm->AgentIdType; ?></td>
+                            <td width="20%" id="fieldrowAgent3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrowAgent4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan="2">-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowAgent1" style="display:block;">
+                            <td><?php echo $this->translate("Agent") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AgentPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AgentIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowAgent2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->lobjInitialConfigForm->ResetAgentSeq; ?>
+                                <?php echo $this->translate("Reset By Year"); ?><span class="reqMark"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo 'Course' . ' ' . $this->translate("Id") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SubjectCodeType; ?></td>
+                            <td width="20%" id="fieldrowss3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrowss4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Credit hours</td>
+                                        <td>ch</td>
+                                        <td>23</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Award Short Code</td>
+                                        <td>a</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Faculty Short Code</td>
+                                        <td>f</td>
+                                        <td>MHA</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Course Level</td>
+                                        <td>l</td>
+                                        <td>1</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Fix Seperator</td>
+                                        <td colspan="2">-</td>
+
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        </tr>
+                        <tr id="fieldrowss1" style="display:block;">
+                            <td><?php echo $this->translate("Subject") . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SubjectPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->SubjectIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowss2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->lobjInitialConfigForm->ResetSubjectSeq; ?>
+                                <?php echo $this->translate("Reset By Year"); ?><span class="reqMark"></span>
+                            </td>
+                        </tr>
+
+                        <tr>
+                            <th colspan = "4"><?php echo 'Subject' . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="10%"><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td width="10%"><?php echo $this->lobjInitialConfigForm->CourseIdType; ?></td>
+                            <!-- <td width="20%" id="fieldrowApplication3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td> -->
+                            <td width="20%" id="fieldrowCourse3" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td width="50%" id="fieldrowCourse4" style="display:block;">
+                                <table width="98%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Year (4 digit)</td>
+                                        <td>YYYY</td>
+                                        <td>2012</td>
+
+                                    </tr>
+                                    <tr>
+                                        <td>Year (2 digit)</td>
+                                        <td>YY</td>
+                                        <td>12</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowCourse1" style="display:block;">
+                            <td><?php echo "Subject" . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CoursePrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->CourseIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowCourse2" style="display:block;">
+                            <td colspan="4">
+                                <?php echo $this->lobjInitialConfigForm->ResetCourseSeq; ?>
+                                <?php echo $this->translate("Reset By Year"); ?><span class="reqMark"></span>
+                            </td>
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo 'Inventory' . ' ' . $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Code") . ' ' . $this->translate("Generation") . ' ' . $this->translate("Type"); ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->inventoryIdType; ?></td>
+                            <!-- <td width="20%" id="fieldrowApplication3" style="display:block;"><?php echo $this->translate("Seperator"); ?> <span class="reqMark"></span></td> -->
+                            <td id="fieldrowInventory1" style="display:block;"><?php echo $this->translate("You can choose from following codes"); ?></td>
+                            <td id="fieldrowInventory2" style="display:block;">
+                                <table class="table" width="100%">
+                                    <tr>
+                                        <th>Parameter</th>
+                                        <th>code</th>
+                                        <th>Example</th>
+                                    </tr>
+                                    <tr>
+                                        <td>Sequence Number</td>
+                                        <td>seqno</td>
+                                        <td>001</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Prefix</td>
+                                        <td>px</td>
+                                        <td>A</td>
+                                    </tr>
+                                    <tr>
+                                        <td>Seperator</td>
+                                        <td>-</td>
+                                    </tr>
+                                </table>
+                            </td>
+                        </tr>
+                        <tr id="fieldrowInventory3" style="display:block;">
+                            <td><?php echo "Inventory" . " " . $this->translate("Prefix") ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->inventoryPrefix; ?></td>
+                            <td><?php echo $this->translate("Please Define a Format") ?> <span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjInitialConfigForm->inventoryIdFormat; ?></td>
+                        </tr>
+                        <tr id="fieldrowInventory4" style="display:block;">
+                            <td colspan="4">
+                                <?php //echo $this->lobjInitialConfigForm->ResetCourseSeq;?>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-six','tab-ten')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "validatecode()">
+                            </td>
+
+                        </tr>
+                    </table>
+                </div>
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-seven" title='<?php echo $this->translate("General") . ' ' . $this->translate("Setting"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("General") . ' ' . $this->translate("Setting"); ?></th>
+                        </tr>
+                        <tr>
+                            <td width="30%"><?php echo $this->translate("Enforce") . " " . $this->translate("Known") . " " . $this->translate("Schools") . " " . $this->translate("for") . " " . $this->translate("Local") . " " . $this->translate("Students"); ?></td>
+                            <td width="20%"><?php echo $this->lobjInitialConfigForm->LocalStudent; ?></td>
+                            <td width="30%"><?php echo $this->translate("Block") . " " . $this->translate("Type"); ?></td>
+                            <td width="20%"><?php echo $this->lobjInitialConfigForm->BlockType; ?></td>
+
+                        </tr>
+                        <tr id="blockrow1">
+                            <td width="30%"><?php echo $this->translate("Block") . " " . $this->translate("Name"); ?></td>
+                            <td width="20%"><?php echo $this->lobjInitialConfigForm->BlockName; ?></td>
+                            <td width="30%"><?php echo $this->translate("Block") . " " . $this->translate("Seperator"); ?></td>
+                            <td width="20%"><?php echo $this->lobjInitialConfigForm->BlockSeparator; ?></td>
+
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No of Reference Codes"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->NoRefCode; ?></td>
+                        </tr>
+                        <tr id="RefField1">
+                            <td><?php echo $this->translate("Reference Code 1"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RefCodeField1; ?></td>
+                            <td><?php echo $this->translate("Reference Code 2"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RefCodeField2; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Reference Code 3"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RefCodeField3; ?></td>
+                            <td><?php echo $this->translate("Reference Code 4"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->RefCodeField4; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No Of Warnings"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->NoofWarnings; ?></td>
+                            <td><?php echo $this->translate("Add Drop") . ' ' . $this->translate("$this->Subject") . ' ' . $this->translate("For Block Landscape"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->AddDrop; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Appeal Marks Publishing"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->MarksAppeal; ?></td>
+                            <td><?php echo $this->translate("Take Marks"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->TakeMarks; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Marks Distribution Type"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->marksdistributiontype; ?></td>
+                            <td><?php echo $this->translate("Failed") . ' ' . $this->translate("$this->Subject"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->Failedsubjects; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-seven','tab-six')"></td>
+                            <td>&nbsp;</td>
+                            <td>&nbsp;</td>
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-seven','tab-eight')">
+                            </td>
+
+                        </tr>
+
+
+                    </table>
+                </div>
+
+
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-eight" title='<?php echo $this->translate("Entry") . ' ' . $this->translate("Setting"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan = "8"><?php echo $this->translate("International"); ?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Placement") . " " . $this->translate("Test"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->InternationalPlacementTest; ?></td>
+                            <td ><?php echo $this->translate("Placement") . " " . $this->translate("Test") . " " . $this->translate("Processing Fee"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->InternationalPlcamenetTestProcessingFee; ?></td>
+                            <td><?php echo $this->translate("Certification"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->InternationalCertification; ?></td>
+                            <td ><?php echo $this->translate("Certification") . " " . $this->translate("Processing Fee"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->InternationalCertificationProcessingFee; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("And") . " / " . $this->translate("Or"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->InternationalAndOr; ?></td>
+                            <td colspan = "6"></td>
+                        </tr>
+                        <tr>
+                            <th colspan = "8"><?php echo $this->translate("Local"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Placement") . " " . $this->translate("Test"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->LocalPlacementTest; ?></td>
+                            <td ><?php echo $this->translate("Placement") . " " . $this->translate("Test") . " " . $this->translate("Processing Fee"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->LocalPlcamenetTestProcessingFee; ?></td>
+                            <td><?php echo $this->translate("Certification"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->LocalCertification; ?></td>
+                            <td ><?php echo $this->translate("Certification") . " " . $this->translate("Processing Fee"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->LocalCertificationProcessingFee; ?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("And") . " / " . $this->translate("Or"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->LocalAndOr; ?></td>
+                            <td colspan = "6"></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-eight','tab-seven')"></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+
+
+                            <td align="right" >
+                                <input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-eight','tab-nine')">
+                            </td>
+
+                        </tr>
+
+
+
+                    </table>
+
+
+                </div>
+
+                <div dojoType="dijit.layout.ContentPane" id="tab-nine" title='<?php echo $this->translate("Arabic") . ' ' . $this->translate("Settings"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <td ><?php echo $this->translate("Hijri Date"); ?></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->HijriDateOptions; ?>     <?php echo $this->lobjInitialConfigForm->HijriDate; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-nine','tab-eight')"></td>
+                            <td align="right" ><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "fnToggleTabs('Next','tab-nine','tab-eleven')"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" id="tab-eleven" title='<?php echo $this->translate("Name") . ' ' . $this->translate("Settings"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Name  Labels Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No") . ' ' . $this->translate("of") . ' ' . $this->translate("Fields"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->NameDtlCount; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Name Field 1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->NameDtl1; ?></td>
+                            <td ><?php echo $this->translate("Name Field 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->NameDtl2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Name Field 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->NameDtl3; ?></td>
+                            <td ><?php echo $this->translate("Name Field 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->NameDtl4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Name Field 5"); ?> <span class="reqMark"></span></td>
+                            <td colspan="3"><?php echo $this->lobjInitialConfigForm->NameDtl5; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-eleven','tab-nine')"></td>
+                            <td align="right" colspan="3"><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next"); ?>"  name ="Next";  Value = "<?php echo $this->translate("Next"); ?>" onclick = "checkNamefields()"></td>
+                        </tr>
+                    </table>
+                </div>
+                <div dojoType="dijit.layout.ContentPane" id="tab-twelve" title='<?php echo $this->translate("Extra") . ' ' . $this->translate("Id"); ?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight ?>">
+                    <table class="table" width = "100%">
+                        <tr>
+                            <th colspan="4"><?php echo $this->translate("Extra Id Labels Details"); ?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("No") . ' ' . $this->translate("of") . ' ' . $this->translate("Fields"); ?></td>
+                            <td><?php echo $this->lobjInitialConfigForm->ExtarIdDtlCount; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 1"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl1; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 2"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl2; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 3"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl3; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 4"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl4; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 5"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl5; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 6"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl6; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 7"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl7; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 8"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl8; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 9"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl9; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 10"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl10; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 11"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl11; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 12"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl12; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 13"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl13; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 14"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl14; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 15"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl15; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 16"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl16; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 17"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl17; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 18"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl18; ?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Extara Id Field 19"); ?> <span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl19; ?></td>
+                            <td ><?php echo $this->translate("Extra Id Field 20"); ?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjInitialConfigForm->ExtarIdDtl20; ?></td>
+                        </tr>
+                        <tr>
+                            <td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back"); ?>"; name = "Back" Value = "<?php echo $this->translate("Back"); ?>" onclick = "fnToggleTabs('Back','tab-twelve','tab-eleven')"></td>
+                            <td align="right" colspan="3"><?php echo $this->lobjInitialConfigForm->Save; ?></td>
+                        </tr>
+                    </table>
+                    <table>
+                        <tr>
+                            <td align = "right">
+                                <input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module' => 'generalsetup', 'controller' => 'initialconfiguration', 'action' => 'index'), 'default', true); ?>';" />
+                            </td>
+                        </tr>
+                    </table>
+                </div>
+
+        </form>
+    </fieldset>
+
+</body>

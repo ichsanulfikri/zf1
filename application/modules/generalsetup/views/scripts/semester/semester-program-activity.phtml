@@ -1,0 +1,107 @@
+<?php foreach ($this->larractivitylist as $index => $activity):?>
+<table class="table" width="100%">
+    <tr>
+        <th colspan = "4"><?php echo $activity['value'];?></th>
+    </tr>
+    <tr>
+        <td><?php echo $this->translate("Start").' '.$this->translate("Date");?></td>
+        <td><?php  
+            /*
+             * Assign date for dojo
+             */
+            
+            $month= date("m"); // Month value
+            $day= date("d"); //today's date
+            $year= date("Y"); // Year value
+            $yesterdaydate= date('Y-m-d', mktime(0,0,0,$month,($day),$year));
+            $dateformat = "{datePattern:'dd-MM-yyyy'}";
+            
+            /*
+             * Set start date name to be unique
+             */
+            
+            $startDate = 'StartDate'.$activity['key'];
+            
+            /*
+             * Create start date element
+             */
+            $SemesterAddDropStartDate = new Zend_Form_Element_Text($startDate);
+            $SemesterAddDropStartDate->setAttrib('dojoType',"dijit.form.DateTextBox");
+            $SemesterAddDropStartDate->setAttrib('onChange',"dijit.byId('EndDate').constraints.min = arguments[0];");
+            
+            /*
+             * Assign value 
+             */
+            if(isset($this->larraddDrop[$startDate])) :
+                $SemesterAddDropStartDate->setValue($this->larraddDrop[$startDate]);
+            endif;
+            
+            
+            $SemesterAddDropStartDate->setAttrib('required',"false")
+            ->setAttrib('constraints', "$dateformat");
+            $SemesterAddDropStartDate->removeDecorator("DtDdWrapper")
+            ->removeDecorator("Label")
+            ->removeDecorator('HtmlTag');
+            
+        echo $SemesterAddDropStartDate;
+        ?></td>
+        <td><?php echo $this->translate("End").' '.$this->translate("Date");?></td>
+        <td><?php
+           
+            /*
+             * Set end date name to be unique
+             */
+            
+            $endDate = 'EndDate'.$activity['key'];
+            $SemesterAddDropEndDate = new Zend_Form_Element_Text($endDate);
+            $SemesterAddDropEndDate->setAttrib('dojoType',"dijit.form.DateTextBox");
+            $SemesterAddDropEndDate->setAttrib('onChange',"dijit.byId('StartDate').constraints.max = arguments[0];") ;
+            
+            /*
+             * Assign value
+             */
+            
+            if(isset($this->larraddDrop[$startDate])) :
+                $SemesterAddDropEndDate->setValue($this->larraddDrop[$endDate]);
+            endif;
+            
+            $SemesterAddDropEndDate->setAttrib('required',"false")
+            ->setAttrib('constraints', "$dateformat");
+            
+            $SemesterAddDropEndDate->removeDecorator("DtDdWrapper")
+            ->removeDecorator("Label")
+            ->removeDecorator('HtmlTag');
+            
+            echo $SemesterAddDropEndDate;
+                
+            /*
+             * Set id name to be unique
+             */
+            $id = 'id'.$activity['key'];
+            $SemesterAddDropId = new Zend_Form_Element_Hidden($id);
+            
+            /*
+             * assign value
+             */
+            if(isset($this->larraddDrop[$id])) :
+                $SemesterAddDropId->setValue($this->larraddDrop[$id]);
+            endif;
+            
+            $SemesterAddDropId->removeDecorator("DtDdWrapper");
+            $SemesterAddDropId->removeDecorator("Label");
+            $SemesterAddDropId->removeDecorator('HtmlTag');
+            echo $SemesterAddDropId;
+            ?>
+            </td>
+    </tr>
+</table>
+<?php endforeach;?>
+<table class="table" width="100%">
+    <tr>
+        <td align="right"><?php echo $this->lobjsemesterForm->Save;?> <input
+            type="button" class="NormalBtn" dojotype="dijit.form.Button"
+            label="<?php echo $this->translate("Back"); ?>"
+            onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'semester', 'action'=>'semester-list'),'default',true);?>';" />
+        </td>
+    </tr>
+</table>

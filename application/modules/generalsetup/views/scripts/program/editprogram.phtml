@@ -1,0 +1,1136 @@
+<script type="text/javascript">
+	var rowid=1;
+	var rowids=1;
+	var subjArray  = new Array();
+	var deleteArray  = new Array();
+	var schemeArray  = new Array();
+	dojo.addOnLoad(function() {
+		var idaward= dijit.byId('Award');
+		//fnGetAwardCode(idaward);
+		$("#mainTabContainer_tablist").css('width','100%');
+	});
+
+
+
+	var rowids = <?php echo count($this->programmajoring);?>+1;
+	<?php if($this->programmajoring){
+				foreach($this->programmajoring as $programmajoring) { ?>
+				subjArray.push('<?php echo $programmajoring['EnglishDescription']?>');
+				<?php
+			}
+	}?>
+
+	<?php if($this->programscheme){
+		foreach($this->programscheme as $programscheme) { ?>
+		schemeArray.push('<?php echo $programscheme['IdScheme']?>');
+		<?php
+	}
+	}?>
+
+	function fnGetStaffList(IdStaff){
+		if(IdStaff != "")
+			{
+				var xhrArgs = {
+						url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstafflist/idStaff/"+IdStaff,
+						handleAs:'json',
+						load:function(data){
+							dijit.byId('FromDate').set('value',data['JoiningDate']);
+						}
+				   }
+				dojo.xhrGet(xhrArgs);
+			}
+		}
+
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+	    var options = {
+						label:"name",
+						identifier:"key",
+						items:JSONText
+					  };
+	    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+
+	function fnGetAwardCode(idaward)
+	{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/program/getawardcode/idaward/"+idaward,
+					handleAs:'text',
+					load:function(data){
+						//alert(data);
+						document.getElementById('awards').innerHTML = data;
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+	}
+
+
+	function fnGetColgDeptid(SelectColgDept){
+
+		if(SelectColgDept != "")
+			{
+				var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/program/getcolgdeptid/ColgDeptid/"+SelectColgDept,
+					handleAs:'json',
+					load:function(data){
+						AutoFillNextEditableDropDown("IdCollege",data);
+					}
+			   }
+				dojo.xhrGet(xhrArgs);
+			}
+		}
+
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+	    var options = {
+						label:"name",
+						identifier:"key",
+						items:JSONText
+					  };
+	    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+
+	function accredictionInsert() {
+		var flag = true;
+
+		if(dijit.byId("AccreditionType")==''){
+		    dijit.byId("AccreditionType").attr('required','true');
+			dijit.byId("AccreditionType").focus();flag = false;
+		}
+
+		var AccreditionType = dijit.byId("AccreditionType");
+		if(AccreditionType.get('value')== "")
+		{
+			AccreditionType.set('class','dijitTextBoxError dijitComboBoxError');
+			flag = false;
+		}
+
+		if(flag == true) {
+			accredictiondate();
+		}
+		return flag;
+	}
+
+	var batchArray  = new Array();
+	var oldContent = "";
+	var NoCnt	=	0;
+
+
+
+	function accredictiondate() {
+		var AccreditionType = dijit.byId("AccreditionType");
+		var AccreditionTypename = dijit.byId("AccreditionType").displayedValue;
+
+		var AccreditionRference = dijit.byId("AccredictionReferences").value;
+		var AccreditionDate = dijit.byId("AccredictionDate");
+
+		var AccDtl = new Array();
+		<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+			AccDtl.push(dijit.byId("AccDtl<?php echo $i; ?>").value);
+		<?php } ?>
+
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);
+		var tcol3=trow.insertCell(2);
+		tcol1.innerHTML="<input type='hidden' value='"+AccreditionType+"' name=AccreditionTypegrid[]>"+AccreditionTypename;
+		tcol2.innerHTML="<input type='hidden' value='"+AccreditionRference+"' name=AccreditionRferencegrid[]>"+AccreditionRference;
+		tcol3.innerHTML="<input type='hidden' value='"+AccreditionDate+"' name=AccreditionDategrid[]>"+AccreditionDate;
+
+		<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+			var tcol<?php echo $i+3; ?>=trow.insertCell(<?php echo $i+2; ?>);
+			tcol<?php echo $i+3; ?>.innerHTML="<input type='hidden' value='"+AccDtl[<?php echo $i-1; ?>]+"' name=AccDtlgrid<?php echo $i; ?>[]>"+AccDtl[<?php echo $i-1; ?>];
+		<?php } ?>
+
+		var tcol<?php echo $this->AccDtlCount+4; ?>=trow.insertCell(<?php echo $this->AccDtlCount+3; ?>);
+		tcol<?php echo $this->AccDtlCount+4; ?>.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowid++;
+
+	}
+
+	function deleteRow(r)
+	{
+		rowid--;
+
+		var i=r.parentNode.parentNode.rowIndex;
+		batchArray.splice(parseInt(i-1),1);
+		document.getElementById('hor').deleteRow(i);
+
+	}
+
+
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+
+	function clearpageAdd() {
+
+		dijit.byId('AccreditionType').set('value','');
+		dijit.byId('AccreditionType').set('placeHolder','Select');
+
+		<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+			dijit.byId("AccDtl<?php echo $i;?>").set("value","");
+		<?php } ?>
+	}
+
+	function deleteaccridictiondetails(idtemp) {
+		var xhrArgs = {url: "<?php echo $this->baseUrl();?>"+"/generalsetup/program/deleteaccridiction/idtemp/"+idtemp,
+				handleAs:'json',
+				load:function(data){
+					if(data == '1') {
+						window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/program/editprogram/id/<?php echo $this->LintIdProgram;?>/update/true"
+					}
+				}
+		}
+		dojo.xhrPost(xhrArgs);
+	}
+
+
+
+
+
+
+	function fnToggleTabs(TabAction,CurrentTabId,NextTabId){
+		if(TabAction == "Next"){
+				var flag = Validateform(CurrentTabId);
+				if(flag)
+				{
+					var mainTabContainerId = dijit.byId("mainTabContainer")
+				 	var tabContainerId = dijit.byId(NextTabId);
+					mainTabContainerId.selectChild(tabContainerId);
+				}
+
+		}else if(TabAction == "Back"){
+			var mainTabContainerId = dijit.byId("mainTabContainer")
+		 	var tabContainerId = dijit.byId(NextTabId);
+			mainTabContainerId.selectChild(tabContainerId);
+		}
+	}
+
+	function ShowThisTab(TabId){
+		var mainTabContainerId = dijit.byId("mainTabContainer")
+ 		var tabContainerId = dijit.byId(TabId);
+		mainTabContainerId.selectChild(tabContainerId);
+	}
+
+	function Validateform(TabId){
+		var flag = "";
+
+		if(TabId == "tab-one"){
+			flag = fnValidateTab1();
+		}else if(TabId == "tab-two"){
+			flag = fnValidateTab2();
+		}else if(TabId == "tab-three"){
+			flag = fnValidateTab3();
+		}else if(TabId == "tab-four"){
+			flag = fnValidateTab4();
+		}else if(TabId == "tab-five"){
+			flag = fnValidateTab5();
+		}
+		return flag;
+	}
+	function RemarkValidateform(){
+		var flag = true;
+		flag = fnValidateTab1();
+		return flag;
+	}
+
+	function fnValidateTab1(){
+		var flag = true;
+
+		if(dijit.byId("ProgramName").value==''){
+		    dijit.byId("ProgramName").attr('required','true');
+			dijit.byId("ProgramName").focus();
+			flag = false;
+		}
+
+                if(dijit.byId("IdScheme").value==''){
+		    dijit.byId("IdScheme").attr('required','true');
+			dijit.byId("IdScheme").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("ShortName").value==''){
+		    dijit.byId("ShortName").attr('required','true');
+			dijit.byId("ShortName").focus();
+			flag = false;
+		}
+		if(dijit.byId("Duration").value==''){
+		    dijit.byId("Duration").attr('required','true');
+			dijit.byId("Duration").focus();
+			flag = false;
+		}
+		if(dijit.byId("OptimalDuration").value==''){
+		    dijit.byId("OptimalDuration").attr('required','true');
+			dijit.byId("OptimalDuration").focus();
+			flag = false;
+		}
+		if(dijit.byId("Award").value==''){
+		    dijit.byId("Award").attr('required','true');
+			dijit.byId("Award").focus();
+			flag = false;
+		}
+		if(dijit.byId("TotalCreditHours").value==''){
+		    dijit.byId("TotalCreditHours").attr('required','true');
+			dijit.byId("TotalCreditHours").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("MinimumAge").value==''){
+		    dijit.byId("MinimumAge").attr('required','true');
+			dijit.byId("MinimumAge").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("IdStaff").value==''){
+		    dijit.byId("IdStaff").attr('required','true');
+			dijit.byId("IdStaff").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("FromDate").isValid()){
+		    dijit.byId("FromDate").attr('required','true');
+			dijit.byId("FromDate").focus();
+			flag = true;
+		}
+		else
+		{
+			  dijit.byId("FromDate").attr('required','true');
+			dijit.byId("FromDate").focus();
+			flag=false;
+		}
+
+		if(dijit.byId("IdCollege").value==''){
+		    dijit.byId("IdCollege").attr('required','true');
+			dijit.byId("IdCollege").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("IdDepartment").value==''){
+		    dijit.byId("IdDepartment").attr('required','true');
+			dijit.byId("IdDepartment").focus();
+			flag = false;
+		}
+
+		var actualval = $("#ActiveDB").val();
+		var currentval = $("#Active").attr('checked');
+		if(currentval){currentval = 1;} else {currentval = 0;}
+		var remarks = $("#Remarks").val();
+		if(actualval != currentval) {
+		if(remarks == "") {
+				alert("Please fill the Remarks/Reason");
+				dijit.byId("Remarks").attr('required','true');
+				flag = false;
+				ShowThisTab('tab-one');
+				dijit.byId("Remarks").focus();
+			}
+		}
+
+		return flag;
+	}
+
+	function fnValidateTab2(){
+		var flag = true;
+		return flag;
+	}
+
+	function fnValidateTab3(){
+		var flag = true;
+
+		/*if(dijit.byId("DefaultEmail").value==''){
+		    dijit.byId("DefaultEmail").attr('required','true');
+			dijit.byId("DefaultEmail").focus();
+			flag = false;
+		}else{
+			if(!dijit.byId("DefaultEmail").isValid()){
+				dijit.byId("DefaultEmail").focus();
+				flag = false;
+			}
+		}
+
+		if(dijit.byId("SMTPUsername").value==''){
+		    dijit.byId("SMTPUsername").attr('required','true');
+			dijit.byId("SMTPUsername").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("SMTPServer").value==''){
+		    dijit.byId("SMTPServer").attr('required','true');
+			dijit.byId("SMTPServer").focus();
+			flag = false;
+		}*/
+
+		return flag;
+	}
+	function fnValidateTab4(){
+		var flag = true;
+		return flag;
+	}
+
+	function fnValidateTab5(){
+		var flag = true;
+		return flag;
+	}
+
+function tabchange () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabstwo = dijit.byId("tab-two");
+		 	maintab.selectChild(tabstwo);
+		}
+	});
+}
+
+function tabchange1 () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabsthree = dijit.byId("tab-three");
+		 	maintab.selectChild(tabsthree);
+		}
+	});
+}
+function tabchange2 () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabsthree = dijit.byId("tab-four");
+		 	maintab.selectChild(tabsthree);
+		}
+	});
+}
+
+function tabchange3 () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabsone = dijit.byId("tab-one");
+		 	maintab.selectChild(tabsone);
+
+		}
+	});
+}
+
+function tabchange4 () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabstwo = dijit.byId("tab-two");
+		 	maintab.selectChild(tabstwo);
+
+		}
+	});
+}
+
+function tabchange5 () {
+	dojo.addOnLoad(function(){
+		var retflag = validateform();
+		if(retflag)
+		{
+			var maintab = dijit.byId("mainTabContainer")
+		 	var tabsthree = dijit.byId("tab-three");
+		 	maintab.selectChild(tabsthree);
+
+		}
+	});
+}
+
+function validateform()
+{
+
+	var flag = true;
+
+	if(dijit.byId("ProgramName").value==''){
+	    dijit.byId("ProgramName").attr('required','true');
+		dijit.byId("ProgramName").focus();
+		flag = false;
+	}
+	if(dijit.byId("ShortName").value==''){
+	    dijit.byId("ShortName").attr('required','true');
+		dijit.byId("ShortName").focus();
+		flag = false;
+	}
+	if(dijit.byId("Duration").value==''){
+	    dijit.byId("Duration").attr('required','true');
+		dijit.byId("Duration").focus();
+		flag = false;
+	}
+	if(dijit.byId("OptimalDuration").value==''){
+	    dijit.byId("OptimalDuration").attr('required','true');
+		dijit.byId("OptimalDuration").focus();
+		flag = false;
+	}
+	if(dijit.byId("Award").value==''){
+	    dijit.byId("Award").attr('required','true');
+		dijit.byId("Award").focus();
+		flag = false;
+	}
+	if(dijit.byId("TotalCreditHours").value==''){
+	    dijit.byId("TotalCreditHours").attr('required','true');
+		dijit.byId("TotalCreditHours").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("IdStaff").value==''){
+	    dijit.byId("IdStaff").attr('required','true');
+		dijit.byId("IdStaff").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("FromDate").value==''){
+	    dijit.byId("FromDate").attr('required','true');
+		dijit.byId("FromDate").focus();
+		flag = false;
+	}
+
+	return flag;
+
+}
+
+function fnValidateForm(){
+	var flag = true;
+
+	if(fnValidateTab3() == false){
+		ShowThisTab("tab-three");
+		flag = false;
+	}
+
+	if(fnValidateTab2() == false){
+		ShowThisTab("tab-two");
+		flag = false;
+	}
+
+	if(fnValidateTab1() == false){
+		ShowThisTab("tab-one");
+		flag = false;
+	}
+
+	return flag;
+}
+
+function majoringAdd() {
+	var flag = true;
+	if(dijit.byId("IdMajor").value==''){
+	    dijit.byId("IdMajor").attr('required','true');
+		dijit.byId("IdMajor").focus();flag = false;
+	}
+	if(dijit.byId("EnglishDescription").value==''){
+	    dijit.byId("EnglishDescription").attr('required','true');
+		dijit.byId("EnglishDescription").focus();flag = false;
+	}
+	if(dijit.byId("BahasaDescription").value==''){
+	    dijit.byId("BahasaDescription").attr('required','true');
+		dijit.byId("BahasaDescription").focus();flag = false;
+	}
+    if(flag == true) {
+		MajoringInsertion();
+	}
+	return flag;
+}
+
+function MajoringInsertion() {
+	var IdMajor = dijit.byId("IdMajor").value;
+	var IdMajor = dijit.byId("IdMajor").displayedValue;
+	var EnglishDescription = dijit.byId("EnglishDescription").value;
+	var EnglishDescriptionName = dijit.byId("EnglishDescription").displayedValue;
+	var BahasaDescription = dijit.byId("BahasaDescription").value;
+	var BahasaDescriptionName = dijit.byId("BahasaDescription").displayedValue;
+
+
+
+	var duplication = IdMajor;
+	//alert(duplication);
+	batchArray.push(duplication);
+	if(arrHasDupes(batchArray))
+	{
+		batchArray = batchArray.unique();
+		alert("Duplicate Majoring");
+	}
+	else
+	{
+
+		var trow = document.getElementById('hor1').insertRow(rowids);
+
+		var tcol0=trow.insertCell(0);
+		var tcol1=trow.insertCell(1);
+	    var tcol2=trow.insertCell(2);
+		var tcol3=trow.insertCell(3);
+
+		tcol0.innerHTML="<input type='hidden' value='"+IdMajor+"' name=IdMajorggrid[]>"+IdMajor;
+		tcol1.innerHTML="<input type='hidden' value='"+EnglishDescription+"' name=EnglishDescriptiongrid[]>"+EnglishDescriptionName;
+		tcol2.innerHTML="<input type='hidden' value='"+BahasaDescription+"' name=BahasaDescriptiongrid[]>"+BahasaDescriptionName;
+		tcol3.innerHTML="<a href='#' onClick='deleteRows(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowids++;
+	}
+}
+
+function schemeAdd(){
+	var IdScheme = dijit.byId("IdScheme").value;
+	var IdScheme_name = dijit.byId("IdScheme").displayedValue;
+
+	schemeArray.push(IdScheme);
+	
+	if(arrHasDupes(schemeArray)){
+		schemeArray = schemeArray.unique();
+		alert("Duplicate Scheme");
+	}else{
+		$('#tbl_scheme > tbody').append(
+			$('<tr>')
+			.append(
+				$('<td>').html("<input type='hidden' value='"+IdScheme+"' name=IdScheme_add[]>"+IdScheme_name)
+			)
+			.append(
+				$('<td>').html("<a href='#' onClick='$(this).parent().parent().remove(); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>")
+			)
+		);
+	}
+}
+
+function deleteRowScheme(r,scheme_id)
+{
+	var str_del = $('#delete_scheme').val();
+	
+	if(str_del!=""){
+		$('#delete_scheme').val(str_del+","+scheme_id);
+	}else{
+		$('#delete_scheme').val(scheme_id);
+	}
+	
+	$(r).parent().parent().remove();
+}
+
+function deleteRows(r)
+{
+	rowids--;
+	var i=r.parentNode.parentNode.rowIndex;
+	batchArray.splice(parseInt(i-1),1);
+	document.getElementById('hor1').deleteRow(i);
+}
+
+function clearpagemajoring() {
+	dijit.byId('IdMajor').set("value","");
+    dijit.byId('EnglishDescription').set("value","");
+	dijit.byId('BahasaDescription').set("value","");
+}
+
+function deleteRowProgram(r,idprogrammajoring)
+{
+
+	deleteArray.push(idprogrammajoring);
+	idprogrammajoring=deleteArray;
+
+	document.getElementById('IdProgramMajoring').value=idprogrammajoring;
+
+	rowids--;
+	subjArray.splice(parseInt(i-1),1);
+	var i=r.parentNode.parentNode.rowIndex;
+	document.getElementById('hor1').deleteRow(i);
+	subjArray.pop();
+}
+
+
+function fnGetColgDeptList(IdCollege){
+	if(IdCollege != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getcolgdeptlist/IdCollege/"+IdCollege,
+					handleAs:'json',
+					load:function(data){
+						AutoFillNextEditableDropDown("IdDepartment",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+
+
+function editProgramMajoring(idProgramMajoring){	
+
+	//get data majoring from ajax
+	$.ajax({
+		url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'program', 'action'=>'ajax-get-majoring','idProgram'=>$this->LintIdProgram),'default',true);?>",
+		data: {'idProgramMajoring':idProgramMajoring},
+		type: 'POST',
+		dataType: 'json'	
+	}).done(function ( data ){
+
+			$("#idProgramMajoring").val(idProgramMajoring);		
+		 	$("#EditIdMajor").val(data.IdMajor);
+		 	$("#EditEnglishDescription").val(data.EnglishDescription);
+		 	$("#EditBahasaDescription").val(data.BahasaDescription);
+		});
+	
+	
+	//popup aje
+	$( "#dialog-message" ).dialog('open');
+}
+
+$(function() {
+
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+    $( "#dialog-message" ).dialog({
+      modal: true,
+      autoOpen: false,
+      width: 600,
+      buttons: {
+        "Cancel": function() {
+          $( this ).dialog( "close" );
+        },
+        "Save": function() {
+            
+       	   $("#formEdit").submit();
+       	   $( this ).dialog( "close" );
+       	   
+          }
+      }
+    });
+});
+</script>
+
+<div id="dialog-message" title="<?php echo $this->translate("Edit Program Majoring");?>">
+<form name="formEdit" id="formEdit" method="post" action="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'program', 'action'=>'save-edit-majoring'),'default',true);?>">
+<input type="hidden" name="idProgram" id="idProgram" value="<?php echo $this->LintIdProgram;?>" >
+<input type="hidden" name="idProgramMajoring" id="idProgramMajoring" value="" >
+ <table class="" width="100%" >
+ <tr>
+ 	<td><?php echo $this->translate("ID Major");?></td>
+ 	<td><input type="text" name="EditIdMajor" id="EditIdMajor" value="" ></td>
+ </tr>
+ <tr>
+ 	<td><?php echo $this->translate("English Description");?></td>
+ 	<td><input type="text" name="EditEnglishDescription" id="EditEnglishDescription" value="" size="50"></td>
+ </tr>
+  <tr>
+ 	<td><?php echo $this->translate("Indonesia Description");?></td>
+ 	<td><input type="text" name="EditBahasaDescription" id="EditBahasaDescription" value="" size="50"></td>
+ </tr>
+ </table>
+ </form>
+</div>
+
+
+<fieldset>
+    <legend><?php echo $this->translate($this->Program);$lstrdivheight="400px";?></legend>
+
+                <Form dojoType="dijit.form.Form"  id="myForm" action="" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					if(RemarkValidateform()){
+						return true;
+					}else{
+						return false;
+					}
+                }
+				</script>
+			<div id="mainTabContainer" dojoType="dijit.layout.TabContainer" doLayout="false" tabPosition="top" overflow="auto" style= "width:100%">
+				<div dojoType="dijit.layout.ContentPane" id="tab-one" title='<?php echo $this->translate($this->Program).' '.$this->translate("Details");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate($this->Program).' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate($this->Program).' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjprogramForm->ProgramName;?>
+                            	<?php echo $this->lobjprogramForm->UpdDate;?>
+                            	<?php echo $this->lobjprogramForm->IdProgram;?>
+                            	<?php echo $this->lobjprogramForm->UpdUser;?></td>
+                            <td ><?php echo $this->translate($this->defaultlanguage);?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjprogramForm->ArabicName;?></td>
+
+                        </tr>
+                         <tr>
+                           <td><?php echo $this->translate("Program").' '.$this->translate("Salutation");?></td>
+                           <td><?php echo $this->lobjprogramForm->programSalutation;?></td>
+                        	<td><?php echo $this->translate("Program").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjprogramForm->ProgramCode;?></td>
+                         </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Short").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjprogramForm->ShortName;?></td>
+                        	<td><?php echo $this->translate("Max Duration");?><?php echo $this->translate("(No. Of Semester))");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjprogramForm->Duration;?></td>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Optimal Duration");?><?php echo $this->translate("(No. Of Semester)");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjprogramForm->OptimalDuration;?></td>
+                            <td ><?php echo $this->translate("Award");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjprogramForm->Award;?><span id='awards'></span></td>
+                        </tr>
+                        <!--
+                        <tr>
+                            <td><?php //echo $this->translate("Agent Verification");?><span class="reqMark"></span></td>
+                            <td><?php //echo $this->lobjprogramForm->AgentVerification;?></td>
+                            <td></td>
+                            <td ><?php //echo $this->translate("Scheme");?><span class="reqMark">*</span></td>
+                            <td ><?php //echo $this->lobjprogramForm->IdScheme;?><span id='awards'></span></td>
+                        </tr>
+                        -->
+                        <tr>
+                            <td><?php echo $this->translate("Total Credit Hours");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjprogramForm->TotalCreditHours;?></td>
+                             <td><?php echo $this->translate("Minimum Age");?><span class="reqMark">*</span></td>
+                             <td><?php echo $this->lobjprogramForm->MinimumAge;?></td>
+                             <!--
+                           <td><?php echo $this->translate("Placement Test Type");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjprogramForm->PlacementTestType;?></td>
+                        --></tr>
+                         <tr>
+                             <td><?php echo $this->translate("Active Status");?><span class="reqMark"></span></td>
+                             <td><?php echo $this->lobjprogramForm->Active;?><?php echo $this->lobjprogramForm->ActiveDB;?></td>
+                             <td><?php echo $this->translate("Remarks/Reason");?></td>
+                             <td><?php echo $this->lobjprogramForm->Remarks;?></td>
+                        </tr>
+                        <tr>
+                             <td><?php echo $this->translate("Offered");?><span class="reqMark"></span></td>
+                             <td>
+                             	PSSB<?php echo $this->lobjprogramForm->PssbOffer;?>
+                             	&nbsp;
+                             	USM<?php echo $this->lobjprogramForm->UsmOffer;?>
+                             </td>
+                             <td><?php echo $this->translate("Allow Registration");?></td>
+                             <td><?php echo $this->lobjprogramForm->Allowreg;?></td>
+                        </tr>
+                        <tr>
+                             <td><?php echo $this->translate("EPSBED Program Code");?><span class="reqMark"></span></td>
+                             <td><?php echo $this->lobjprogramForm->Program_code_EPSBED;?></td>
+                             <td></td>
+                             <td></td>
+                        </tr>
+                        <tr>
+                             <td><?php echo $this->translate("EPSBED Strata Code");?><span class="reqMark"></span></td>
+                             <td><?php echo $this->lobjprogramForm->Strata_code_EPSBED;?></td>
+                             <td></td>
+                             <td></td>
+                        </tr>
+                        <tr>
+                          <th colspan = "4"><?php echo $this->translate('Chief').' '.$this->translate("of").' '.$this->translate($this->Program).' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate('Chief').' '.$this->translate("of").' '.$this->translate($this->Program);?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjuniversityForm->IdStaff;?></td>
+                        	<td><?php echo $this->translate($this->College);?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjprogramForm->IdCollege;?></td>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Joining").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjuniversityForm->FromDate;?></td>
+                        	<?php echo $this->lobjuniversityForm->ToDate;?>
+                         <td><?php echo $this->translate($this->Department);?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjprogramForm->IdDepartment;?></td>
+                        </tr>
+                           <tr>
+						<td align="right"  colspan="4">
+							<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-one','tab-two')">
+						</td>
+					</tr>
+
+					</table>
+				</div>
+				<div dojoType="dijit.layout.ContentPane" id="tab-two" title='<?php echo $this->translate("Accredition Details");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+                    <table class="table" width="100%" >
+                    	<tr>
+                            <th colspan = "4"><?php echo $this->translate("Accredition").' '.$this->translate("Details");?></th>
+                        </tr>
+                        	<tr>
+                            	<td><?php echo $this->translate('Accredition').' '.$this->translate('Type');?><span class="reqMark"></span></td>
+                            	<td><?php echo $this->lobjprogramForm->AccreditionType;?></td>
+                            	<td> </td>
+                            	<td></td>
+                        	</tr>
+	                        <tr>
+	                            <td ><?php echo $this->translate("Accredition Reference");?><span class="reqMark"></span></td>
+	                            <td ><?php echo $this->lobjprogramForm->AccredictionReferences;?><span></span></td>
+	                            <td><?php echo $this->translate("Accredition Date");?><span class="reqMark"></span></td>
+	                            <td><?php echo $this->lobjprogramForm->AccredictionDate;?></td>
+	                        </tr>
+	                    	<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+	                    	<?php  $acclabel = '$this->AccDtl'.$i;
+	 						eval("\$acclabel = \"$acclabel\";"); 	?>
+	                    	<?php if($i%2!=0){?>
+	                    	<tr>
+	                         	<td ><?php echo $this->translate($acclabel);?><span class="reqMark"></span></td>
+	                            <td ><input type='text'   id='AccDtl<?php echo $i;?>'  value='' dojoType='dijit.form.TextBox'  name='AccDtl<?php echo $i; ?>'  /></td>
+	                            <?php }  if($i%2==0){ ?>
+	                         	<td ><?php echo $this->translate($acclabel);?><span class="reqMark"></span></td>
+	                            <td ><input type='text'   id='AccDtl<?php echo $i;?>'  value='' dojoType='dijit.form.TextBox'  name='AccDtl<?php echo $i; ?>'  /></td>
+	                          </tr>
+	                          <?php }?>
+	                        <?php } ?>
+
+	                        <tr>
+                            	<td colspan="4" align = "right"><?php echo $this->lobjprogramForm->Add;?><?php echo $this->lobjprogramForm->Clear;?></td>
+                        	</tr>
+	                  </table>
+	                  <table  class="table" width="100%"  id="hor">
+	                        <tr>
+	                        	<th><?php echo $this->translate("Accrediction Type");?></th>
+	                        	<th><?php echo $this->translate("Reference");?></th>
+	                        	<th><?php echo $this->translate("Date");?></th>
+	                        	<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+									<?php  $acclabel = '$this->AccDtl'.$i;
+	 								eval("\$acclabel = \"$acclabel\";"); ?>
+	 								<th><?php echo $this->translate($acclabel);?></th>
+	                        	<?php }?>
+	                        	<th><?php echo $this->translate("Delete");?></th>
+	                        </tr>
+
+
+					        <?php foreach ($this->tempaccredictiondetails as $lobjaccrediction): ?>
+					  		<tr >
+					        	<td><?php echo $lobjaccrediction['DefinitionDesc'];?></td>
+					        	<td><?php echo $lobjaccrediction['AccredictionReferences'];?></td>
+					        	<td><?php echo $lobjaccrediction['AccredictionDate'];?></td>
+					        	<?php for($i=1;$i<=$this->AccDtlCount;$i++) {?>
+					        		<td><?php echo $lobjaccrediction['AccDtl'.$i];?></td>
+					        	<?php }?>
+					        	<td><a href="#" onClick="deleteaccridictiondetails('<?php echo $lobjaccrediction['IdTempProgramAccreditionDetails'];?>');" >
+												<img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'>
+											</a></td>
+							</tr>
+					        <?php endforeach; ?>
+
+	                   </table>
+	                     <table  class="table" width="100%">
+	                    	  <tr>
+								<td align="left" >
+									<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-two','tab-one')">
+								</td>
+								<td align="right" >
+									<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-two','tab-three')">
+								</td>
+							</tr>
+
+	                   </table>
+				</div>
+
+				<!--<div dojoType="dijit.layout.ContentPane" id="tab-three" title='<?php echo $this->translate("MOHE Details");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+                    <table class="table" width="100%" >
+                    	<tr>
+                            <th colspan = "4"><?php echo $this->translate("MOHE").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Reference");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjprogramForm->MoheReferences;?><span id='awards'></span></td>
+                            <td><?php echo $this->translate("Date");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjprogramForm->MoheDate;?></td>
+                        </tr>
+                        <tr>
+                        	<?php for($i=1;$i<=$this->MoheDtlCount;$i++) {?>
+ 							<?php  $mohelabel = '$this->MoheDtl'.$i;
+ 							eval("\$mohelabel = \"$mohelabel\";"); 	?>
+ 							<?php if($i%2!=0){?>
+ 							<tr>
+	                         	<td ><?php echo $this->translate($mohelabel);?><span class="reqMark"></span></td>
+	                            <td ><input type='text'   id='MoheDtl<?php echo $i;?>'  value='<?php echo $this->mohedtls['MoheDtl'.$i]?>' dojoType='dijit.form.TextBox'  name='MoheDtl<?php echo $i; ?>'  /></td>
+	                            <?php } if($i%2==0){ ?>
+	                         	<td ><?php echo $this->translate($mohelabel);?><span class="reqMark"></span></td>
+	                            <td ><input type='text'   id='MoheDtl<?php echo $i;?>'  value='<?php echo $this->mohedtls['MoheDtl'.$i]?>' dojoType='dijit.form.TextBox'  name='MoheDtl<?php echo $i; ?>'  /></td>
+                            </tr>
+                            <?php }?>
+                            <?php } ?>
+                             <tr>
+						<td colspan="2"><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-three','tab-two')"></td>
+
+						<td colspan="2" align="right" >
+							<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-three','tab-four')">
+						</td>
+
+					</tr>
+                    </table>
+				</div>
+				-->
+				<div dojoType="dijit.layout.ContentPane" id="tab-three" title='<?php echo $this->translate("Learning Mode");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+                    <table class="table" width="100%" >
+                    	<tr>
+                            <th colspan = "4"><?php echo $this->translate("Learning").' '.$this->translate("Mode");?></th>
+                        </tr>
+                        <tr>
+                         	<td ><?php echo $this->translate("Learning").' '.$this->translate("Mode");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjprogramForm->LearningMode;?></td>
+                        </tr>
+                         <tr>
+						<td><input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-three','tab-two')"></td>
+						<td></td>
+						<td></td>
+						<td align="right" >
+							<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-three','tab-four')"></td>
+					</tr>
+                    </table>
+				</div>
+				<div dojoType="dijit.layout.ContentPane" id="tab-four" title='<?php echo $this->translate("Program Majoring");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+                    <table class="table" width="100%" >
+                    	<tr>
+                            <th colspan = "4"><?php echo $this->translate("Majoring");?></th>
+                        </tr>
+                        <tr>
+                         	<td	><?php echo $this->translate("Major").' '.$this->translate("ID");?><span class="reqMark"></span></td>
+                         	<td	><?php echo $this->lobjprogramForm->IdProgramMajoring; ?><?php echo $this->lobjprogramForm->IdMajor;?></td>
+                         	<td ><?php echo $this->translate("English").' '.$this->translate("Description");?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjprogramForm->EnglishDescription;?></td>
+                         </tr>
+                         <tr>
+                         	<td ><?php echo $this->defaultlanguage.' '.$this->translate("Description");?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjprogramForm->BahasaDescription;?></td>
+                        </tr>
+                        <tr>
+                           	<td colspan="4" align = "left"><?php echo $this->lobjprogramForm->Insert;?><?php echo $this->lobjprogramForm->Erase;?></td>
+                        </tr>
+                       </table>
+	                  <table  class="table" width="100%"  id="hor1">
+	                        <tr>
+	                        	<th><?php echo $this->translate("IdMajor");?></th>
+	                        	<th><?php echo $this->translate("English Description");?></th>
+	                        	<th><?php echo $this->defaultlanguage .' '.$this->translate("Description");?></th>
+	                        	<th><?php echo $this->translate("Action");?></th>
+	                        </tr>
+
+						<?php foreach($this->programmajoring as $programmajoring) {?>
+						      <tr>
+						      		<td><?php echo $programmajoring['IdMajor']?></td>
+						      		<td><?php echo $programmajoring['EnglishDescription'];?></td>
+						      		<td><?php echo $programmajoring['BahasaDescription'];?></td>
+						      		<td>
+						      		<a href='#' onClick='deleteRowProgram(this,"<?php echo $programmajoring['IDProgramMajoring'];?>"); return false;';><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						      		&nbsp;
+						      		<a href='#' onClick='editProgramMajoring("<?php echo $programmajoring['IDProgramMajoring'];?>");';><img src='<?php echo $this->baseUrl();?>/images/edit.png'  border=0 width='16' height='16'></a>
+						      		</td>
+
+
+						      </tr>
+						 <?php }?>
+	                  </table>
+	                  <table class="table" width="100%">
+                        <tr>
+							<td>
+								<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-four','tab-three')">
+							</td>
+							<td align="right">
+								<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-four','tab-five')">
+							</td>
+						</tr>
+                    </table>
+				</div>
+				<div dojoType="dijit.layout.ContentPane" id="tab-five" title='<?php echo $this->translate("History");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+				<table class="table" width="100%">
+	                        <tr>
+	                        	<th><?php echo $this->translate("Status");?></th>
+	                        	<th><?php echo $this->translate("Remark");?></th>
+	                        	<th><?php echo $this->translate("Username");?></th>
+	                        	<th><?php echo $this->translate("Date");?></th>
+	                        </tr>
+
+						<?php foreach($this->history as $history) {?>
+						      <tr>
+						      		<?php if($history['Active']==1){?>
+						      				<td>Active</td>
+						      			<?php }else {?>
+						      				<td>Inactive</td>
+						      			<?php }?>
+						      		<td><?php echo $history['Remarks'];?></td>
+						      		<td><?php echo $history['loginName'];?></td>
+						      		<td><?php echo $history['UpdDate']?></td>
+						      </tr>
+						 <?php }?>
+                </table>
+                <table class="table" width="100%">
+                        <tr>
+							<td>
+								<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-four','tab-three')">
+							</td>
+							<td align="right">
+								<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label ="<?php echo $this->translate("Next");?>"  name ="Next";  Value = "<?php echo $this->translate("Next");?>" onclick = "fnToggleTabs('Next','tab-three','tab-six')">
+							</td>
+						</tr>
+                    </table>
+				</div>
+				<div dojoType="dijit.layout.ContentPane" id="tab-six" title='<?php echo $this->translate("Scheme");?>' style="padding:10px;overflow:auto;height:<?php echo $lstrdivheight?>">
+				
+					<table class="table" width="100%" >
+                    	<tr>
+                            <th colspan = "4"><?php echo $this->translate("Majoring");?></th>
+                        </tr>
+                        <tr>
+                         	<td	><?php echo $this->translate("Scheme");?><span class="reqMark"></span></td>
+                         	<td	><?php echo $this->lobjprogramForm->IdScheme; ?></td>
+                         	<td colspan="2"></td>
+                         </tr>
+                        <tr>
+                           	<td colspan="4" align = "left"><?php echo $this->lobjprogramForm->Insert_Scheme;?></td>
+                    	</tr>
+                    </table>
+                    <input type="hidden" name="delete_scheme" id="delete_scheme" value="" >
+	                <table  class="table" width="100%"  id="tbl_scheme">
+						<tr>
+	                       	<th><?php echo $this->translate("Scheme");?></th>
+                        	<th><?php echo $this->translate("Action");?></th>
+                        </tr>
+                        <?php foreach($this->programscheme as $programscheme) {?>
+					      <tr>
+				      		<td><?php echo $programscheme['EnglishDescription']?></td>
+				      		<td>
+				      		<a href='#' onClick='deleteRowScheme(this,"<?php echo $programscheme['IdProgramScheme'];?>"); return false;';><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+				      		</td>
+					      </tr>
+						 <?php }?>
+                  	</table>
+				 	<table class="table" width="100%">
+                        <tr>
+							<td>
+								<input type = "button" class="NormalBtn"  dojoType=dijit.form.Button label = "<?php echo $this->translate("Back");?>"; name = "Back" Value = "<?php echo $this->translate("Back");?>" onclick = "fnToggleTabs('Back','tab-six','tab-five')">
+							</td>
+						</tr>
+                    </table>
+				</div>
+			</div>
+					<table class="table" width="100%" >
+               			<tr id="hor" class="table" width="100%" >
+                            <td colspan=4 align = "right">
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'program', 'action'=>'index'),'default',true);?>';" />
+								<?php echo $this->lobjprogramForm->Save;?>
+                            </td>
+                        </tr>
+              		</table>
+            </Form>
+
+</fieldset>
+

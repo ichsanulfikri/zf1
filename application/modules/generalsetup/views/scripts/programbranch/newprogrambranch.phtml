@@ -1,0 +1,82 @@
+<script type="text/javascript">
+
+	dojo.addOnLoad(function() {
+		var form = dijit.byId("myForm");
+		var value=form.attr('value').IdProgramBranchLink;
+
+		if(value == "" ) {
+			dijit.byId('Save').set('label','Add');
+		} else {
+			dijit.byId('Save').set('label','Update');
+		}
+	});
+</script> 
+<fieldset>
+    <legend><?php echo $this->translate("Quota Management");?></legend>
+    
+                <Form dojoType="dijit.form.Form"  id="myForm" action="" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <td ><?php echo $this->translate($this->College).' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjprogrambranchForm->CollegeName;?><?php echo $this->lobjprogrambranchForm->IdCollege;?>
+                            	<?php echo $this->lobjprogrambranchForm->UpdDate;?>
+                            	<?php echo $this->lobjprogrambranchForm->IdProgramBranchLink;?>
+                            	<?php echo $this->lobjprogrambranchForm->UpdUser;?></td>
+                            <td ><?php echo $this->translate($this->Program).' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjprogrambranchForm->IdProgram;?></td>
+                        </tr>
+                        
+                        <tr> 
+                            <td ><?php echo $this->translate("Min").' '.$this->translate("Quota");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjprogrambranchForm->Quota;?></td>
+							<td><?php echo $this->translate("Max").' '.$this->translate("Quota");?><span class="reqMark">*</span></td>
+							<td><?php echo $this->lobjprogrambranchForm->MaxQuota;?></td>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Semester");?></td>
+                        	<td><?php echo $this->lobjprogrambranchForm->IdSemester;?></td>
+                            <td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjprogrambranchForm->Active;?></td>
+                        </tr>
+               			<tr>
+                            <td colspan=4 align = "right"><?php echo $this->lobjprogrambranchForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'programbranch', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>           
+              </table>
+            </Form>
+</fieldset>
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	    	<th><?php echo $this->translate($this->College).' '.$this->translate("Name");?></th>
+	    	<th><?php echo $this->translate($this->Program).' '.$this->translate("Name");?></th>
+	    	<th><?php echo $this->translate("Semester");?></th>
+	    	<th><?php echo $this->translate("Min").' '.$this->translate("Quota");?></th>
+	    	<th><?php echo $this->translate("Max").' '.$this->translate("Quota");?></th>
+	    	</tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjprogrambranch): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->baseUrl();?>/generalsetup/programbranch/newprogrambranch/idbranchlink/<?php echo $this->escape($lobjprogrambranch['IdProgramBranchLink']);?>/id/<?php echo $this->escape($lobjprogrambranch['IdCollege']);?>" ><?php echo $lobjprogrambranch['CollegeName'];?></a></td>
+	        	<td><?php echo $lobjprogrambranch['ProgramName'];?></a></td>
+	        	<td><?php echo $lobjprogrambranch['SemesterMasterName'].'-'.$lobjprogrambranch['year'];?></td>
+	        	<td><?php echo $lobjprogrambranch['Quota'];?></td>
+	        	<td><?php echo $lobjprogrambranch['MaxQuota'];?></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?> 
+			</tr>
+			<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+		</table>
+	</fieldset>

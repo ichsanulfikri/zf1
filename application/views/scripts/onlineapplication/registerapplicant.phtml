@@ -1,0 +1,106 @@
+<script type="text/javascript">
+  function validateForm(){
+    var emaillogin = $('#Emaillogin').val();
+    var password = $('#password').val();
+    var confirmpassword = $('#confirmpassword').val();
+    var flag = false;
+    var msg = '';
+
+    if(emaillogin == ''){
+      flag = true;
+      msg = msg + 'Please enter Email';
+    }
+
+    if(password == ''){
+      flag = true;
+      msg = msg + "\n" +'Please enter Password';
+    }
+
+    if(confirmpassword == ''){
+      flag = true;
+      msg = msg + "\n" +'Please enter confirm password';
+    }
+
+    if(confirmpassword != password){
+      flag = true;
+      msg = msg + "\n" +'Password and Confirm Password should match';
+    }
+
+    if(password.length < 4 || password.length > 20){
+      flag = true;
+      msg = msg + "\n" +'Password should be minmum of 8 character and maximum of 20 character';
+    }
+
+    var reg = /^([A-Za-z0-9_\-\.])+\@([A-Za-z0-9_\-\.])+\.([A-Za-z]{2,4})$/;
+    if(reg.test(emaillogin) == false) {
+      flag = true;
+      msg = msg + "\n" +'Invalid Email Address'; 
+    }
+
+    var spclcharcount = countSpecialchars(password);   
+    if(spclcharcount < 1){
+      flag = true;
+      msg = msg + "\n" +'Password should be have atleast one special character';
+    }
+
+    if(hasWhiteSpace(password)){
+      flag = true;
+      msg = msg + "\n" +'No Spaces Allowed in Password';
+    }
+
+    if(flag){
+      alert(msg);
+      return false;
+    }
+    return true;
+  }
+
+  function countSpecialchars(str){
+    var iChars = "!@#$%^&*()+=-[]\\\';,./{}|\":<>?~_";
+    var count = 0;
+    for (var i = 0; i < str.length; i++) {
+  	if (iChars.indexOf(str.charAt(i)) != -1) {
+          count = count + 1;
+  	}
+    }
+    return count;
+  }
+
+  function hasWhiteSpace(s) {
+    return s.indexOf(' ') >= 0;
+  }
+
+
+  
+</script>
+<body>
+  <form onsubmit="return validateForm()" enctype="multipart/form-data" dojoType="dijit.form.Form" id="registrationApplicant" action="" method="POST"  name= "mylobjStudentApplicationForm">
+    <div id="contentArea">
+      <div class="section" id="content1">
+        <?php
+            if(isset($this->msg) && $this->msg!=""){
+        ?>
+          <ul class="apponlineerrors">
+            <li><?php echo $this->msg; ?></li>
+          </ul>
+        <?php } ?>
+        <table width=width="100%" border="0" cellspacing="10" cellpadding="10">
+          <tr>
+            <td><?php echo $this->translate("Email");?> <span class="reqMark">*</span>&nbsp;&nbsp;</td>
+            <td><?php echo $this->applicantRegForm->Emaillogin;?></td>
+          </tr>
+          <tr>
+            <td><?php echo $this->translate("Password");?> <span class="reqMark">*</span>&nbsp;&nbsp;</td>
+            <td><?php echo $this->applicantRegForm->password;?></td>
+          </tr>
+          <tr>
+            <td><?php echo $this->translate("Confirm").' '.$this->translate("Password");?> <span class="reqMark">*</span>&nbsp;&nbsp;</td>
+            <td><?php echo $this->applicantRegForm->confirmpassword;?></td>
+          </tr>
+        </table>     
+          <input type="submit" id="submit" value="Submit">
+      </div>
+    </div>
+</form>
+</body>
+

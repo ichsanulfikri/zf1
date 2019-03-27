@@ -1,0 +1,135 @@
+
+<script type="text/javascript">
+dojo.addOnLoad(function() {
+	dijit.byId('field28').focus();
+	<?php
+	if(isset( $this->idCollege )){
+	?>
+		dijit.byId('field5').set('value','<?php echo $this->idCollege; ?>');
+	<?php
+	}else{
+	?>
+		dijit.byId('field5').set('value','');
+		dijit.byId('field5').set('placeHolder','Select');		
+	<?php
+	}
+	?>
+	
+	dijit.byId('field8').set('value','');
+	dijit.byId('field8').set('placeHolder','Select');
+	dijit.byId('field20').set('value','');
+	dijit.byId('field20').set('placeHolder','Select');
+});
+
+function fnGetColgDeptList(IdCollege){
+	if(IdCollege != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getcolgdeptlist/IdCollege/"+IdCollege,
+					handleAs:'json',
+					load:function(data){
+						AutoFillNextEditableDropDown("field20",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+	var options = {
+				label:"name",
+				identifier:"key",
+				items:JSONText
+			  };
+	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+</script>
+
+	<div align="center" style="background: #fff;">
+		<ul class="stepsmenu">																																												<li class="first"><a href="/generalsetup/subjectmaster">Course Master</a></li>
+    		<li class="second"><a href="/generalsetup/subjectprerequisites">Course Prerequisites</a></li>
+    		<li class="third"><a href="/generalsetup/subjectequivalent">Course Equivalent</a></li>
+    		<li class="fourth"><a href="/generalsetup/subjectdetails">Course Details</a></li>		
+		</ul>
+	</div>
+							
+	<fieldset>
+		<legend><?php echo $this->translate("$this->Subject").' '.$this->translate("Search");?></legend>
+         <form action="<?php echo $this->baseUrl();?>/generalsetup/subjectmaster/index/search/1" method="POST">
+            <table width="100%">
+            	 <tr>
+                   <td><?php echo $this->translate("Faculty");?></td>
+                   <td ><?php echo $this->lobjform->field5;?></td>
+                   <td><?php echo $this->translate("Branch");?></td>
+                   <td ><?php echo $this->lobjform->field8;?></td>
+                </tr>
+                <tr>
+                   <td><?php echo $this->translate("Department");?></td>
+                   <td ><?php echo $this->lobjform->field20;?></td>
+                   <td><?php  echo $this->translate("Course Name").' ('.$this->translate($this->defaultlanguage).")";?></td>
+                   <td ><?php echo $this->lobjform->field28;?></td>
+                </tr>
+                <tr>
+                   <td><?php echo $this->translate("Course Code");?></td>
+                   <td ><?php echo $this->lobjform->field3;?></td>
+                   <td><?php echo $this->translate("Course Name");?></td>
+                   <td ><?php echo $this->lobjform->field2;?></td>
+                </tr>
+                <tr>
+                   <td ><?php echo $this->translate("Active");?></td>
+                   <td ><?php echo $this->lobjform->field7;?></td>
+                   <td></td>
+                   <td></td>
+                </tr>
+                <tr>
+	               <td align = "center" colspan = "4">
+						<?php echo $this->lobjform->Search;?>
+						<input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Add')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectmaster', 'action'=>'newsubjectmaster'),'default',true);?>';" />
+						<?php echo $this->lobjform->Clear;?>
+				   </td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+    <br/>
+	<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+
+	    	<tr>
+	    		<th><?php echo $this->translate("Course Name");?> (<?php echo $this->translate($this->defaultlanguage);?>)</th>
+	        	<th><?php echo $this->translate("Course Name");?></th>
+	        	<th><?php echo $this->translate("Code");?></th>
+	       	    <th><?php echo $this->translate("Course Type");?></th>
+	       	    <th><?php echo $this->translate("Faculty / Department");?></th>
+  				<th><?php echo $this->translate("Credit Hours");?></th>
+	       </tr>
+	        <?php if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjsubject ): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td>
+	        		<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectmaster', 'action'=>'subjectmasterlist' , 'id'=>$lobjsubject['IdSubject']),'default',true);?>" >
+	        			<?php echo $this->escape($lobjsubject['subjectMainDefaultLanguage']);?>
+	        		</a>
+	        	</td>
+	    	    <td>
+	    	    	<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectmaster', 'action'=>'subjectmasterlist' , 'id'=>$lobjsubject['IdSubject']),'default',true);?>" >
+	    	    		<?php echo $this->escape($lobjsubject['SubjectName']);?>
+	    	    	</a>
+	    	    </td>
+	    	    <td><?php echo $this->escape($lobjsubject['SubCode']);?></td>
+	    	    <td><?php echo $this->escape($lobjsubject['CourseName']);?></td>
+	    	    <td><?php  echo $this->escape($lobjsubject['BranchName']); ?></td>
+	    	 	<td align="center"><?php echo $this->escape($lobjsubject['CreditHours']);?></td>
+	    	</tr>  
+	        <?php endforeach; ?>
+	            <?php endif; ?>
+			
+	    	<tr>
+	        	<td colspan="6" align="right">
+	        		<div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div>
+	        	</td>
+   			</tr>
+		</table>
+	</fieldset>

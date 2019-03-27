@@ -1,0 +1,62 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('txtSearch').focus();
+	});
+</script>
+</head>
+	<fieldset>
+		<legend><?php echo $this->translate($this->title).' '.$this->translate("Search");?></legend>
+         <form action="<?php echo $this->baseUrl();?>/workflow/index/index/search/1" method="POST">
+            <table width="100%">
+                <tr>
+                   <td><?php echo $this->translate("Search");?></td>
+                   <td ><?php echo $this->lobjform->txtSearch;?><?php echo $this->lobjform->Search;?></td>
+                </tr>
+                <tr>
+                     <td><?php echo $this->translate("Category");?></td>
+                     <td ><?php echo $this->lobjform->lsCategory;?></td>
+                </tr>
+                <tr>
+                    <td ><?php echo $this->translate("Status");?></td>
+                    <td ><?php echo $this->lobjform->lsStatus;?></td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            </table>
+        </form>
+    </fieldset>
+    <br/>
+	<fieldset>
+	<legend><?php echo $this->translate($this->title);?></legend>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    	<tr>
+	        	<th><?php echo $this->translate("Letter");?></th>
+	        	<th><?php echo $this->translate("Date of Letter");?></th>
+	        	<th><?php echo $this->translate("From");?></th>
+	        	<th><?php echo $this->translate("Subject");?></th>
+	        	<th><?php echo $this->translate("To");?></th>
+	        	<th><?php echo $this->translate("Arrival Date");?></th>
+	        	<th><?php echo $this->translate("Status");?></th>
+	    	</tr>
+	        <?php 
+	        $db=new Workflow_Model_DbTable_Myjob();
+	        if (count($this->paginator)): ?>
+	        <?php foreach ($this->paginator as $lobjJob): ?>
+	  		<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	        	<td><a href="<?php echo $this->url(array('module'=>'workflow','controller'=>'disposition', 'action'=>'index' , 'ivent'=>$lobjJob['ivent'],'formid'=>$lobjJob['Subject']),'default',true);?>" ><?php echo $this->escape($lobjJob['Letter']);?></a></td>
+	    		<td><?php echo $this->escape($lobjJob['dtLetter']);?></td>
+	    		<td><?php echo $this->escape($lobjJob['From']);?></td>
+	    		<td><?php echo $this->escape($lobjJob['Subject']);?></td>
+	    		<td><?php echo $this->escape($lobjJob['To']);?></td>
+	    		<td><?php echo $this->escape($lobjJob['dtArrival']);?></td>
+	    		<td><?php echo $this->escape($db->fnGetJobDisposisiStatus($lobjJob['Status']));?></a></td>
+	            <?php endforeach; ?>
+	            <?php endif; ?>
+			</tr>
+	    	<tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   			</tr>
+		</table>
+	</fieldset>

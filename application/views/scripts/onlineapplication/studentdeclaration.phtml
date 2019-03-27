@@ -1,0 +1,106 @@
+<script type="text/javascript">
+function backtoqualification(){
+	$("#tab3").click();
+}
+function validateform(){
+	var flag = true;
+	var values = $('#studentdeclaration').serialize();
+	var checked = $('#ConfirmDeclaration:checkbox:checked').length;
+    if(checked == 0){
+		alert("Please confirm the Declaration");
+		flag = false;
+        }
+    if(flag == true){
+    		 $.ajax({
+    	         type: 'POST',
+    	         url: '<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'admissionstatus'),'default',true);?>',
+    	         async: false,
+    	         data: values,
+    	         success: function(responseText) {
+    	        	 //console.log(responseText);
+    	        	 $("#content5").html(responseText);
+
+
+						var tabid = '5';
+						var tab_id = "#tab"+tabid;
+						$(tab_id).live('click',function(){
+						var activeTab = $(this);
+						// check if the current tab already selected
+						if($(this).hasClass("selected")){
+							return;
+						}
+
+						var contentId = $(this).attr("id");
+						contentId = contentId.replace("tab", "content");
+
+
+						// remove selected class for previous tab
+						var tmp = $("#tabbedpanels a.selected").attr("id").replace("tab", "content");
+
+						$("#tabbedpanels a.selected").removeClass("selected");
+
+						$("#"+tmp).hide();
+
+						// 	adding selected class to this tab
+						$(this).addClass("selected");
+
+						$("#"+contentId).show();
+							});
+						$("#tab5").click();
+						location.reload();
+
+
+    	         }
+    	     });
+   }
+}
+
+</script>
+<table>
+</br>
+</table>
+<form name="studentdeclaration" id="studentdeclaration" action="">
+<table border="0" padding-left = "20px" cellspacing="0" cellpadding="0" width="100%" align = "center">
+<tr><td width="25%"></td>
+<td width="50%">
+<table border="0" padding-left = "20px" cellspacing="0" cellpadding="0" width="100%" align = "center">
+</table>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+
+    <td width="100%" colspan="3" align="center"><strong><u>Declaration</u></strong> </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">&nbsp; </td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3">I agree to abide by the policies and regulations of Allianze University College of Medical Sciences. I understand that any information given falsely will affect the decision on my application, and may result in my eligibility for admission/enrollment.</td>
+  </tr>
+   <tr>
+    <td width="100%" colspan="3">&nbsp;</td>
+  </tr>
+  <tr>
+  <td><?php echo $this->lobjStudentApplicationForm->ConfirmDeclaration.' '."I Agree";?></td>
+  </tr>
+  <tr>
+    <td width="100%" colspan="3"> &nbsp;</td>
+
+  </tr>
+  <tr>
+  <?php $ldtsystemDate = date ( 'd-m-Y' );?>
+  <td>Date: <?php echo $ldtsystemDate;?></td>
+  </tr>
+  <tr>
+  <td> <input type="button" name="submit" style="width: 110px!important;" value="Submit" onclick="validateform()"><input type="button" style="width: 110px!important;" name="back" value="Back" onclick="backtoqualification()"></td>
+  </tr>
+  </table>
+  </form>

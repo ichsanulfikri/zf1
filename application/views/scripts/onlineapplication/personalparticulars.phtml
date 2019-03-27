@@ -1,0 +1,805 @@
+<?php
+if(isset($this->NameconfDetail)){
+	$nameConfDetail = $this->NameconfDetail;
+}
+if(isset($this->ExtraIdconfDetail)){
+	$ExtraIdconfDetail = $this->ExtraIdconfDetail;
+}
+if(isset($this->passportDtl)){
+	$passportDtl = $this->passportDtl;
+}
+?>
+
+<form name="newstudentapplication" id="newstudentapplication" action="" onsubmit="return validateForm()">
+<table width=width= "100%" border="0" cellspacing="10" cellpadding="10">
+	<?php $applicantdetails=$this->applicantdetails;?>
+	<tr>
+		<td><?php echo $this->translate("First").' '.$this->translate("Name");?>
+		<span class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<?php if (isset($applicantdetails['FName'])){?>
+		<td><input type="text" name="FName" id="FName" required="required" value="<?php echo $applicantdetails['FName'];?>"> <?php echo $this->lobjStudentApplicationForm->IDApplication;?>
+		<input type="Hidden" id="availRes" value="" />
+		<?php }else{?>
+		</td>
+		<td><input type="text" name="FName" id="FName" required="required"> <?php echo $this->lobjStudentApplicationForm->IDApplication;?>
+		<input type="Hidden" id="availRes" value="" />
+		</td>
+		<?php }?>
+
+	<tr>
+		<?php if (isset($applicantdetails['LName'])){?>
+		<td><?php echo $this->translate("Last").' '.$this->translate("Name");?><span
+			class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<td><input type="text" name="LName" id="LName" required="required" value="<?php echo $applicantdetails['LName'];?>">
+		</td>
+		<?php }else{?>
+		<td><?php echo $this->translate("Last").' '.$this->translate("Name");?><span
+			class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<td><input type="text" name="LName" id="LName" required="required">
+		</td>
+		<?php }?>
+	</tr>
+	</tr>
+									<!--<?php if (isset($applicantdetails['MName'])){?>
+									<td><?php echo $this->translate("Second").' '.$this->translate("Name");?></td>
+									<td><input type="text" name="MName" id="MName" value="<?php echo $applicantdetails['MName'];?>"><span id="errLName"
+										class="errors"></span></td>
+									<?php }else{?>
+									<td><?php echo $this->translate("Second").' '.$this->translate("Name");?></td>
+									<td><input type="text" name="MName" id="MName"><span id="errLName"
+										class="errors"></span></td>
+									<?php }?>
+								</tr>
+	--><!-- <tr>
+		<td><?php echo $this->translate("Third").' '.$this->translate("Name");?></td>
+		<td><input type="text" name="ThirdName" id="ThirdName"><span
+			id="errLName" class="errors"></span></td>
+
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Fourth").' '.$this->translate("Name");?></td>
+		<td><input type="text" name="FourthName" id="FourthName"><span
+			id="errLName" class="errors"></span></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Full").' '.$this->translate("Name");?><span
+			class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<td><input type="text" name="FullName" id="FullName"
+			required="required"><span id="errLName" class="errors"></span></td>
+	</tr>-->
+	<!--<tr>
+		<?php if (isset($applicantdetails['defaultlangname'])){?>
+		<td><?php echo $this->translate("Full").' '.$this->translate("Name").' '."(".$this->translate($this->defaultLanguage).")";?><span
+			class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<td><input type="text" name="defaultlangname" id="defaultlangname"
+			required="required" value="<?php echo $applicantdetails['defaultlangname'];?>"><span id="errLName" class="errors"></span></td>
+		<?php }else{?>
+		<td><?php //echo $this->translate("Full").' '.$this->translate("Name").' '."(".$this->translate($this->defaultLanguage).")";?><span
+			class="reqMark">*</span>&nbsp;&nbsp;</td>
+		<td><input type="text" name="defaultlangname" id="defaultlangname"
+			required="required"><span id="errLName" class="errors"></span></td>
+		<?php }?>
+
+	</tr>
+	--><?php
+	if(isset($nameConfDetail) && $nameConfDetail['count'] > 0){
+		$i = 1;
+		$j = 1;
+		$str = "<tr>";
+		$temp = '';
+		if($nameConfDetail['count'] == 1){
+			$field = "NameField1";
+			$temp = "<td>".$this->translate($nameConfDetail['fields'][1])."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+			$str = $str.$temp;
+		}else{
+			foreach($nameConfDetail['fields'] as $key=>$value){
+				$field = "NameField".$key;
+				if(isset($applicantdetails[$field])){
+				if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 2;
+					if($j == $nameConfDetail['count']){
+						$temp = $temp."</tr>";
+					}
+				}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 1;
+				}
+				}
+				else{
+				if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 2;
+					if($j == $nameConfDetail['count']){
+						$temp = $temp."</tr>";
+					}
+				}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 1;
+				}
+				}
+				$str = $str.$temp;
+				$j++;
+			}
+		}
+		echo $str;
+	}
+	?>
+		<!--<tr>
+			<td><h1><strong><?php echo $this->translate("Passport").' '.$this->translate("Details");?></h1></td>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Passport Issue Date");?>
+			</td>
+			<?php if(isset($applicantdetails['PPIssueDt']) && $applicantdetails['PPIssueDt']!='0000-00-00'){?>
+			<?php $ldtsystemDate = date('d-m-Y',strtotime($applicantdetails['PPIssueDt']));?>
+			<td>
+			<input type="text" id="PPIssueDt" name="PPIssueDt" class="PPIssueDt" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY
+			</td>
+			<?php }else{?>
+			<?php $ldtsystemDate = date ( 'd-m-Y' );?>
+			<td>
+			<input type="text" id="PPIssueDt" name="PPIssueDt" class="PPIssueDt" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY
+			</td>
+			<?php }?>
+		</tr>
+		<tr>
+			<td><?php echo $this->translate("Passport Expiry Date");?>
+			</td>
+			<?php if(isset($applicantdetails['PPExpDt'])&& $applicantdetails['PPIssueDt']!='0000-00-00'){?>
+			<?php $ldtsystemDate = date("d-m-Y",strtotime($applicantdetails['PPExpDt']));?>
+			<td>
+			<input type="text" id="PPExpDt" name="PPExpDt" class="PPExpDt" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY
+			</td>
+			<?php }else{?>
+			<?php $ldtsystemDate = date ( "d-m-Y" );?>
+			<td>
+			<input type="text" id="PPExpDt" name="PPExpDt" class="PPExpDt" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY
+			</td>
+			<?php }?>
+		</tr>
+		<tr>
+	--><?php
+	if(isset($passportDtl) && $passportDtl['count'] > 0){
+		$i = 1;
+		$j = 1;
+		$str = "<tr>";
+		$temp = '';
+		if($passportDtl['count'] == 1){
+			$field = "PPField1";
+			$temp = "<td>".$this->translate($passportDtl['fields'][1])."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+			$str = $str.$temp;
+		}else{
+			foreach($passportDtl['fields'] as $key=>$value){
+				$field = "PPField".$key;
+				if(isset($applicantdetails[$field])){
+					if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 2;
+					if($j == $passportDtl['count']){
+						$temp = $temp."</tr>";
+					}
+					}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 1;
+				}
+				}
+				else{
+				if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 2;
+					if($j == $passportDtl['count']){
+						$temp = $temp."</tr>";
+					}
+				}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 1;
+				}
+				}
+				$str = $str.$temp;
+				$j++;
+			}
+		}
+		echo $str;
+	}?>
+	</tr>
+	<?php
+	if(isset($ExtraIdconfDetail) && $ExtraIdconfDetail['count'] > 0){
+		$i = 1;
+		$j = 1;
+		$str = "<tr>";
+		$temp = '';
+		if($ExtraIdconfDetail['count'] == 1){
+			$field = "ExtraIdField1";
+			if($applicantdetails[$field]){
+			$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+			}
+			else{
+			$temp = "<td>".$this->translate($ExtraIdconfDetail['fields'][1])."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+			}
+			$str = $str.$temp;
+		}else{
+			foreach($ExtraIdconfDetail['fields'] as $key=>$value){
+				$field = "ExtraIdField".$key;
+				if($applicantdetails[$field]){
+				if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 2;
+					if($j == $ExtraIdconfDetail['count']){
+						$temp = $temp."</tr>";
+					}
+				}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."' value='".$applicantdetails[$field]."'></td></tr>";
+					$i = 1;
+				}
+				}
+				else{
+				if($i == 1){
+					$temp = "<tr><td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 2;
+					if($j == $ExtraIdconfDetail['count']){
+						$temp = $temp."</tr>";
+					}
+				}else{
+					$temp = "<td>".$this->translate($value)."</td><td><input type='text' name='".$field."' id='".$field."'></td></tr>";
+					$i = 1;
+				}
+				}
+				$str = $str.$temp;
+				$j++;
+			}
+		}
+		echo $str;
+	}?>
+	<tr>
+		<td><?php echo $this->translate("Date").' '.$this->translate('of').' '.$this->translate("Birth");?>
+		</td>
+		<?php if(isset($applicantdetails['DOB'])&& $applicantdetails['PPIssueDt']!='0000-00-00'){?>
+		<?php $ldtsystemDate = date('d-m-Y',strtotime($applicantdetails['DOB']));?>
+		<td><input type="text" id="DOB" name="DOB" class="DOB" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY</td>
+		<?php }else{?>
+		<?php $ldtsystemDate = date ( "d-m-Y" );?>
+				<td><input type="text" id="DOB" name="DOB" class="DOB" value="<?php echo $ldtsystemDate;?>"> *Date Format DD-MM-YYYY</td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Country of origin/Citizenship");?><span
+			class="reqMark">*</span></td>
+			<?php if(isset($applicantdetails['Nationality'])){?>
+			<td><select name="Nationality" id="Nationality" required="required" onchange = "fngetcountrycode()">
+			<option>Select</option>
+			<?php foreach($this->country as $temp) { ?>
+			<option <?php if($applicantdetails['Nationality'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+			</select></td>
+			<?php }else{?>
+		<td><select name="Nationality" id="Nationality" required="required" onchange = "fngetcountrycode()">
+			<option>Select</option>
+			<?php foreach($this->country as $temp) { ?>
+			<option value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } }?>
+		</select></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Gender");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjStudentApplicationForm->Gender;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Tel(Mobile)");?></td>
+		<?php if(isset($applicantdetails['MobileNumber']) && $applicantdetails['MobileNumber']!=''){?>
+		<td>
+		<input type="text" style="width:54px !important;" name="MobileCountryCode" id="MobileCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="MobileStateCode" style="width:54px !important;" id="MobileStateCode" value="<?php echo $applicantdetails['MobileStateCode'];?>" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="MobileNumber" id="MobileNumber" value="<?php echo $applicantdetails['MobileNumber'];?>" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }else{?>
+		<td><input type="text" style="width:54px !important;" name="MobileCountryCode" id="MobileCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="MobileStateCode" style="width:54px !important;" id="MobileStateCode" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="MobileNumber" id="MobileNumber" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Tel(Home)");?></td>
+		<?php if(isset($applicantdetails['HomeNumber']) && $applicantdetails['HomeNumber']!=''){?>
+		<td><input type="text" name="HomeCountryCode" style="width:54px !important;" id="HomeCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="HomeStateCode" style="width:54px !important;" id="HomeStateCode" value="<?php echo $applicantdetails['HomeStateCode'];?>" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="HomeNumber" id="HomeNumber" value="<?php echo $applicantdetails['HomeNumber'];?>" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }else{?>
+		<td><input type="text" name="HomeCountryCode" style="width:54px !important;" id="HomeCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="HomeStateCode" style="width:54px !important;" id="HomeStateCode" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="HomeNumber" id="HomeNumber" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Tel(Office)");?></td>
+		<?php if(isset($applicantdetails['OfficeNumber']) && $applicantdetails['OfficeNumber']!=''){?>
+		<td><input type="text" name="OfficeCountryCode" style="width:54px !important;" id="OfficeCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="OfficeStateCode" style="width:54px !important;" id="OfficeStateCode" value="<?php echo $applicantdetails['OfficeStateCode'];?>" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="OfficeNumber" id="OfficeNumber" value="<?php echo $applicantdetails['OfficeNumber'];?>" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }else{?>
+		<td><input type="text" name="OfficeCountryCode" style="width:54px !important;" id="OfficeCountryCode" value="<?php echo $this->countrycode;?>" maxlength="3" onkeypress='validate(event)' /><input type="text" name="OfficeStateCode" style="width:54px !important;" id="OfficeStateCode" maxlength="2" onkeypress='validate(event)' /><input type="text" style= "width: 250px !important;" name="OfficeNumber" id="OfficeNumber" maxlength="9" onkeypress='validate(event)' /></td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Email");?><span class="reqMark">*</span></td>
+		<td><input type="text" name="email" id="email" value="<?php echo $this->applicantEmail;?>" required="required" readonly="readonly"></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Marital").' '.$this->translate("Status");?><span class="reqMark">*</span></td>
+		<?php if(isset($applicantdetails['MaritalStatus'])){?>
+		<td>
+			<select name="MaritalStatus" id="MaritalStatus">
+			<option>Select</option>
+			<?php foreach($this->maritalstatus as $temp) { ?>
+			<option <?php if($applicantdetails['MaritalStatus'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+			</select></td>
+		<td>
+		<?php }else{?>
+		<td><select name="MaritalStatus" id="MaritalStatus">
+			<option>Select</option>
+			<?php foreach($this->maritalstatus as $temp) { ?>
+			<option value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php }?>
+		</select></td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><h3><?php echo $this->translate("Correspondence Address");?></h3></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Address1");?></td>
+		<?php if (isset($applicantdetails['CorrespondenceAdd'])){?>
+		<td><input type="text" name="CorrespondenceAdd" id="CorrespondenceAdd" value="<?php echo $applicantdetails['CorrespondenceAdd'];?>"></td>
+		<?php }else{?>
+		<td><input type="text" name="CorrespondenceAdd" id="CorrespondenceAdd"></td>
+		<?php }?>
+
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Address2");?></td>
+		<?php if (isset($applicantdetails['CorrespondenceAdd2'])){?>
+		<td><input type="text" name="CorrespondenceAdd2" id="CorrespondenceAdd2" value="<?php echo $applicantdetails['CorrespondenceAdd2'];?>"></td>
+		<?php }else{?>
+		<td><input type="text" name="CorrespondenceAdd2" id="CorrespondenceAdd2"></td>
+		<?php }?>
+
+	</tr>
+	<tr>
+	<td><?php echo $this->translate("Country");?> <span class="reqMark">*</span></td>
+		<?php if(isset($applicantdetails['CorrespondenceCountry'])){?>
+		<td><select name="CorrespondenceCountry" id="CorrespondenceCountry" onchange="fnGetStateList()">
+			<option>Select</option>
+			<?php foreach($this->country as $temp) { ?>
+			<option <?php if($applicantdetails['CorrespondenceCountry'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+			</select></td>
+		<?php }else{?>
+		<td><select name="CorrespondenceCountry" id="CorrespondenceCountry" onchange="fnGetStateList()">
+			<option>Select</option>
+			<option <?php if($applicantdetails['CorrespondenceCountry'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php foreach($this->country as $temp) { ?>
+			<option value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+		</select></td>
+		<?php }?>
+	</tr>
+
+	<tr>
+
+		<td><?php echo $this->translate("Province");?></td>
+		<?php if(isset($applicantdetails['CorrespondenceProvince'])){?>
+		<td>
+		<select name="CorrespondenceProvince" id="CorrespondenceProvince" onchange="fngetCityList()">
+			<?php foreach($this->state as $temp) { ?>
+			<option <?php if($applicantdetails['CorrespondenceProvince'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+			</select></td>
+		<?php }else{?>
+		<td><select name="CorrespondenceProvince" id="CorrespondenceProvince" onchange ="fngetCityList()">
+		</select></td>
+		<?php }?>
+
+	</tr>
+	<tr>
+	<td><?php echo $this->translate("City");?></td>
+		<?php if(isset($applicantdetails['CorrespondenceCity'])){?>
+		<td>
+		<select name="CorrespondenceCity" id="CorrespondenceCity">
+			<?php foreach($this->city as $temp) { ?>
+			<option <?php if($applicantdetails['CorrespondenceCity'] == $temp['key']) { echo "selected";} ?> value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+		</select>
+		</td>
+		<?php }else{?>
+		<td><select name="CorrespondenceCity" id="CorrespondenceCity">
+		</select></td>
+		<?php }?>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Zip");?> <span class="reqMark">*</span></td>
+		<?php if(isset($applicantdetails['CorrespondenceZip'])){?>
+		<td><input type="text" name="CorrespondenceZip" id="CorrespondenceZip" value="<?php echo $applicantdetails['CorrespondenceZip'];?>"></td>
+		<?php }else{?>
+		<td><input type="text" name="CorrespondenceZip" id="CorrespondenceZip"></td>
+		<?php }?>
+	</tr>
+	<!--
+	<tr>
+		<td><?php echo $this->translate("Program Level/Award");?><span
+			class="reqMark">*</span></td>
+		<td><select name="AwardLevel" id="AwardLevel" required="required">
+			<option>Select</option>
+			<?php foreach($this->award as $temp) { ?>
+			<option value="<?php echo $temp['key'] ;?>"><?php echo $temp['value']; ?></option>
+			<?php } ?>
+		</select></td>
+
+	</tr>
+	--><tr>
+		<td colspan="4" align="right">
+		<input type="button" name="submit" value="Save & Next" onclick="validateForm()"/>
+		</td>
+	</tr>
+
+</table>
+</form>
+<script type="text/javascript">
+//dojo.addOnLoad(function(){
+//	fnGetStateList();
+//});
+var univflag = false;
+
+function fngetcountrycode(){
+	idCountry = document.getElementById("Nationality").value;
+	if(idCountry != "")
+	{
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getcountrycode/idCountry/"+idCountry,
+				handleAs:'json',
+				load:function(data){
+						$('#MobileCountryCode').val(data['value']);
+						$('#HomeCountryCode').val(data['value']);
+						$('#OfficeCountryCode').val(data['value']);
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+}
+
+function fnGetStateList(){
+	idCountry = document.getElementById("CorrespondenceCountry").value;
+	if(idCountry != "")
+	{
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getcountrystateslistonlineapp/idCountry/"+idCountry,
+				handleAs:'json',
+				load:function(data){
+					AutoFillDropDown("CorrespondenceProvince",data);
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+	fnGetmatchcountry(idCountry);
+}
+
+function fnGetmatchcountry(idCountry){
+	if(idCountry != "")
+	{
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/matchapplicantcoutry/idCountry/"+idCountry,
+				handleAs:'json',
+				load:function(data){
+					if(data == 1){
+					 	univflag = true;
+					}
+					else{
+						univflag = false;
+					}
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+}
+
+function AutoFillDropDown(EditableDropDownId,JSONText){
+		EditableDropDownId	= document.getElementById(EditableDropDownId);
+		var listItems = " ";
+		 listItems+= "<option>" + "Select" + "</option>";
+		for (var i = 0; i < JSONText.length; i++){
+		      listItems+= "<option value='" + JSONText[i].key + "'>" + JSONText[i].name + "</option>";
+				 }
+		$(EditableDropDownId).html(listItems);
+}
+
+function fngetCityList(){
+	idState = document.getElementById("CorrespondenceProvince").value;
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getstatecitylistonlineapp/idState/"+idState,
+					handleAs:'json',
+					load:function(data){
+						AutoFillDropDown("CorrespondenceCity",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+}
+
+function validateForm(){
+	var flag = true;
+	if(document.getElementById("FName").value == ""){
+		document.getElementById("FName").focus();
+		alert("Please Fill Blank Name Field");
+		return false;
+	}
+	if(document.getElementById("LName").value == ""){
+		document.getElementById("LName").focus();
+		alert("Please Fill Blank Name Field");
+		return false;
+	}
+	if(document.getElementById("ExtraIdField1").value == ""){
+		document.getElementById("ExtraIdField1").focus();
+		alert("Please Fill ID Field");
+		return false;
+	}
+	if(document.getElementById("Nationality").value == "Select"){
+		document.getElementById("Nationality").focus();
+		alert("Please select Country of origin/Citizenship");
+		return false;
+	}
+	if(document.getElementById("MaritalStatus").value == "Select"){
+		document.getElementById("MaritalStatus").focus();
+		alert("Please select Marital Status");
+		return false;
+	}
+	if(document.getElementById("CorrespondenceAdd").value == "" && document.getElementById("CorrespondenceAdd2").value == ""){
+		document.getElementById("CorrespondenceAdd").focus();
+		alert("Please enter Address1/Address2");
+		return false;
+	}
+	if(document.getElementById("CorrespondenceCountry").value == "Select"){
+		document.getElementById("CorrespondenceCountry").focus();
+		alert("Please select correspondence country");
+		return false;
+	}
+
+	if(univflag){
+		if(document.getElementById("CorrespondenceProvince").value == "Select"){
+			document.getElementById("CorrespondenceProvince").focus();
+			alert("Please select province");
+			return false;
+		}
+		if(document.getElementById("CorrespondenceCity").value == "Select"){
+			document.getElementById("CorrespondenceCity").focus();
+			alert("Please select city");
+			return false;
+		}
+
+	}
+	
+	if(document.getElementById("CorrespondenceZip").value == ""){
+		document.getElementById("CorrespondenceZip").focus();
+		alert("Please select correspondence zip");
+		return false;
+	}
+
+	
+	
+//	if(document.getElementById("AwardLevel").value == "Select"){
+//		document.getElementById("AwardLevel").focus();
+//		alert("Please select an Program Level/Award");
+//		return false;
+//	}
+	flag = checkphonefield();
+	 var values = $('#newstudentapplication').serialize();
+	 if(flag == true){
+	 $.ajax({
+         type: 'POST',
+         url: '<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'addpersonalparticulars'),'default',true);?>',
+         async: false,
+         data: values,
+         success: function(responseText) {
+             console.log(responseText);
+             var obj = jQuery.parseJSON(responseText);
+             console.log(obj['email']);
+             if(obj['key'] == "true"){
+            	 window.location.href = "<?php echo $this->baseUrl();?>/onlineapplication/applicationstatus/email/"+obj['email'];
+             }
+             else if(obj['key'] == "false"){
+
+             	$("#tab2").live('click',function(){
+             		var activeTab = $(this);
+             		// check if the current tab already selected
+					if($(this).hasClass("selected")){
+						return;
+					}
+
+					var contentId = $(this).attr("id");
+					contentId = contentId.replace("tab", "content");
+
+
+					// remove selected class for previous tab
+					var tmp = $("#tabbedpanels a.selected").attr("id").replace("tab", "content");
+
+					$("#tabbedpanels a.selected").removeClass("selected");
+
+					$("#"+tmp).hide();
+
+					// 	adding selected class to this tab
+					$(this).addClass("selected");
+
+					$("#"+contentId).show();
+				});
+             	$("#tab2").click();
+             }
+         }
+             });
+	 }
+}
+
+
+function validate(evt) {
+	  var theEvent = evt || window.event;
+	  var key = theEvent.keyCode || theEvent.which;
+	  key = String.fromCharCode( key );
+	  var regex = /[0-9]|\./;
+	  if( !regex.test(key) ) {
+	    theEvent.returnValue = false;
+	    alert("only digits are allowed");
+	    if(theEvent.preventDefault) theEvent.preventDefault();
+	  }
+	}
+function checkphonefield(){
+	 var mobilephone = document.getElementById("MobileNumber").value;
+	 var mobilecountrycode = document.getElementById('MobileCountryCode').value;
+	 var mobilestatecode = document.getElementById('MobileStateCode').value;
+
+	 var homephone = document.getElementById("HomeNumber").value;
+	 var homecountrycode = document.getElementById('HomeCountryCode').value;
+	 var homestatecode = document.getElementById('HomeStateCode').value;
+
+	 var officephone = document.getElementById("OfficeNumber").value;
+	 var officecountrycode = document.getElementById('OfficeCountryCode').value;
+	 var officestatecode = document.getElementById('OfficeStateCode').value;
+
+//	 if(mobilecountrycode!=''){
+//		   if(mobilestatecode == ''){
+//			document.getElementById("MobileStateCode").focus();
+//		    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//		    return false;
+//		   }
+//		   if(mobilephone == ''){
+//			document.getElementById("MobileNumber").focus();
+//		    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//		    return false;
+//		   }
+//		 }
+
+		 if(mobilestatecode!=''){
+		   if(mobilecountrycode == ''){
+			document.getElementById("MobileCountryCode").focus();
+		    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+		    return false;
+		   }
+		   if(mobilephone == ''){
+			   document.getElementById("MobileNumber").focus();
+			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+			    return false;
+		   }
+		 }
+		  if(mobilephone != ''){
+		    var len = mobilephone.length;
+		    if(len < 5){
+		      document.getElementById("MobileNumber").focus();
+		      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+		      return false;
+		    }
+		    if(mobilecountrycode == ''){
+		    	document.getElementById("MobileCountryCode").focus();
+			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+			    return false;
+		    }
+		    if(mobilestatecode == ''){
+		    	document.getElementById("MobileStateCode").focus();
+			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+			    return false;
+		    }
+		  }
+//		  if(homecountrycode!=''){
+//			   if(homestatecode == ''){
+//				document.getElementById("HomeStateCode").focus();
+//			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//
+//			    return false;
+//			   }
+//			   if(homephone == ''){
+//				document.getElementById("HomeNumber").focus();
+//			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//
+//			    return false;
+//			   }
+//			 }
+
+			 if(homestatecode!=''){
+			   if(homecountrycode == ''){
+				document.getElementById("HomeCountryCode").focus();
+			    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+			    return false;
+			   }
+			   if(homephone == ''){
+				   document.getElementById("HomeNumber").focus();
+				    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+				    return false;
+			   }
+			 }
+			  	if(homephone!=''){
+			    var len = homephone.length;
+			    if(len < 5){
+			      document.getElementById("HomeNumber").focus();
+			      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+			      return false;
+			    }
+			    if(homecountrycode == ''){
+			    	document.getElementById("HomeCountryCode").focus();
+				    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+				   return false;
+			    }
+			    if(homestatecode == ''){
+			    	document.getElementById("HomeStateCode").focus();
+				    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+				    return false;
+			    }
+			  }
+//			  	if(officecountrycode!=''){
+//					   if(officestatecode == ''){
+//						document.getElementById("OfficeStateCode").focus();
+//					    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//
+//					    return false;
+//					   }
+//					   if(officephone == ''){
+//						document.getElementById("OfficeNumber").focus();
+//					    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+//
+//					    return false;
+//					   }
+//					 }
+
+					 if(officestatecode!=''){
+					   if(officecountrycode == ''){
+						document.getElementById("OfficeCountryCode").focus();
+					    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+					    return false;
+					   }
+					   if(officephone == ''){
+						   document.getElementById("OfficeNumber").focus();
+						    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+
+						    return false;
+					   }
+					 }
+					  	if(officephone!=''){
+					    var len = officephone.length;
+					    if(len < 5){
+					      document.getElementById("OfficeNumber").focus();
+					      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+					      return false;
+					    }
+					    if(officecountrycode == ''){
+					    	document.getElementById("OfficeCountryCode").focus();
+						    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+						   return false;
+					    }
+					    if(officestatecode == ''){
+					    	document.getElementById("OfficeStateCode").focus();
+						    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+						    return false;
+					    }
+					  }
+
+					  if(mobilestatecode == '' && homestatecode == '' && officestatecode == ''){
+						  document.getElementById("MobileStateCode").focus();
+						  alert('Please enter atleast one telephone number (Mobile/Office/Home)');
+						  return false;
+					  }
+						  
+	 return true;
+	}
+
+</script>

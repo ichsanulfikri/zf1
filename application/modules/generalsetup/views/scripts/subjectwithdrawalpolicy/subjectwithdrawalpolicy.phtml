@@ -1,0 +1,144 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+
+	});
+
+var rowid = <?php echo count($this->paginator)+1;?>;
+function addSubjectwithdrawalpolicyDetails() {
+	
+	var IdSemester = dijit.byId("IdSemester").value;
+	var IdSemesterName = dijit.byId("IdSemester").displayedValue;		
+	var Days = dojo.byId("Days").value;
+	var Percentage = dijit.byId("Percentage").value;
+	var subjectname=dijit.byId("subjectname");
+
+	if(Days==''){
+	    dijit.byId("Days").attr('required','true');
+		dijit.byId("Days").focus();
+	return false;
+	}
+	if(Percentage==''){
+	    dijit.byId("Percentage").attr('required','true');
+		dijit.byId("Percentage").focus();
+	return false;
+	}
+	
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);
+		var tcol3=trow.insertCell(2);
+		var tcol4=trow.insertCell(3);
+		var tcol5=trow.insertCell(4);
+		var tcol6=trow.insertCell(5);
+		
+		
+		
+		tcol1.innerHTML= "<?php echo $this->SubName;?>";
+		tcol2.innerHTML= "<?php echo $this->SubCode;?>";
+		tcol3.innerHTML="<input type='hidden' value='"+IdSemester+"' name=IdSemestergrid[]><input type='hidden' value='"+IdSemesterName+"' name=IdSemesterNamegrid[]>"+IdSemesterName;
+		tcol4.innerHTML="<input type='hidden' value='"+Days+"' name=Daysgrid[]>"+Days;
+		tcol5.innerHTML="<input type='hidden' value='"+Percentage+"' name=Percentagegrid[]>"+Percentage;	
+		tcol6.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowid++;
+	
+}
+
+function deleteRow(r)
+{
+	rowid--;
+	
+	var i=r.parentNode.parentNode.rowIndex;
+	document.getElementById('hor').deleteRow(i);
+	
+}
+
+</script>
+<fieldset>
+<legend><?php echo $this->translate("Subject Withdrawal").' '.$this->translate("Policy");?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php echo $this->lobjSubjectwithdrawalpolicyform->UpdDate;?>
+		<?php echo $this->lobjSubjectwithdrawalpolicyform->UpdUser;?>		
+		<?php echo $this->lobjSubjectwithdrawalpolicyform->IdSubject;?>
+		
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Subject").' '.$this->translate("Withdrawal").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Subject").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+				<td><?php echo $this->SubName; ?></td>
+				<td><?php echo $this->translate("Subject Short Name");?><span class="reqMark"></span></td>
+				<td><?php echo $this->SubCode;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Select").' '.$this->translate("Semester");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjSubjectwithdrawalpolicyform->IdSemester; ?></td>
+				<td><?php echo $this->translate("No of Days");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjSubjectwithdrawalpolicyform->Days;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Percentage of").' '.$this->translate("Deduction");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjSubjectwithdrawalpolicyform->Percentage;?></td>
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->lobjSubjectwithdrawalpolicyform->Active;?>				
+				</td>
+			</tr>
+			<tr>
+				<td colspan = "4" align = "right"><?php echo $this->lobjSubjectwithdrawalpolicyform->Add;?></td>
+			</tr>
+				
+		</table>
+		<table id="hor"  class="table" width="100%" cellpadding="5" cellspacing="1">
+						<tr>               
+							<th><?php echo $this->translate("Subject").' '.$this->translate("Name")?></th>    
+							<th><?php echo $this->translate("Subject").' '.$this->translate("Short Name")?></th>             
+							<th><?php echo $this->translate("Semester").' '.$this->translate("Name");?></th>
+							<th><?php echo $this->translate("No:Of").' '.$this->translate("Days")?></th>
+							<th><?php echo $this->translate("Percentage Of").' '.$this->translate("Deduction")?></th>							
+							<th><?php echo $this->translate("Delete")?></th>							
+						</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjSubjectwithdrawpolicyList): ?>
+					<tr>
+						<td>											
+						<?php echo $this->escape($lobjSubjectwithdrawpolicyList['SubjectName']);?>							
+						</td>
+						<td><?php  echo ($this->escape($lobjSubjectwithdrawpolicyList['SubCode']));?></td>
+						<td><?php print_r($this->escape($lobjSubjectwithdrawpolicyList['SemesterMasterName']." ".$lobjSubjectwithdrawpolicyList['year']));?>
+						<input type='hidden' value="<?php echo $this->escape($lobjSubjectwithdrawpolicyList['IdSemester']);?>" name=IdSemestergrid[]>
+						<input type='hidden' value="<?php echo $this->escape($lobjSubjectwithdrawpolicyList['SemesterMasterName']);?>" name=IdSemesterNamegrid[]>
+						</td>
+						<td><?php print_r($this->escape($lobjSubjectwithdrawpolicyList['Days']));?>
+						<input type='hidden' value="<?php echo $this->escape($lobjSubjectwithdrawpolicyList['Days']);?>" name=Daysgrid[]>
+						</td>
+						<td><?php print_r($this->escape($lobjSubjectwithdrawpolicyList['Percentage']));?>
+						<input type='hidden' value="<?php echo $this->escape($lobjSubjectwithdrawpolicyList['Percentage']);?>" name=Percentagegrid[]>
+						</td>
+						<td><a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+						
+					</tr>
+				<?php endforeach;
+			endif; ?>
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjSubjectwithdrawalpolicyform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectwithdrawalpolicy', 'action'=>'index'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>	
+
+
+
+	

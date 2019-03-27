@@ -1,0 +1,35 @@
+<fieldset>
+	<legend><?php echo $this->translate("Change Password")?></legend>
+	<form dojoType="dijit.form.Form"  id="myForm" name="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/changepassword/index" method="post" onsubmit="return checkform();">
+        <script type="dojo/method" event="onSubmit">
+            if (this.validate()) {
+				return true;
+            } else {
+                return false;
+            }
+		</script>  
+		<table width="100%" class = "table">
+			<tr>
+				<th colspan = "2"><?php echo $this->translate('Change').' '.$this->translate('Password');?></th>
+			</tr>
+			<tr>
+	           	<td><?php echo $this->translate("Old Password")?><span class="reqMark">*</span></td>
+				<td><?php echo $this->form->oldpassword;?></td>
+        	</tr>
+			<tr>
+    	        <td><?php echo $this->translate("New Password")?><span class="reqMark">*</span></td>
+				<td><?php  echo $this->form->newpassword; echo "<br/>"; ?></td>
+	        </tr>
+			<tr>
+        	    <td><?php echo $this->translate("Retype Password")?><span class="reqMark">*</span></td>
+				<td><?php echo $this->form->retypepassword; ?></td>
+    	    </tr>
+			<tr>
+				<td colspan="2" align = "right">
+					<?php echo $this->form->Save;?>
+					<input name="submit" type="button" class="NormalBtn" value="Clear" dojotype="dijit.form.Button" label="Clear" onclick="javascript:window.location.href='<?php echo $this->baseUrl();?>/generalsetup/changepassword/index'">
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>

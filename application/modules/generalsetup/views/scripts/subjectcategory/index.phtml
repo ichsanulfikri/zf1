@@ -1,0 +1,53 @@
+<script>
+		dojo.addOnLoad(function(){
+			//OnLoadAction();
+			dijit.byId('field5').set('value','');
+			dijit.byId('field5').set('placeHolder','Select');
+			
+             });
+             </script>
+<fieldset>
+<legend><?php echo $this->translate("Subject Category");?></legend>
+<form action="<?php echo $this->baseUrl();?>/generalsetup/subjectcategory/index/search/1" method="POST">
+				<table width="100%">
+    							 <tr>
+                                    <td><?php echo $this->translate('Subject').' '.$this->translate("Category").' '.$this->translate("Name");?></td>
+                                    <td><?php echo $this->lobjform->field5;?></td>
+                                   	<td><?php echo $this->translate('Description');?></td>
+     								<td><?php echo $this->lobjform->field3;?></td>
+                                </tr>
+                                <tr>                              	
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                    <td align = "center" colspan = "4">
+								        <?php echo $this->lobjform->Search;?>
+								        <input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectcategory', 'action'=>'newsubjectcategory'),'default',true);?>';" />	
+								        <?php echo $this->lobjform->Clear;?>
+								    </td>
+                                </tr>
+                </table>
+</form>	
+</fieldset> 
+<!--  Grid Display -->       
+<fieldset>
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    <tr>
+    	<th><?php echo $this->translate("Subject Category Name")?></th>
+    	<th><?php echo $this->translate("Description")?></th>
+    </tr>
+        <?php if (count($this->paginator)): ?>
+        <?php foreach ($this->paginator as $arrsubjectcategory ): ?>
+    <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+   		<td><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectcategory', 'action'=>'editsubjectcategory' , 'id'=>$arrsubjectcategory['IdSubjectCategory']),'default',true);?>" ><?php echo($this->escape($arrsubjectcategory['SubjectCategoryName']));?></a></td> 
+    	
+    	<td><?php echo $this->escape($arrsubjectcategory['Description']);?></td>
+    	<?php endforeach; ?>
+        <?php endif; ?>
+    </tr>
+    <tr>
+	    <td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+    </tr>
+</table>
+</fieldset>      

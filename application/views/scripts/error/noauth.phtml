@@ -1,0 +1,42 @@
+<div class="message error"><strong><?php echo $this->translate('You are not Authorized to view this page');?></strong>.</div>
+<br />
+<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url; ?>';" />
+
+
+<?php 
+if( isset($this->admin) && $this->admin == true){
+?>
+
+ <?php if (isset($this->exception)): ?>
+
+  <h3>Exception information:</h3>
+  <p>
+      <b>Message:</b> <?php echo $this->exception->getMessage() ?>
+  </p>
+
+  <h3>Stack trace:</h3>
+  <pre><?php echo $this->exception->getTraceAsString() ?>
+  </pre>
+
+  <h3>Request Parameters:</h3>
+  <pre><?php echo var_export($this->request->getParams(), true) ?>
+  </pre>
+  <?php endif ?>
+
+
+<fieldset style="margin: 10px 0;">
+	<legend>Admin Option</legend>
+	<form method="post" action="/generalsetup/resource/add-admin-role-resource">
+		<h3>Assign access to admin?</h3>
+		<input type="radio" name="assign" value="1" checked="checked" /> Yes &nbsp;
+		<input type="radio" name="assign" value="0" /> No
+		
+		<input type="hidden" name="idResources" value="<?php echo $this->resource['idResources']; ?>" />
+		<input type="hidden" name="path" value="<?php echo $this->path; ?>" />
+		<br />
+		<input type="submit" value="Update ACL" />
+	</form>
+</fieldset>
+<?php 
+}
+?>

@@ -1,0 +1,49 @@
+<fieldset>
+    <legend><?php echo $this->translate("Language");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/language/newlang" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Language").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("System");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjlonguageForm->system;?>
+                            	<?php echo $this->lobjlonguageForm->createddt;?>
+                            	<?php echo $this->lobjlonguageForm->Language;?>
+                            	<?php echo $this->lobjlonguageForm->createdby;?></td>
+                            <!--<td ><?php echo $this->translate("English");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjlonguageForm->english;?></td>
+                        --></tr>
+                         <tr>
+                            <!--<td ><?php echo $this->translate("System");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjlonguageForm->system;?>
+                            	<?php echo $this->lobjlonguageForm->createddt;?>
+                            	<?php echo $this->lobjlonguageForm->Language;?>
+                            	<?php echo $this->lobjlonguageForm->createdby;?></td>
+                            --><td ><?php echo $this->translate("English");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjlonguageForm->english;?></td>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate($this->Language);?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjlonguageForm->arabic;?></td>
+                           
+                        </tr>
+               			<tr>
+                            <td colspan=4 align = "right"><?php echo $this->lobjlonguageForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'language', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                               
+                        </tr>           
+                        
+              </table>
+            
+            </Form>
+
+</fieldset>

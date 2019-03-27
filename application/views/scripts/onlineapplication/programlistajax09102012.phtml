@@ -1,0 +1,7 @@
+<select id="program_<?php echo $this->intake;?>" class="" style="width:200px;" name="program_<?php echo $this->intake?>">
+  <option value=''>select</option>
+<?php foreach($this->program as $program){?>
+  <option value='<?php echo $program['key'];?>'><?php echo $program['value']; ?></option>
+  <?php } ?>
+</select>
+<?php exit; ?>

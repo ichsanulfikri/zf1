@@ -1,0 +1,87 @@
+<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>
+<fieldset>
+	<legend><?php echo $this->translate("Results");?></legend>
+		<form dojoType="dijit.form.Form" action="" method="POST"  name= "myform" id= "myform">
+			<script type="dojo/method" event="onSubmit">
+  				if (this.validate()) {
+				return true;
+				} else {
+				return false;}
+
+			</script>
+			<table class="table" width="100%" >
+				<tr>
+					<td align = "center"><?php echo $this->translate("To check application Results, please enter Applicant ID. ");?><span class="reqMark">*</span></td>
+				</tr>
+				<tr>
+					<td align = "center"><input type = "text" name = "ICNumber" value = "" dojoType = "dijit.form.ValidationTextBox" required = "true"></td>
+				</tr>
+				<tr>
+                	<td colspan = "4" align = "right">
+                		<input type = "submit" name = "Save" value = "Save" dojotype="dijit.form.Button" class="NormalBtn" label="<?php echo $this->translate("Search"); ?>">
+						<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'default','controller'=>'index', 'action'=>'index'),'default',true);?>';" />	
+                     </td> 
+				</tr>	
+			</table>
+		</form>
+</fieldset>
+<br/>
+<?php if(COUNT($this->sdudentresults) > 0) {?>
+
+<legend><?php echo $this->translate("Results");?></legend>
+<br/>
+		<table class="table" width="100%" >
+			<?php foreach ($this->sdudentresults as $lobjStudentName ): ?>
+			<?php endforeach; ?>
+				<tr>
+					<td><b><?php echo $this->translate("Student Name");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['FName']).' '.$this->escape($lobjStudentName['LName']);?></td>
+					<td><b><?php echo $this->translate("Applicant Id");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['StudentId']);?></td>
+					<td><b><?php echo $this->translate("Program Name");?><b></td>
+					<td><?php echo $this->escape($lobjStudentName['ProgramName']);?></td>
+				</tr>	
+
+		</table>
+<br/>
+		<table class="table" width="100%" >
+			<tr>
+				<th><?php echo $this->translate("Plcament Test");?></th>
+				<th><?php echo $this->translate("Component Name");?></th>
+				<th><?php echo $this->translate("Weightage");?></th>
+				<th><?php echo $this->translate("Total Marks");?></th>
+				<th><?php echo $this->translate("Minimum Marks");?></th>
+				<th><?php echo $this->translate("Marks Obtained");?></th>
+				<th><?php echo $this->translate("Pass/Fail");?></th>
+			</tr>
+
+			
+			
+			<?php foreach ($this->sdudentresults as $lobjStudentResults ): ?>
+				<tr>
+					<td><?php echo $this->escape($lobjStudentResults['PlacementTestName']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['ComponentName']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['ComponentWeightage']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['ComponentTotalMarks']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['MinimumMark']);?></td>
+					<td><?php echo $this->escape($lobjStudentResults['Marks']);?></td>
+					<?php if($lobjStudentResults['Marks'] < $lobjStudentResults['MinimumMark']) { ?>
+						<td><?php echo $this->translate("Fail");?></td>
+					<?php } else { ?>
+						<td><?php echo $this->translate("Pass");?></td>
+					<?php } ?>
+				</tr>
+			<?php endforeach; ?>
+		</table>
+</fieldset>
+<?php } else { ?>
+		<table class="table" width="100%">
+			<tr >
+				<th ><?php echo $this->noresults;?></th>
+			</tr>
+		</table>	
+<?php } ?>

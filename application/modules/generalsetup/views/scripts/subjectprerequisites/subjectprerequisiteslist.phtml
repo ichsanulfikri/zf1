@@ -1,0 +1,346 @@
+<head>
+
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+
+	dijit.byId('IdRequiredSubject').set('value','');
+	dijit.byId('IdRequiredSubject').set('placeHolder','Select');
+	dijit.byId('PrerequisiteType').set('value','');
+	dijit.byId('PrerequisiteType').set('placeHolder','Select');
+	dijit.byId('PrerequisiteGrade').set('value','');
+	dijit.byId('PrerequisiteGrade').set('placeHolder','Select');
+	dojo.byId("branch_row1").style.display = "none";
+	dojo.byId("branch_row2").style.display = "none";
+	
+	});
+var rowid = 1;
+
+function AddSubjectPrerequisitesDetails() {
+	var flag = true;
+	if(dijit.byId("IdCollege")==''){
+	    dijit.byId("IdCollege").attr('required','true');
+		dijit.byId("IdCollege").focus();flag = false;
+	}	
+	if(dijit.byId("IdDepartment")==''){
+	    dijit.byId("IdDepartment").attr('required','true');
+		dijit.byId("IdDepartment").focus();flag = false;
+	}
+	if(dijit.byId("IdRequiredSubject")==''){
+	    dijit.byId("IdRequiredSubject").attr('required','true');
+		dijit.byId("IdRequiredSubject").focus();flag = false;
+	}
+
+
+	if(dijit.byId("PrerequisiteType")==''){
+	    dijit.byId("PrerequisiteType").attr('required','true');
+		dijit.byId("PrerequisiteType").focus();flag = false;
+	}
+	var PrerequisiteType = dijit.byId("PrerequisiteType");
+	
+	if(PrerequisiteType == "0"){
+		if(dijit.byId("PrerequisiteGrade").value==''){
+		    dijit.byId("PrerequisiteGrade").attr('required','true');
+			dijit.byId("PrerequisiteGrade").focus();flag = false;
+		}
+
+	}
+	var MinCreditHours = dijit.byId("MinCreditHours").value;
+
+	if(MinCreditHours == ""){
+		if(dijit.byId("MinCreditHours").value==''){
+		    dijit.byId("MinCreditHours").attr('required','true');
+			dijit.byId("MinCreditHours").focus();flag = false;
+		}
+
+	}
+
+	if(flag == true) {
+		SubjectPrerequisitesInsert();	
+	}			
+	return flag;
+}
+var subjectArray  = new Array();
+var oldContent = "";
+var NoCnt	=	0;
+
+<?php
+if($this->resultTempsubjectprerequisitest){
+	foreach($this->resultTempsubjectprerequisitest as $resultTempsubjectprerequisitest) { ?>		
+	subjectArray.push('<?php echo $resultTempsubjectprerequisitest['SubjectName']?>');
+	<?php
+	}
+}
+
+?>
+
+
+function fngrade() {
+	var PrerequisiteType = dijit.byId("PrerequisiteType");
+	
+	if(PrerequisiteType == "1"){
+		dijit.byId("PrerequisiteGrade").setValue('Complete Subject');
+		dojo.byId("branch_row1").style.display = "none";
+		dojo.byId("branch_row2").style.display = "none";
+
+	}else {
+		dijit.byId("PrerequisiteGrade").setValue('');
+		dojo.byId("branch_row1").style.display = "inline";
+		dojo.byId("branch_row2").style.display = "inline";
+
+	}
+
+	
+}
+
+function SubjectPrerequisitesInsert() {
+	
+	var IdRequiredSubject = dijit.byId("IdRequiredSubject");
+	var IdRequiredSubjectname = dijit.byId("IdRequiredSubject").displayedValue;
+	var SubjectCode = dijit.byId("SubjectCode").value;
+	var PrerequisiteType = dijit.byId("PrerequisiteType");
+	var PrerequisiteTypename = dijit.byId("PrerequisiteType").displayedValue;
+
+
+	var PrerequisiteType = dijit.byId("PrerequisiteType").value;
+
+	var MinCreditHours = dijit.byId("MinCreditHours").value;
+	
+	if(PrerequisiteType == "1"){
+		var PrerequisiteGrade = 'Complete Subject';
+		var PrerequisiteGradename = 'Complete Subject';
+		
+	}else {
+		var PrerequisiteGrade = dijit.byId("PrerequisiteGrade").value;
+		var PrerequisiteGradename = dijit.byId("PrerequisiteGrade").displayedValue;
+
+	}
+	
+	subjectArray.push(IdRequiredSubjectname);
+	if(arrHasDupes(subjectArray))
+	{
+		subjectArray = subjectArray.unique();
+		alert("Duplicate Subject Name");
+	} else {
+	var trow=document.getElementById('hor').insertRow(rowid);
+	var tcol1=trow.insertCell(0);
+	var tcol2=trow.insertCell(1);
+	var tcol3=trow.insertCell(2);
+	var tcol4=trow.insertCell(3);
+	var tcol5=trow.insertCell(4);
+	var tcol6=trow.insertCell(5);
+
+	tcol1.innerHTML="<input type='hidden' value='"+IdRequiredSubject+"' name=IdRequiredSubjectgrid[]>"+IdRequiredSubjectname;
+	tcol2.innerHTML=""+SubjectCode;
+	tcol3.innerHTML="<input type='hidden' value='"+PrerequisiteType+"' name=PrerequisiteTypegrid[]>"+PrerequisiteTypename;	
+	tcol4.innerHTML="<input type='hidden' value='"+PrerequisiteGrade+"' name=PrerequisiteGradegrid[]>"+PrerequisiteGradename;
+	tcol5.innerHTML="<input type='hidden' value='"+MinCreditHours+"' name=MinCreditHoursgrid[]>"+MinCreditHours;	
+	tcol6.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+	rowid++;
+	}
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+Array.prototype.unique = function () {
+    var r = new Array();
+    o:for(var i = 0, n = this.length; i < n; i++)
+    {
+        for(var x = 0, y = r.length; x < y; x++)
+        {
+                if(r[x]==this[i])
+                {
+                	continue o;
+                }
+                
+        }
+        r[r.length] = this[i];
+    }
+    return r;
+}
+function deleteRow(r)
+{
+	rowid--;
+	var i=r.parentNode.parentNode.rowIndex;
+	subjectArray.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+	
+}
+function deletesubjectprerequisites(IdTempSubjectPrerequisites) {
+	var xhrArgs = {url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectprerequisites/deletesubjectprerequisites/IdTempSubjectPrerequisites/"+IdTempSubjectPrerequisites,
+			handleAs:'json',
+			load:function(data){ 
+				if(data == '1') {
+					window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/subjectprerequisites/subjectprerequisiteslist/id/<?php echo $this->idsubject;?>/update/true"
+				}
+			}
+	}
+	dojo.xhrPost(xhrArgs); 
+}
+function fnGetDepartmentList(idCollege){ 
+	
+	if(idCollege != "")
+		{ 
+			var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectprerequisites/getdepartmentlist/idCollege/"+idCollege,
+				handleAs:'json',
+				load:function(data){ 
+					AutoFillNextEditableDropDown("IdDepartment",data); 
+				}
+		   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	}
+
+function fnGetSubjectList(iddepartment){ 
+	var idsubject= dijit.byId("IdSubject").value;
+
+	if(iddepartment != "" || iddepartment != undefined)
+		{ 
+			var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectprerequisites/getsubjectlist/iddepartment/"+iddepartment+"/idsubject/"+idsubject,
+				handleAs:'json',
+				load:function(data){ 
+					AutoFillNextEditableDropDown("IdRequiredSubject",data); 
+				}
+		   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	}
+
+
+function fnGetSubjectCode(idsubject) {
+	if(idsubject != "" || idsubject != undefined)
+	{ 
+		var xhrArgs = {
+			url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectprerequisites/getsubjectcode/idsubject/"+idsubject,
+			handleAs:'text',
+			load:function(data){ 
+				dijit.byId('SubjectCode').set('value',data);
+			}
+	   }
+		dojo.xhrGet(xhrArgs); 
+	} 
+}
+
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+	    var options = {
+						label:"name",
+						identifier:"key",
+						items:JSONText
+					  };
+	    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}	
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("$this->Subject").' '.$this->translate("Prerequisites");?></legend>
+                 <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/subjectprerequisites/subjectprerequisiteslist/id/<?php echo $this->idsubject; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+				
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"> <?php echo $this->translate("$this->Subject").' '.$this->translate("Prerequisites").' '.$this->translate("Details");?></th>
+                           
+                        </tr>
+                        <tr>
+                        	<th ><?php echo $this->translate("$this->Subject Name");?></th>
+                            <td ><?php echo $this->SubjectName;?></td>
+                            <td></td>
+                            <td> <?php echo $this->lobjSubjectprerequisitesForm->IdSubjectPrerequisites;?></td>
+                        </tr>
+                      	
+                        <tr> 
+                        	<th ><?php echo $this->translate("$this->Subject").' '.$this->translate("Code");?></th>
+                            <td ><?php echo $this->SubCode;?></td>
+                            <td></td>
+                            <td></td>
+                        	
+                        </tr>
+                         <br/>
+                         <tr>
+                            <th colspan = "4"> <?php echo $this->translate("Add").' '.$this->translate("New").' '.$this->translate("$this->Subject").' '.$this->translate("Prerequisites");?></th>
+                        </tr>
+                            <td ><span id="label1"><?php echo $this->translate("$this->Subject");?></span><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjSubjectprerequisitesForm->IdRequiredSubject;?></td>
+                            <td ><?php echo $this->translate("Pass").' '.$this->translate("Grade");?></span><span class="reqMark">*</span></td>
+                            <td> <?php echo $this->lobjSubjectprerequisitesForm->PrerequisiteType;?>
+                            <?php echo $this->lobjSubjectprerequisitesForm->SubjectCode;?>
+                            <?php echo $this->lobjSubjectprerequisitesForm->IdSubject;?>	
+                         	<td></td>
+                        </tr>
+                        <tr> 
+                        	<td ><span id="branch_row1"><?php echo $this->translate("Grade");?></span></td>
+                            <td ><span id="branch_row2"><?php echo $this->lobjSubjectprerequisitesForm->PrerequisiteGrade;?></span></td>
+                            <td></td>
+                           	<td></td>
+                        </tr>
+                        <tr>
+                       			 <td><?php echo $this->translate("Min Credit").' '.$this->translate("Hours");?></td>
+                       			 <td><?php echo $this->lobjSubjectprerequisitesForm->MinCreditHours;?></td>
+                       			 <td></td>
+                       			 <td></td>
+                        </tr>
+                        <tr>
+							<td align="right" colspan="4"><?php echo $this->lobjSubjectprerequisitesForm->Add;?></td>
+						</tr>
+                         </table>
+                    <div style="width:100%;height:300px;overflow:auto;">     
+					<table id="hor" class="table" width="100%">
+					<tr>
+					<th><?php echo $this->translate("$this->Subject").' '.$this->translate("Name");?></th>
+					<th><?php echo $this->translate("$this->Subject").' '.$this->translate("Code");?></th>
+					<th><?php echo $this->translate("Pass").' '.$this->translate("Grade");?></th>
+					<th><span id="branch_row3"><?php echo $this->translate("Grade");?></span></th>
+					<th><?php echo $this->translate("Min Credit").' '.$this->translate("Hours");?></th>
+					<th><?php echo $this->translate("Options");?></th>
+					</tr>
+					
+					<?php foreach($this->resultTempsubjectprerequisitest as $resultTempsubjectprerequisitestdtls) {?>
+	       			<tr>
+	       				<td><?php echo $resultTempsubjectprerequisitestdtls['SubjectName'];?></td>
+	       				<td><?php echo $resultTempsubjectprerequisitestdtls['SubCode'];?></td>
+	       				<td><?php if($resultTempsubjectprerequisitestdtls['PrerequisiteType']=='0'){
+	       					echo 'Pass with Grade';}else{ echo 'Complete Subject';}?></td>
+	       				
+	       				<td><?php echo $resultTempsubjectprerequisitestdtls['DefinitionCode'];?>
+	       				<input type='hidden' value="<?php echo $this->escape($resultTempsubjectprerequisitestdtls['IdRequiredSubject']);?>" name=IdRequiredSubjectgrid[]>
+	       				<input type='hidden' value="<?php echo $this->escape($resultTempsubjectprerequisitestdtls['PrerequisiteType']);?>" name=PrerequisiteTypegrid[]>
+	       				<input type='hidden' value="<?php echo $this->escape($resultTempsubjectprerequisitestdtls['idDefinition']);?>" name=PrerequisiteGradegrid[]>
+	       				<input type='hidden' value="<?php echo $this->escape($resultTempsubjectprerequisitestdtls['MinCreditHours']);?>" name=MinCreditHoursgrid[]>
+	       				
+	       				</td>
+	       				<td><?php echo $resultTempsubjectprerequisitestdtls['MinCreditHours'];?></td>
+	       					
+	       				<td>
+						<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>
+						</td>
+	       			</tr>
+	       			<?php }?>
+	       			
+				</table>
+				</div>		
+				<table class="table" width="100%">	
+                        <tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjSubjectprerequisitesForm->Save;?>
+                            <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectprerequisites', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

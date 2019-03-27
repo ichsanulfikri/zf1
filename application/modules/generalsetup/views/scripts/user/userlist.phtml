@@ -1,0 +1,387 @@
+<?php
+if(isset($this->NameconfDetail)){
+      $nameConfDetail = array();
+      $nameConfDetail = $this->NameconfDetail;
+}
+?>
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+	dijit.byId('loginName').focus();
+});
+
+
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "" || idCountry != undefined)
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("state",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+	function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("city",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 		
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+	 // alert("ok");
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+function fnGetStaffDetails(idStaff){ 
+	if(idStaff != "" || idStaff != undefined)
+	{ 
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstafflist/idStaff/"+idStaff,
+				handleAs:'json',
+				load:function(data){ 
+					//dijit.byId('fName').set('value',data['FirstName']);
+					//dijit.byId('mName').set('value',data['ThirdName']);
+					//dijit.byId('lName').set('value',data['SecondName']);
+					dijit.byId('email').set('value',data['Email']);
+					//dijit.byId('userArabicName').set('value',data['ArabicName']);
+					dijit.byId('DOB').set('value',data['DOB']);
+					dijit.byId('gender').set('value',data['gender']);
+					dijit.byId('addr1').set('value',data['Add1']);
+					dijit.byId('addr2').set('value',data['Add2']);
+					dijit.byId('country').set('value',data['Country']);
+					dijit.byId('state').set('value',data['State']);
+					dijit.byId('city').set('value',data['City']);
+					dijit.byId('zipCode').set('value',data['Zip']);
+				}
+		   }
+		dojo.xhrGet(xhrArgs); 
+	} 
+}
+function checkphonefield(){
+
+ var workphone = dijit.byId("workPhone").value;
+ var workcountrycode = dijit.byId('workcountrycode').value;
+ var workstatecode = dijit.byId('workstatecode').value;
+
+ var homePhone = dijit.byId("homePhone").value;
+ var homecountrycode = dijit.byId('homecountrycode').value;
+ var homestatecode = dijit.byId('homestatecode').value;
+
+ var fax = dijit.byId("fax").value;
+ var faxstatecode = dijit.byId('faxstatecode').value;
+ var faxcountrycode = dijit.byId('faxcountrycode').value;
+
+ if(faxcountrycode!=''){
+   if(faxstatecode == ''){
+    dijit.byId("faxstatecode").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("faxstatecode").set( "state", "Error" );
+    return false;
+   }
+   if(fax == ''){
+     dijit.byId("fax").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("fax").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(faxstatecode!=''){
+   if(faxcountrycode == ''){
+    dijit.byId("faxcountrycode").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("faxcountrycode").set( "state", "Error" );
+    return false;
+   }
+   if(fax == ''){
+     dijit.byId("fax").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("fax").set( "state", "Error" );
+    return false;
+   }
+ }
+  if(fax != ''){
+    var len = fax.length;
+    if(len < 5){
+      dijit.byId("fax").focus();
+      alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("fax").set( "state", "Error" );
+      return false;
+    }
+    if(faxcountrycode == ''){
+      dijit.byId("faxcountrycode").focus();
+       alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("faxcountrycode").set( "state", "Error" );
+      return false;
+    }
+    if(faxstatecode == ''){
+      alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("faxstatecode").focus();
+      dijit.byId("faxstatecode").set( "state", "Error" );
+      return false;
+    }
+  }
+  
+ if(workcountrycode!=''){
+   if(workstatecode == ''){
+    dijit.byId("workstatecode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("workstatecode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("workPhone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("workPhone").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(workstatecode!=''){
+   if(workcountrycode == ''){
+    dijit.byId("workcountrycode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("workcountrycode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("workPhone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("workPhone").set( "state", "Error" );
+    return false;
+   }
+ }
+  if(workphone != ''){
+    var len = workphone.length;
+    if(len < 5){
+      dijit.byId("workPhone").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("workPhone").set( "state", "Error" );
+      return false;
+    }
+    if(workcountrycode == ''){
+      dijit.byId("workcountrycode").focus();
+       alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("workcountrycode").set( "state", "Error" );
+      return false;
+    }
+    if(workstatecode == ''){
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("workstatecode").focus();
+      dijit.byId("workstatecode").set( "state", "Error" );
+      return false;
+    }
+  }
+
+  if(homecountrycode!=''){
+   if(homestatecode == ''){
+    dijit.byId("homestatecode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("homestatecode").set( "state", "Error" );
+    return false;
+   }
+   if(homePhone == ''){
+     dijit.byId("homePhone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("homePhone").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(homestatecode!=''){
+   if(homecountrycode == ''){
+    dijit.byId("homecountrycode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("homecountrycode").set( "state", "Error" );
+    return false;
+   }
+   if(homePhone == ''){
+     dijit.byId("homePhone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("homePhone").set( "state", "Error" );
+    return false;
+   }
+ }
+
+
+
+  if(homePhone != ''){
+    var len = homePhone.length;
+    if(len < 5){
+      dijit.byId("homePhone").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("homePhone").set( "state", "Error" );
+      return false;
+    }
+    if(homecountrycode == ''){
+      dijit.byId("homecountrycode").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("homecountrycode").set( "state", "Error" );
+      return false;
+    }
+    if(homestatecode == ''){
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("homestatecode").focus();
+      dijit.byId("homestatecode").set( "state", "Error" );
+      return false;
+    }
+  }
+  return true;
+}
+</script> 
+ <fieldset>
+    <legend><?php echo $this->translate("Users")?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/user/userlist" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+                  if(checkphonefield()){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Login Details")?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Login Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->loginName;?><?php echo $this->lobjuserForm->UpdDate;?><?php echo $this->lobjuserForm->UpdUser;?></td>
+                            <td><?php echo $this->translate("Staff").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->IdStaff;?><?php echo $this->lobjuserForm->iduser;?></td>
+                        </tr>
+                        <!-- 
+                        <tr>
+                            <td ><?php echo $this->translate("First Name");?><span class="reqMark">*</span></td>
+                            <td  ><?php echo $this->lobjuserForm->fName;?></td>
+                            <td ><?php echo $this->translate("Middle Name");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->mName;?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Last Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->lName;?></td>
+                            <?php if($this->Languageid == 1) {?>
+                            <td><?php echo $this->translate("Arabic").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->userArabicName;?></td>
+                            <?php } else {?>
+                            <td></td>
+                            <td></td>
+                            <?php }?>
+                        </tr>
+                         -->
+                        <?php
+                           if(isset($nameConfDetail) && $nameConfDetail['count'] > 0){
+                             $i = 1;
+                             $j = 1;
+                             $str = "<tr>";
+                             $temp = '';
+                             if($nameConfDetail['count'] == 1){
+                               $field = "NameField1";
+                               $temp = "<td>".$this->translate($nameConfDetail['fields'][1])."</td><td>".$this->lobjuserForm->$field."</td></tr>";
+                               $str = $str.$temp;
+                             }else{
+                               foreach($nameConfDetail['fields'] as $key=>$value){
+                                $field = "NameField".$key;
+                                if($i == 1){
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjuserForm->$field."</td>";
+                                  $i = 2;
+                                  if($j == $nameConfDetail['count']){
+                                    $temp = $temp."</tr>";
+                                  }
+                                }else{
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjuserForm->$field."</td></tr>";
+                                  $i = 1;
+                                }
+                                $str = $str.$temp;
+                                $j++;
+                               }
+                             }
+                             echo $str;
+                           }
+                         ?>
+
+                        <tr>
+                            <td><?php echo $this->translate("Email Address");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->email;?></td>
+                            <td  ><?php echo $this->translate("Role");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->IdRole;?></td>
+                            <!-- <td ><?php echo $this->translate("Password");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->passwd;?></td> -->
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Personal Details")?></th>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("DOB")?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->DOB;?></td>
+                            <td ><?php echo $this->translate("Gender")?><span class="reqMark">*</span></td>
+                             <td ><?php echo $this->lobjuserForm->gender;?>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Address 1")?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->addr1;?></td>
+                            <td ><?php echo $this->translate("Address 2")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->addr2;?>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Country")?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->country;?></td>
+                            <td ><?php echo $this->translate("State")?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjuserForm->state;?></td>                           
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("City")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->city;?></td>
+                            <td ><?php echo $this->translate("Zip Code")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->zipCode;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Work Phone")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->workcountrycode;?><?php echo $this->lobjuserForm->workstatecode;?><?php echo $this->lobjuserForm->workPhone;?></td>
+                            <td ><?php echo $this->translate("Home Phone")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->homecountrycode;?><?php echo $this->lobjuserForm->homestatecode;?><?php echo $this->lobjuserForm->homePhone;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Cell Phone")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->countrycode;?><?php echo $this->lobjuserForm->cellPhone;?></td>
+                            <td ><?php echo $this->translate("Fax")?></td>
+                            <td ><?php echo $this->lobjuserForm->faxcountrycode;?><?php echo $this->lobjuserForm->faxstatecode;?><?php echo $this->lobjuserForm->fax;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Active")?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjuserForm->UserStatus;?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <tr>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                          <td>&nbsp;</td>
+                            <td align = "right"><?php echo $this->lobjuserForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'user', 'action'=>'index'),'default',true);?>';" />	
+                            </td>             
+                        </tr>
+              </table>
+             
+            </Form>
+</fieldset>

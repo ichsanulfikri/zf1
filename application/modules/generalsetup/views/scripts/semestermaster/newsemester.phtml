@@ -1,0 +1,50 @@
+<fieldset>
+    <legend><?php echo $this->translate("Semester");?></legend>
+    
+                <Form dojoType="dijit.form.Form"  id="myForm" action="" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Semester").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Semester").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjsemestermasterForm->SemesterMainName;?>
+                            	<?php echo $this->lobjsemestermasterForm->UpdDate;?>
+                            	<?php echo $this->lobjsemestermasterForm->UpdUser;?></td>
+                            <?php if($this->Languageid == 1){?>
+                            <td ><?php echo $this->translate("Arabic").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjsemestermasterForm->ArabicName;?></td>
+                            <?php } else {?>
+                            <td></td>
+                            <td></td>
+                            <?php }?>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("Semester Code");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjsemestermasterForm->SemCode;?></td>
+                           
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjsemestermasterForm->Active;?></td>
+                            <td colspan=2></td>
+                        </tr>
+               			<tr>
+                            <td colspan=4 align = "right"><?php echo $this->lobjsemestermasterForm->Save;?>
+                             <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'semestermaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                               
+                        </tr>           
+                        
+              </table>
+            
+            </Form>
+
+</fieldset>

@@ -1,0 +1,406 @@
+<script type="text/javascript"><!--
+
+dojo.addOnLoad(function(){
+	dijit.byId('IdCollege').set('value','');
+	dijit.byId('IdCollege').set('placeHolder','Select');
+	//dijit.byId('Branch').set('value','');
+	//dijit.byId('Branch').set('placeHolder','Select');
+	//dijit.byId('IdDepartment').set('value','');
+//	dijit.byId('IdDepartment').set('placeHolder','Select');
+	dijit.byId('IdSubject').set('value','');
+	dijit.byId('IdSubject').set('placeHolder','Select');
+	//-------
+//	disableCheck();
+	//-------
+	});
+
+	//---------
+//	function disableCheck(){
+//		if(dijit.byId('AllFaculty').checked == true ) {
+//			dijit.byId('IdCollege').setAttribute("readOnly", true);
+//			dijit.byId('IdDepartment').setAttribute("readOnly", true);
+//			//dojo.byId('colid').innerHtml
+//			dojo.byId("colid").innerHTML = "";
+//			dojo.byId("depid").innerHTML = "";
+//
+//			dijit.byId('IdCollege').set('value','');
+//			dijit.byId('IdCollege').set('placeHolder','Select');
+//			dijit.byId('IdDepartment').set('value','');
+//			dijit.byId('IdDepartment').set('placeHolder','Select');
+//
+//			fnGetDeptSubjectsList("0");
+//		}
+//		else{
+//			dijit.byId('IdCollege').setAttribute("readOnly", false);
+//			dijit.byId('IdDepartment').setAttribute("readOnly",false);
+//
+//			dijit.byId('IdCollege').set('value','');
+//			dijit.byId('IdCollege').set('placeHolder','Select');
+//			dijit.byId('IdDepartment').set('value','');
+//			dijit.byId('IdDepartment').set('placeHolder','Select');
+//
+//			dojo.byId("colid").innerHTML = "*";
+//			dojo.byId("depid").innerHTML = "*";
+//		}
+//
+//	  }
+	//--------
+
+
+
+function fnGetColgDeptList(IdCollege){
+	if(IdCollege != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getcolgdeptlist/IdCollege/"+IdCollege,
+					handleAs:'json',
+					load:function(data){						
+						AutoFillNextEditableDropDown("IdDepartment",data.department);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+
+function fnGetDeptSubjectsListX(IdDepartment){
+	if(IdDepartment != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getdeptsubjectslist/IdDepartment/"+IdDepartment,
+					handleAs:'json',
+					load:function(data){
+						console.log(data);
+						AutoFillNextEditableDropDown("IdSubject",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+
+
+function fnGetDeptSubjectsList(IdCollege){
+	if(IdCollege != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getdeptsubjectslist/IdCollege/"+IdCollege,
+					handleAs:'json',
+					load:function(data){
+						console.log(data);
+						AutoFillNextEditableDropDown("IdSubject",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+
+function fnGetColgDeptList(IdCollege){
+	if(IdCollege != "")
+		{
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/getcolgdeptlist/IdCollege/"+IdCollege,
+					handleAs:'json',
+					load:function(data){
+						AutoFillNextEditableDropDown("IdDepartment",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+	var options = {
+				label:"name",
+				identifier:"key",
+				items:JSONText
+			  };
+	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+var subArray = new Array();
+var subArray2 = new Array();
+	var oldContent = "";
+	var NoCnt	=	0;
+
+	fnGetSubjectCode(<?php echo $this->idsub;?>);
+
+	var rowid = <?php echo count($this->larrresultset) + 1?>;
+	    <?php if($this->larrresultset):
+		foreach($this->larrresultset as $larrresult):?>
+			subArray.push('<?php echo $larrresult['SubCode']?><?php echo "-" ?><?php 
+            if(isset($larrresult['BranchName'])): 
+                echo $larrresult['BranchName']; 
+            else : 
+                echo 'Tiada';
+            endif;?>');
+		<?php endforeach;endif;?>
+
+ 		//alert(subArray);
+		function addsubjectsofferedDetails() {
+			var flag = true;
+
+////			if(dijit.byId('AllFaculty').checked == false ) {
+////				if(dijit.byId("IdDepartment").value==''){
+////				    dijit.byId("IdDepartment").attr('required','true');
+////					dijit.byId("IdDepartment").focus();flag = false;
+////				}
+//
+//				if(dijit.byId("IdCollege").value==''){
+//				    dijit.byId("IdCollege").attr('required','true');
+//					dijit.byId("IdCollege").focus();flag = false;
+//				}
+//
+//
+//			}
+
+			if(dijit.byId("IdSubject").value==''){
+			    dijit.byId("IdSubject").attr('required','true');
+				dijit.byId("IdSubject").focus();flag = false;
+			}
+			if(dijit.byId("MinQuota").value==''){
+			    dijit.byId("MinQuota").attr('required','true');
+				dijit.byId("MinQuota").focus();flag = false;
+			}
+			if(dijit.byId("MaxQuota").value==''){
+			    dijit.byId("MaxQuota").attr('required','true');
+				dijit.byId("MaxQuota").focus();flag = false;
+			}
+//			if(dijit.byId("Branch").value==''){
+//			    dijit.byId("Branch").attr('required','true');
+//					dijit.byId("Branch").focus();flag = false;
+//			}
+			if(dijit.byId("MinQuota").value > dijit.byId("MaxQuota").value){
+			    alert("Minimum Quota can't exceed Maximum Quota");
+				dijit.byId("MinQuota").focus();
+				flag = false;
+			}
+			if(flag == true) {
+				chargedetailsInsert();
+			}
+			return flag;
+		}
+
+	function chargedetailsInsert() {
+
+
+		var IdSubject = dijit.byId("IdSubject");
+		var SubjectName = dijit.byId("IdSubject").displayedValue;
+		//var Branch = dijit.byId("Branch");
+		//var  BranchName = dijit.byId("Branch").displayedValue;
+		var SubjectCode = dijit.byId("SubjectCode").displayedValue;
+		var MinQuota = dijit.byId("MinQuota").value;
+		var MaxQuota = dijit.byId("MaxQuota").value;
+
+
+//		if(dijit.byId('AllFaculty').checked == true ) {
+//			var IdCollege = "";
+//			var IdCollegename = "All";
+//		}
+//		else {
+			var IdCollege = dijit.byId("IdCollege").value;
+			var IdCollegename = dijit.byId("IdCollege").displayedValue;
+		//}
+
+		//subArray.push(SubjectCode+'-'+BranchName);
+		subArray.push(SubjectCode+'-All');
+		//alert(subArray);
+		if(arrHasDupes(subArray) )
+		{
+			subArray = subArray.unique();
+			//alert(subArray);
+			alert("Duplicate Record");
+		}
+
+//		else if(Branch == 1000)
+//			{
+//			var optVals=[];
+//
+//			optVals = $('#Branch option');
+//			    console.log(optVals);
+//			    alert(  $('#Branch').length )
+//			}
+		else {
+			var IdSubject = dijit.byId("IdSubject");
+			var trow=document.getElementById('hor').insertRow(rowid);
+			var tcol1=trow.insertCell(0);
+			var tcol2=trow.insertCell(1);
+			var tcol3=trow.insertCell(2);
+			var tcol4=trow.insertCell(3);
+			var tcol5=trow.insertCell(4);
+			var tcol6=trow.insertCell(5);
+			var tcol7=trow.insertCell(6);
+
+			tcol1.innerHTML="<input type='hidden' value='"+IdSubject+"' name=IdSubjects[]>"+SubjectName;
+			tcol2.innerHTML= SubjectCode;
+			//tcol3.innerHTML="<input type='hidden' value='"+Branch+"' name=Branch[]>"+BranchName;
+			tcol3.innerHTML="<input type='hidden' value='1000' name=Branch[]>All";
+			tcol4.innerHTML="<input type='hidden' value='"+IdCollege+"' name=IdCollegegrid[]>"+IdCollegename;
+			tcol5.innerHTML="<input type='hidden' value='"+MinQuota+"' name=MinQuotagrid[]>"+MinQuota;
+			tcol6.innerHTML="<input type='hidden' value='"+MaxQuota+"' name=MaxQuotagrid[]>"+MaxQuota;
+			tcol7.innerHTML="<a href='#' onClick='deleteRow(this,"+IdSubject+"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+			rowid++;
+		}
+	}
+
+	function clearpageAdd() {
+		dijit.byId("IdSubject").set("value","");
+		dijit.byId("SubjectCode").set("value","");
+		//dijit.byId("Branch").set("value","");
+		dijit.byId("MinQuota").set("value","");
+		dijit.byId("MaxQuota").set("value","");
+
+	}
+
+	function deleteRow(r,IdSubject)
+	{
+
+		rowid--;
+		var i=r.parentNode.parentNode.rowIndex;
+		subArray.splice(parseInt(i-1),1);
+		document.getElementById('hor').deleteRow(i);
+
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectsoffered/deletesubject/idsubject/"+IdSubject+"/idsemester/"+<?php echo $this->lintidsemester?>,
+				handleAs:'text',
+				load:function(data){
+
+					//window.location.href='<?php echo $this->baseUrl();?>/generalsetup/subjectsoffered/subjectsofferedlist/idsemester/<?php echo $this->lintidsemester?>/update/true';
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+
+	}
+
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+	function fnGetSubjectCode(idsubject) {
+		if(idsubject != "" && idsubject != undefined)
+		{
+			var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectprerequisites/getsubjectcode/idsubject/"+idsubject,
+				handleAs:'text',
+				load:function(data){
+					dijit.byId('SubjectCode').set('value',data);
+				}
+		   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+
+--></script>
+
+
+<fieldset><legend><?php echo $this->translate("$this->Subject").' '.$this->translate("Offered");?></legend>
+<form
+	action="<?php echo $this->baseUrl();?>/generalsetup/subjectsoffered/subjectsofferedlist/idsemester/<?php echo $this->lintidsemester?>"
+	method="POST">
+<table class='table' width="100%">
+	<tr>
+		<td><?php echo $this->translate("Semester").":";?></td>
+		<td><?php echo $this->larrsemestermaster['SemesterMainName']?></td>
+		<!--<td><?php echo $this->translate("Apply to all");?><?php echo " "; ?><?php echo $this->translate($this->College);?></td>
+									<td><?php echo $this->lobjform->AllFaculty;?></td>
+								 -->
+	</tr>
+	<tr>
+		<td><?php echo $this->translate($this->College);?><span id="colid"
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->IdCollege;?></td>
+		<!--<td><?php echo $this->translate($this->Department);?><span id="depid"
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->IdDepartment;?></td>
+	--></tr>
+	<tr>
+		<td><?php echo $this->translate("$this->Subject");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->IdSubject;?><input type="text"
+			id="SubjectCode" dojoType="dijit.form.ValidationTextBox" value=""
+			disabled><?php  echo $this->lobjform->UpdUser;echo $this->lobjform->UpdDate;?></td>
+		<td><?php echo $this->translate("Minimum Quota");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->MinQuota;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Maximum Quota");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->MaxQuota;?>
+
+
+		<td><!--<?php echo $this->translate("Branch");?><span class="reqMark">*</span>--></td>
+		<td><input type="hidden" id="Branch" name="Branch" value="1000"><?php //echo $this->lobjform->Branch;?>
+
+	</tr>
+
+	<tr>
+		<td align="right" colspan="4"><?php echo $this->lobjform->Add;?> <?php echo $this->lobjform->Clear;?>
+
+		</td>
+	</tr>
+</table>
+<table id="hor" class="table" width="100%">
+	<tr>
+		<th><?php echo $this->translate->_("Subject")?></th>
+		<th><?php echo $this->translate->_("Subject")." ".$this->translate->_("Code")?></th>
+		<th><?php echo $this->translate("Branch");?></th>
+		<th><?php echo $this->translate($this->College);?></th>
+		<th><?php echo $this->translate->_("Minimum")." ".$this->translate->_("Quota")?></th>
+		<th><?php echo $this->translate->_("Maximum")." ".$this->translate->_("Quota")?></th>
+		<th><?php echo $this->translate->_("Delete")?></th>
+	</tr>
+	<?php if($this->larrresultset):
+	foreach($this->larrresultset as $larrresult):?>
+	<tr>
+		<td><?php echo $larrresult['SubjectName']?><?php echo "-"?><?php echo $larrresult['SubCode']?></td>
+		<td><?php echo $larrresult['SubCode']?></td>
+		<td><?php echo $larrresult['BranchName']?></td>
+		<!--											<?php if($larrresult['IdCollege'] == NULL || $larrresult['IdCollege'] == "" || $larrresult['IdCollege']== '0') { ?>-->
+		<td><?php echo $this->translate->_("All")?></td>
+		<?php } else { ?>
+		<?php $lobjsubjectsofferedmodel = new GeneralSetup_Model_DbTable_Subjectsoffered();
+			$fascultyname = $lobjsubjectsofferedmodel->fnGetFacultyName($larrresult['IdCollege']);?>
+		<td><?php echo $fascultyname['CollegeName']?></td>
+		<?php } ?>
+		<td><?php echo $larrresult['MinQuota']?></td>
+		<td><?php echo $larrresult['MaxQuota']?></td>
+		<td><!--Disabled dulu delete for this semester a href='#'
+			onClick='deleteRow(this,<?php echo $larrresult['IdSubject']?>); return false;'>--><img
+			src='<?php echo $this->baseUrl();?>/images/delete.png' border=0
+			width='16' height='16'><!--</a>--></td>
+			<?php endforeach;endif;?>
+
+</table>
+<table width="100%">
+	<tr align="right">
+		<td><?php echo $this->lobjform->Save;?><input type="button"
+			class="NormalBtn" dojotype="dijit.form.Button"
+			label="<?php echo $this->translate("Back"); ?>"
+			onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectsoffered', 'action'=>'index'),'default',true);?>';" /></td>
+	</tr>
+</table>
+</form>
+</fieldset>

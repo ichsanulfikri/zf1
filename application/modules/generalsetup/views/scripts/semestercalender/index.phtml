@@ -1,0 +1,79 @@
+<?php
+//echo "<pre>";
+//print_r($this->calenderList);
+?>
+<head>
+  <script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/jquery-1.4.3.js"></script>
+  <script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/calender.js"></script>
+</head>
+<body>
+  <fieldset style="width:45%">
+    <legend><?php echo $this->translate("Calender"). ' ' . $this->translate("Legend"); ?></legend>
+    <table class="table" width="80%" cellspacing="1" cellpadding="5">
+      <tbody>
+        <tr>
+          <th>Color Code</th>
+          <th>Activity Name</th>
+        </tr>
+        <?php foreach($this->activitylist as $list){?>
+        <tr style="background-color:#F0F0F0">
+          <td width ="20%"style="background-color: <?php echo $list['ActivityColorCode']?>;"> </td>
+          <td><?php echo $list['ActivityName'];?></td>
+        </tr>
+        <?php } ?>
+      </tbody>
+    </table>
+    <input type='button' style="float:right"class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Add')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'semestercalender', 'action'=>'add'),'default',true);?>';" />
+  </fieldset>
+  <br>
+  <fieldset style="width:98%">
+    <legend><?php echo $this->translate("Calender"). ' ' . $this->translate("Setup"); ?></legend>
+    <table class="table" border="0" width="100%" cellspacing="2" cellpadding="2">
+      <tbody>
+        <tr>
+          <th width="20%">Semester</th>
+          <th>Jan</th>
+          <th>Feb</th>
+          <th>Mar</th>
+          <th>Apr</th>
+          <th>May</th>
+          <th>Jun</th>
+          <th>Jul</th>
+          <th>Aug</th>
+          <th>Sep</th>
+          <th>Oct</th>
+          <th>Nov</th>
+          <th>Dec</th>
+        </tr>
+      </tbody>
+      <?php foreach($this->calenderList as $semester){?>
+      <tr>
+        <td align="center">
+          <b><?php echo $semester['semesterName'];?></b>
+        </td>
+        <?php         
+            for($i = 1; $i <= 12; $i++){
+              if(isset($semester['calender'])){
+                if(array_key_exists($i,$semester['calender'])){
+                  if(count($semester['calender'][$i])>1){
+                    $temp = '';
+                    foreach($semester['calender'][$i] as $activity){
+                      $temp.= "<a href='".$this->baseUrl()."/generalsetup/semestercalender/edit/id/".$activity['calenderId']."'><span style='background-color:".$activity['colorcode']."; padding:0 4px;display:inline-block;width:10px;height:10px'> </span><small>".date('d/m/y', strtotime($activity['calenderstartdate']))." - ".date('d/m/y',strtotime($activity['calenderenddate']))." (".$activity['activityname'].")</small></a><br>";
+                    }
+                    echo "<td>$temp</td>";
+                  }else{
+                    echo "<td><a href='".$this->baseUrl()."/generalsetup/semestercalender/edit/id/".$semester['calender'][$i][0]['calenderId']."'><span style='background-color:".$semester['calender'][$i][0]['colorcode']."; padding:0 4px;display:inline-block; height:11px; width:3px'> </span><small>".date('d/m/y',strtotime($semester['calender'][$i][0]['calenderstartdate']))." - ".date('d/m/y',strtotime($semester['calender'][$i][0]['calenderenddate']))." (".$semester['calender'][$i][0]['activityname'].")</small></a></td>";
+                  }
+                }else{
+                  echo "<td> </td>";
+                }
+              }else{
+                echo "<td> </td>";
+              }
+            }
+        ?>
+      </tr>
+      <?php } ?>
+    </table>
+  </fieldset>
+</body>

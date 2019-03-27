@@ -1,0 +1,252 @@
+<script type="text/javascript">
+var SUCreditH = 0;
+var SUBJCREDITHOUR=0;
+var SCR = new Array();
+var subjArray  = new Array();
+var deleteArray  = new Array();
+var deletebeforeArray  = new Array();
+dojo.addOnLoad(function(){	
+
+	dijit.byId('EquivalentSubject').set("value",'');
+	dijit.byId('EquivalentSubject').set("placeHolder",'Select');
+
+	dijit.byId('EquivalentSubjectCode').set("value",'');
+	dijit.byId('EquivalentSubjectCode').set("placeHolder",'Select');
+
+});
+var rowid = <?php echo count($this->resultTempsubjectequivalent);?>+1;
+<?php
+		if($this->resultTempsubjectequivalent){
+			foreach($this->resultTempsubjectequivalent as $resultTempsubjectequivalent) { ?>		
+			subjArray.push('<?php echo $resultTempsubjectequivalent['SubjectName']?>');
+			<?php
+			}
+		}?>
+
+function fnGetSubjectEquivalentCode(idsubject,type) {
+	if(type == 'sub') {
+		dijit.byId("EquivalentSubjectCode").set("value",idsubject)
+	} 
+	if(type == 'code') {
+		dijit.byId("EquivalentSubject").set("value",idsubject)
+	} 
+}
+
+function addsubjectcreditHours(){
+	$equivalentsubcode=dijit.byId("EquivalentSubjectCode").displayedValue;
+	if(dijit.byId("EquivalentSubject").value==''){
+	    dijit.byId("EquivalentSubject").attr('required','true');
+		dijit.byId("EquivalentSubject").focus();
+		return false;
+	}
+
+	if(dijit.byId("EquivalentSubjectCode").value==''){
+	    dijit.byId("EquivalentSubjectCode").attr('required','true');
+		dijit.byId("EquivalentSubjectCode").focus();
+		return false;
+	}
+	if($equivalentsubcode !="")
+	{ 
+	
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectequivalent/getsubjectcode/$equivalentsubcode/"+$equivalentsubcode,
+				handleAs:'text',
+				load:function(data){					
+					subjectcreditInsert(data);
+				}
+		   }
+		dojo.xhrGet(xhrArgs); 
+	}
+}
+
+  function subjectcreditInsert(data) {
+	var flag = true;
+	if(dijit.byId("EquivalentSubjectCode").value==''){
+	    dijit.byId("EquivalentSubjectCode").attr('required','true');
+		dijit.byId("EquivalentSubjectCode").focus();flag = false;
+	}
+	
+	if(dijit.byId("EquivalentSubject").value==''){
+	    dijit.byId("EquivalentSubject").attr('required','true');
+		dijit.byId("EquivalentSubject").focus();flag = false;
+	}
+	
+	if(flag == true) {
+		subjectequivalentInsert(data)	
+	}			
+	return flag;
+}
+
+
+function subjectequivalentInsert(data) {
+		var Idcomponents = dijit.byId("EquivalentSubject").value;
+		var IdcomponentsName = dijit.byId("EquivalentSubject").displayedValue;	
+		var CreditHour = data;	
+		var CreditHours =data;
+
+			
+			subjArray.push(IdcomponentsName);
+		
+			if(arrHasDupes(subjArray))
+			{
+				subjArray = subjArray.unique();
+				alert("Duplicate Subject name");
+		
+			} 
+			else {
+		
+			var trow=document.getElementById('hor').insertRow(rowid);
+			var tcol1=trow.insertCell(0);
+			var tcol2=trow.insertCell(1);
+			var tcol3=trow.insertCell(2);
+			
+			tcol1.innerHTML= "<input type='hidden' value='"+Idcomponents+"' name=Idcomponentsgrid[]>"+IdcomponentsName;
+			tcol2.innerHTML= "<input type='hidden' value='"+CreditHour+"' name=CreditHourgrid[]>"+CreditHour;
+			tcol3.innerHTML="<a href='#' onClick='deleteRowBefore(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=1 width='16' height='16'></a>";
+			rowid++;
+			}
+}
+
+
+    function deleteRowBefore(r){
+    	rowid--;
+		subjArray.splice(parseInt(i-1),1);
+		var i=r.parentNode.parentNode.rowIndex;	
+		document.getElementById('hor').deleteRow(i);
+		subjArray.pop();
+
+    }
+
+
+	function deleteRow(r,itemid)
+	{
+		deleteArray.push(itemid);
+		itemid=deleteArray;
+		deleteitem(itemid);
+		rowid--;
+		subjArray.splice(parseInt(i-1),1);
+		var i=r.parentNode.parentNode.rowIndex;	
+		document.getElementById('hor').deleteRow(i);
+		subjArray.pop();	
+	}
+	
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+	                
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+
+function ClearDetails() {
+	dijit.byId("EquivalentSubject").set("value","");
+	dijit.byId("EquivalentSubjectCode").set("value","");
+	
+}
+
+var flag=0;
+
+function deleteitem(itemid){
+	
+	var xhrArgs = {
+			url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectequivalent/addeditemdelete/itemid/"+itemid,
+			handleAs:'text',
+			load:function(data){
+				
+				document.getElementById('Iditem').value=data;
+				flag=1;
+				
+			}
+	   }
+	dojo.xhrGet(xhrArgs); 
+	
+}
+
+</script>
+<fieldset><legend><?php echo $this->translate("$this->Subject").' '.$this->translate("equivalent");?></legend>
+<Form dojoType="dijit.form.Form" id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/subjectequivalent/newsubjectequivalent" method="post" name="myForm">
+<script type="dojo/method" event="onSubmit" >
+               if (this.validate() || (flag==1)) {
+                   return true;
+                 } else {
+                   return false;
+ 	           }
+</script>
+<table class="table" width="100%">
+	<tr>
+		<th colspan="4"><?php echo $this->translate("New Equivalent").' '.$this->translate("$this->Subject");?></th>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Original").' '.$this->translate("$this->Subject");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->subname;?></td>
+		<td><?php echo $this->translate("Original").' '.$this->translate("$this->Subject").' '.$this->translate("code");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->subcode;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Equivalent").' '.$this->translate("$this->Subject");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->EquivalentSubject;?></td>
+		<td><?php echo $this->translate("Equivalent").' '.$this->translate("$this->Subject").' '.$this->translate("code");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->EquivalentSubjectCode;?></td>
+   </tr>
+	<tr>
+	    <td><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjform->Active;?></td>
+	        <?php echo $this->lobjform->IdOriginalSubject; ?>
+	        <?php echo $this->lobjform->Iditem; ?>
+	</tr>
+</table>
+<table class="table" width="100%">
+      <tr>
+	    <td align="right"><?php echo $this->lobjform->Add;?>
+		<?php echo $this->lobjform->Clear;?></td>
+	</tr>
+</table>
+<div style="overflow:auto; height: 100px">
+<table id="hor" class="table" width="100%" cellpadding="5"	cellspacing="1">
+	<tr>
+		<th><?php echo $this->translate("Equivalent").' '.$this->translate("$this->Subject")?></th>
+		<th><?php echo $this->translate("Credit Hours")?></th>
+		<th><?php echo $this->translate("Delete")?></th>
+	</tr>
+	<?php foreach($this->resultTempsubjectequivalent as $resultTempsubjectequivalent) {?>
+	       			<tr>
+	       				<td><?php echo $resultTempsubjectequivalent['SubjectName'];?></td>
+	       				<td><?php echo $resultTempsubjectequivalent['CreditHours'];?></td>
+	       				<td><a href='#' onClick='deleteRow(this,<?php echo $resultTempsubjectequivalent['idequivalent'];?>); return false;';><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+	       			</tr>
+	  <?php }?>
+	
+</table>
+</div>
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<td align="right" colspan="4"><?php echo $this->lobjform->Save;?>
+                           <input type='button' class="NormalBtn"
+			dojotype="dijit.form.Button"
+			label="<?php echo $this->translate('Back')?>" value='click'
+			onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectequivalent', 'action'=>'index'),'default',true);?>';" />
+		</td>
+	</tr>
+</table>
+</Form>
+</fieldset>

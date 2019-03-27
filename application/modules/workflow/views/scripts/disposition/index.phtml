@@ -1,0 +1,70 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('letter_no').focus();
+	});
+</script>
+
+</head>
+	<fieldset>
+	<legend><?php echo $this->translate($this->headtitle);?></legend>
+	<div id="sidebar right">
+	    <div class="item">
+	    	<?php echo $this->action($this->url["action"],$this->url["controller"],$this->url["module"],array("ivent"=>$this->param)); ?>
+	    </div>
+	</div>
+	
+	</fieldset>
+	<fieldset>
+			<legend><?php echo $this->translate($this->workflowtitle);?></legend>
+            <table width="100%">
+            <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+             <td><?php echo $this->translate("No. Letter");?></td>
+                  <td><?php echo $this->translate("Date of Letter");?></td>
+                  <td ><?php echo $this->translate("Date of Arrival");?></td>
+                  <td ><?php echo $this->translate("From");?></td>
+                  <td ><?php echo $this->translate("Status");?></td>
+            </tr>
+            <?php 
+            foreach ($this->workflow as $status) :
+            ?>
+               <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+               <td ><?php echo $this->escape($status['nosrt']);?></td>
+                    <td ><?php echo $this->escape($status['dtsrt']);?></td>
+                    <td ><?php echo $this->escape($status['dtarival']);?></td>
+                    <td ><?php echo $this->escape($status['From']);?></td>
+                    <td ><?php echo $this->escape($status['status']);?></td>
+                 </tr>
+            <?php 
+            endforeach;
+            ?>
+            </table>
+	</fieldset>
+	<fieldset>
+		<legend><?php echo $this->translate($this->title);?></legend>
+         <form action="<?php echo $this->baseUrl();?>/workflow/disposition/index/search/1" method="POST">
+            <table width="100%">
+                <tr>
+                   <td><?php echo $this->translate("No. Letter");?></td>
+                   <td ><?php echo $this->lobjform->letter_no;?>
+                </tr>
+                <tr>
+                     <td><?php echo $this->translate("Disposition");?></td>
+                     <td ><?php echo $this->lobjform->lsStatus;?></td>
+                </tr>
+                <tr>
+                    <td ><?php echo $this->translate("Remark");?></td>
+                    <td ><?php echo $this->lobjform->remark;?></td>
+                 </tr>
+                 <tr>
+                    <td ><?php echo $this->translate("Decision Maker");?></td>
+                    <td ><?php echo $this->lobjform->lsMaker;?></td>
+                 </tr>
+                 <tr>
+                 	<td><?php echo $this->lobjform->Cancel;?></td>
+                 	<td><?php echo $this->lobjform->Save;?></td>
+                 </tr>
+            </table>
+        </form>
+    </fieldset>
+   

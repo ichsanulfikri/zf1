@@ -1,0 +1,280 @@
+<head>
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+	var idAgent = dijit.byId("AgentType");
+	if (idAgent == 1)
+		{
+		var ddwid = dijit.byId("AgentName1");
+		ddwid.setAttribute('disabled', true);
+		dojo.style(dijit.byId("AgentName1").domNode, "display", "none");
+		}
+
+	});
+
+function fnGetAgentList(idAgent){
+	if(idAgent == 1)
+			{
+			dojo.style(dijit.byId("AgentName1").domNode, "display", "none");
+			dojo.style(dijit.byId("AgentName").domNode, "display", "block");
+			var ddwid = dijit.byId("AgentName1");
+			ddwid.setAttribute('disabled', true);
+				var xhrArgs = {
+						url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getagentstafflist/idAgent/"+idAgent,
+						handleAs:'json',
+						load:function(data){ 
+							console.log(data);
+							AutoFillNextEditableDropDown("AgentName",data); 
+						}
+				}
+				
+			dojo.xhrGet(xhrArgs); 
+			}
+	else if(idAgent == 2)
+		{
+		alert("Data not available");
+		}
+	else if(idAgent == 3)
+	{
+		dojo.style(dijit.byId("AgentName").domNode, "display", "none");
+		var ddwid = dijit.byId("AgentName");
+		ddwid.setAttribute('disabled', true);
+		dojo.style(dijit.byId("AgentName1").domNode, "display", "block");
+		var ddwid = dijit.byId("AgentName1");
+		ddwid.setAttribute('disabled', false);
+		}
+			
+	} 
+
+function fnGetAgentinfo(idAgent){
+	if(idAgent != "")
+	{ 
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getagentdetails/idAgent/"+idAgent,
+				handleAs:'json',
+				load:function(data){ 
+					console.log(data);
+					var ddwidget1 = dijit.byId('AgentAdd1');
+					ddwidget1.setAttribute('value', data['Add1']); 
+					var ddwidget2 = dijit.byId('AgentAdd2');
+					ddwidget2.setAttribute('value', data['Add2']); 
+					var ddwidget6 = dijit.byId('Country');
+					ddwidget6.setAttribute('value', data['Country']);
+					var ddwidget5 = dijit.byId('State');
+					ddwidget5.setAttribute('value', data['State']);
+					var ddwidget3 = dijit.byId('City');
+					ddwidget3.setAttribute('value', data['City']); 
+					var ddwidget4 = dijit.byId('Email');
+					ddwidget4.setAttribute('value', data['Email']); 
+					 
+					 
+				}
+		   }
+		dojo.xhrGet(xhrArgs); 
+	} 
+}
+
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("State",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+
+function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("City",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+</script>
+</head>
+<fieldset>
+    <legend><?php echo $this->translate("Agent Master");?></legend>
+          <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/agentmaster/agentmasterlist/id/<?php echo $this->IdAgentMaster; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } 
+				else {
+                    return false;
+                }
+				</script>
+                   <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Agent").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <?php echo $this->lobjAgentmasterForm->IdAgentMaster;?>
+                        <?php echo $this->lobjAgentmasterForm->UpdDate;?>
+                        <?php echo $this->lobjAgentmasterForm->UpdUser;?>
+                         <tr>
+                            <td ><?php echo $this->translate("Agent").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->AgentType;?></td>
+                            <td ><?php echo $this->translate("Agent").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->AgentCode;?></td>
+                            
+                            
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Agent Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->AgentName;?>
+                            <?php echo $this->lobjAgentmasterForm->AgentName1;?></td>
+                            <td><?php echo $this->translate("Address1");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->AgentAdd1;?></td>
+                            
+                            
+                        </tr>
+
+                        <tr>
+                        	<td><?php echo $this->translate("Address2");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->AgentAdd2;?></td>
+                        	<td><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->Country;?></td>
+                        	
+                           
+                            
+                        </tr>
+
+                        <tr>
+                            <td><?php echo $this->translate("State");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->State;?></td>
+                            <td><?php echo $this->translate("City");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->City;?></td>
+                          
+                           
+                        </tr>
+                        <tr>                          	
+                               <td><?php echo $this->translate("Phone");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->Phonecountrycode;?><?php echo $this->lobjAgentmasterForm->Phonestatecode;?><?php echo $this->lobjAgentmasterForm->Phone;?></td>
+                             <td><?php echo $this->translate("Fax");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->faxcountrycode;?><?php echo $this->lobjAgentmasterForm->faxstatecode;?><?php echo $this->lobjAgentmasterForm->Fax;?></td>                           
+                            
+                         
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Email");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->Email;?></td>
+                        	<td><?php echo $this->translate("Password");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->passwd;?></td>
+                        	   
+                            
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("URL");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->URL;?></td> 
+                        	<td><?php echo $this->translate("Designation");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->Desgination;?></td>
+                            
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Contact Phone");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->ContactPhonecountrycode;?><?php echo $this->lobjAgentmasterForm->ContactPhonestatecode;?><?php echo $this->lobjAgentmasterForm->ContactPhone;?></td> 
+                        	<td><?php echo $this->translate("Contact Person");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->ContactPerson;?></td>
+                        	
+                         	
+                        </tr>
+                        <tr>
+                        <td><?php echo $this->translate("Contact cell");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->countrycode;?><?php echo $this->lobjAgentmasterForm->ContactCell;?></td>
+                        <td><?php echo $this->translate("Effective").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                        <td><?php echo $this->lobjAgentmasterForm->EffectiveDate;?></td>   
+                        </tr>  
+                        <tr>
+                        	 <?php $label_1 = $this->AgentField1;  if ($label_1) {?>                         
+                            <td>
+                               <?php echo $this->AgentField1; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjAgentmasterForm->AgentField1;  ?>
+                            </td>   
+                            <?php } ?>                             	
+                             <?php $label_2 = $this->AgentField2;  if ($label_2) {?>                         
+                            <td>
+                               <?php echo $this->AgentField2; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjAgentmasterForm->AgentField2;  ?>
+                            </td>   
+                            <?php } ?> 
+                            
+                        </tr>
+                        <tr> 
+                        	 <?php $label_3 = $this->AgentField3;  if ($label_3) {?>                         
+                            <td>
+                               <?php echo $this->AgentField3; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjAgentmasterForm->AgentField3;  ?>
+                            </td>   
+                            <?php } ?>                         	
+                             <?php $label_4 = $this->AgentField4;  if ($label_4) {?>                         
+                            <td>
+                               <?php echo $this->AgentField4; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjAgentmasterForm->AgentField4;  ?>
+                            </td>   
+                            <?php } ?> 
+                        </tr>
+                         <tr>  
+                         	 <?php $label_5 = $this->AgentField5;  if ($label_5) {?>                         
+                            <td>
+                               <?php echo $this->AgentField5; ?>                            	
+                            </td>
+                            <td>
+                            	<?php  echo $this->lobjAgentmasterForm->AgentField5;  ?>
+                            </td>   
+                            <?php } ?>                        	
+                            
+                            <td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjAgentmasterForm->Active;?></td>
+                        </tr>
+                      </table>
+                       <!--<div style="width:100%;height:300px;overflow:auto;">
+                      	 <table class="table" width="100%">
+                        	<tr>
+								<th colspan="4"><?php echo $this->translate("$this->Program").' '.$this->translate("Name");?></th>
+							</tr>
+						 	<tr>
+								<td colspan="4"><?php echo $this->lobjAgentmasterForm->IdProgram;?></td>
+							</tr>
+						</table>
+                    </div>	
+						--><table align = "right">
+                       	<tr>
+                           	<td align = "right" colspan="4"><?php echo $this->lobjAgentmasterForm->Save;?>
+                          	 <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'agentmaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                       </tr>
+                	 </table>
+                   	
+           </Form>
+</fieldset>
+
+

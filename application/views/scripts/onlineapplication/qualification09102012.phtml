@@ -1,0 +1,676 @@
+<script type="text/javascript">
+    var rowid=<?php echo count($this->applicantqualification) + 1; ?>;
+    var subrowid = 1;
+    var selectedrowid;
+    var batchArray  = new Array();
+</script>
+<?php //echo "<pre>"; print_r($this->applicantqualification);die; ?>
+<div id="subjectgrade-form-dialog" title="Add Subject"
+	style="display: none">
+<Form dojoType="dijit.form.Form" id="myForm1" action="" method="post"
+	name="myForm1"><script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                }
+				else {
+                    return false;
+                }
+	</script>
+<table width="100%">
+	<tr>
+		<td>Subject<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectgradeform->Subject; ?></td>
+	</tr>
+	<tr>
+		<td>Subject Grade<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectgradeform->SubjectGrade; ?></td>
+	</tr>
+</table>
+</Form>
+</div>
+<div id="qualification-form-dialog" title="Add Qualification"
+	style="display: none">
+<Form dojoType="dijit.form.Form" id="myForm" action="" method="post"
+	name="myForm"><script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                }
+				else {
+                    return false;
+                }
+	</script>
+<table width="100%">
+	<tr>
+		<td>Place Obtained<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->PlaceObtained; ?></td>
+	</tr>
+	<tr>
+		<td>Year Obtained(value greater than 1900)<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->YearObtained; ?></td>
+	</tr>
+	<tr>
+		<td>Qualification Level<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->QualificationLevel; ?></td>
+	</tr>
+	<tr>
+		<td>Certificate Name<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->Certificate; ?></td>
+	</tr>
+	<tr>
+		<td>Institution Name<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->Institution; ?></td>
+	</tr>
+	<tr>
+		<td>Institution Address 1</td>
+		<td><?php echo $this->lobjqualificationform->InstitutionAddress1; ?></td>
+	</tr>
+	<tr>
+		<td>Institution Address 2</td>
+		<td><?php echo $this->lobjqualificationform->InstitutionAddress2; ?></td>
+	</tr>
+	<tr>
+		<td>Country<span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjqualificationform->Country; ?></td>
+	</tr>
+	<tr>
+		<td>Province</td>
+		<td><?php echo $this->lobjqualificationform->Province; ?></td>
+	</tr>
+	<tr>
+		<td>City</td>
+		<td><?php echo $this->lobjqualificationform->City; ?></td>
+	</tr>
+	<tr>
+		<td>Post Code</td>
+		<td><?php echo $this->lobjqualificationform->PostCode; ?></td>
+	</tr>
+	<tr>
+		<td>Result Item</td>
+		<td><?php echo $this->lobjqualificationform->ResultItem; ?></td>
+	</tr>
+	<tr>
+		<td>Result/Total Score</td>
+		<td><?php echo $this->lobjqualificationform->Result; ?></td>
+	</tr>
+</table>
+</Form>
+</div>
+<table width= "100%" border="0" cellspacing="10" cellpadding="10">
+	<tr>
+		<td colspan="4" align="left"><input type="button" id="add-entry"
+			name="Add" value="Add Entry Requirement"></td>
+	</tr>
+</table>
+<form id="addqualification" method="post" name="addqualification"
+	action="">
+<table class="table" width="100%" id="hor">
+	<tr>
+		<th><?php echo $this->translate("Obtained").' '.$this->translate("Name")?></th>
+		<th><?php echo $this->translate("Year").' '.$this->translate("Obtained")?></th>
+		<th><?php echo $this->translate("Certificate").' '.$this->translate("Name")?></th>
+		<th><?php echo $this->translate("Result").' '.$this->translate("Type")?></th>
+		<th><?php echo $this->translate("Institution")?></th>
+		<th><?php echo $this->translate("Result/Total Score")?></th>
+		<th><?php echo $this->translate("Subjects")?></th>
+		<th><?php echo $this->translate("Add Subject")?></th>
+		<th><?php echo $this->translate("Delete")?></th>
+	</tr>
+        <?php $rowid = 1; foreach($this->applicantqualification as $item) { ?>
+        <tr>
+            <td><?php echo $item['PlaceObtained']; ?><input type="hidden" name="PlaceObtained[]" value="<?php echo $item['IdPlaceObtained']; ?>" />
+                <input type="hidden" name="IdApplicationQualification[]" value="<?php echo $item['IdApplicationQualification']; ?>" />
+            <input type="hidden" class="QualificationLevel" id="QualificationLevel" name="QualificationLevel[]" value="<?php echo $item['IdEducationalLevel']; ?>" />
+            <input type="hidden" name="InstitutionAddress1[]" value="<?php echo $item['instituteaddress1']; ?>" />
+            <input type="hidden" name="InstitutionAddress2[]" value="<?php echo $item['instituteaddress2']; ?>" />
+            <input type="hidden" name="Country[]" value="<?php echo $item['IdCountry']; ?>" />
+            <input type="hidden" name="Province[]" value="<?php echo $item['IdState']; ?>" />
+            <input type="hidden" name="City[]" value="<?php echo $item['IdCity']; ?>" />
+            <input type="hidden" name="PostCode[]" value="<?php echo $item['zipcode']; ?>" /></td>
+            <td><?php echo $item['yearobtained']; ?> <input type="hidden" name="YearObtained[]" value="<?php echo $item['yearobtained']; ?>" /></td>
+            <td><?php echo $item['Certificate']; ?><input type="hidden" name="Certificate[]" value="<?php echo $item['IdCertificate']; ?>" /></td>
+            <td><?php echo $item['ResultItem']; ?><input type="hidden" name="ResultItem[]" value="<?php echo $item['IdResultItem']; ?>" /></td>
+            <td><?php echo $item['Institution']; ?><input type="hidden" name="Institution[]" value="<?php echo $item['IdInstitute']; ?>" /></td>
+            <td><?php echo $item['resulttotal']; ?><input type="hidden" name="Result[]" value="<?php echo $item['resulttotal']; ?>" /></td>
+            <td>
+                    <table id='subject<?php echo $rowid; ?>' width='100%'>
+                           <tr>
+                               <th>Subject Name</th>
+                               <th>Subject Grade</th>
+                               <th>Delete</th>
+                           </tr>
+                           <?php foreach($item['subjectdetails'] as $subject) {  ?>
+                           <tr>
+                               <td><?php echo $subject['Subject']." - ".$subject['SubjectCode'] ?><input type="hidden" name="Subject[<?php echo "subject".$rowid; ?>][]" value="<?php echo $subject['IdSubject']; ?>" /></td>
+                               <td><?php echo $subject['SubjectGrade'] ?><input type="hidden" name="SubjectGrade[<?php echo "subject".$rowid; ?>][]" value="<?php echo $subject['IdSubjectGrade']; ?>" /></td>
+                               <td><a href='#' onClick='deleteSubjectRow(this,"subject<?php echo $rowid;  ?>"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+                           </tr>
+                           <?php } ?>
+                    </table></td>
+            <td><a href="#" onclick="javascript:fnaddSubject('<?php echo $rowid; ?>');" id="add-subject" name="Add-Subject">Add Subject</a></td>
+            <td><a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+        </tr>
+        <?php $rowid++; } ?>
+</table>
+</form>
+<table class="table" width="100%">
+	<tr>
+		<td colspan="4" align="right"><input type="button" name="submit"
+			id="save-next" value="Save & Next" /></td>
+	</tr>
+</table>
+<script type="text/javascript">
+dojo.addOnLoad(function() {
+	dijit.byId('QualificationLevel').set('value','');
+	dijit.byId('QualificationLevel').set('placeHolder','Select');
+	dijit.byId('Certificate').set('value','');
+	dijit.byId('Certificate').set('placeHolder','Select');
+	dijit.byId('Institution').set('value','');
+	dijit.byId('Institution').set('placeHolder','Select');
+	dijit.byId('Country').set('value','');
+	dijit.byId('Country').set('placeHolder','Select');
+	dijit.byId('Province').set('value','');
+	dijit.byId('Province').set('placeHolder','Select');
+	dijit.byId('City').set('value','');
+	dijit.byId('City').set('placeHolder','Select');
+	dijit.byId('ResultItem').set('value','');
+	dijit.byId('ResultItem').set('placeHolder','Select');
+	dijit.byId('PlaceObtained').set('value','');
+	dijit.byId('PlaceObtained').set('placeHolder','Select');
+	var cid = dijit.byId('Country').value;
+	fnGetCountryStateList(cid,"Province");
+});
+
+function validateQualification() {
+    var flag = true;
+    var tablerow = 1;
+    $(".QualificationLevel").each(function(){
+        var formData = {'idQualification':$(this).val()};
+       $.ajax({
+                                 type: 'POST',
+                                 url: '<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'verifyqualification'),'default',true);?>',
+                                 async: false,
+                                 data: formData,
+                                 success: function(responseText) {
+                                       if(responseText == "1"){
+                                           var rowcount = $("#subject"+tablerow).find("tr").length;
+                                           if(rowcount == 1) {
+                                               alert("Plase add subjects");
+                                               flag = false;
+                                           }
+                                       }
+                                 }
+                            });
+    });
+    return flag;
+}
+$(document).ready(function() {
+
+	$('#add-entry').bind("click",function(){
+		$("#qualification-form-dialog").dialog({ zIndex: 900 });
+		$("#qualification-form-dialog").dialog( "open" );
+	});
+
+	$("#save-next").bind("click",function(){
+                        if(validateQualification()) {
+                                var formData = $("#addqualification").serialize();
+
+                                $.ajax({
+                                 type: 'POST',
+                                 url: '<?php echo $this->url(array('controller'=>'onlineapplication', 'action'=>'addqualification'),'default',true);?>',
+                                 async: false,
+                                 data: formData,
+                                 success: function(responseText) {
+                                	 console.log(responseText);
+                                	 	  var obj = jQuery.parseJSON(responseText);
+                                          if(obj['value'] == "redirect"){
+                                         	 window.location.href = "<?php echo $this->baseUrl();?>/onlineapplication/applicationstatus";
+ 										  }
+                                          else if(obj['value'] == "false"){
+                                         	var tabid = '4';
+											var tab_id = "#tab"+tabid;
+											$(tab_id).live('click',function(){
+											var activeTab = $(this);
+											// check if the current tab already selected
+											if($(this).hasClass("selected")){
+												return;
+											}
+
+											var contentId = $(this).attr("id");
+											contentId = contentId.replace("tab", "content");
+
+
+											// remove selected class for previous tab
+											var tmp = $("#tabbedpanels a.selected").attr("id").replace("tab", "content");
+
+											$("#tabbedpanels a.selected").removeClass("selected");
+
+											$("#"+tmp).hide();
+
+											// 	adding selected class to this tab
+											$(this).addClass("selected");
+
+											$("#"+contentId).show();
+												});
+											$("#tab4").click();
+                                          }
+
+                                 }
+                            });
+                          }
+	});
+
+
+	$( "#qualification-form-dialog" ).dialog({
+		autoOpen: false,
+		height: 500,
+		width: 450,
+		zIndex : 900,
+		modal: true,
+		buttons: {
+			"Add Qualification": function() {
+				if(fnvalidateform()) {
+					//Place Obtained
+					var PlaceObtained = dijit.byId("PlaceObtained").value;
+					var PlaceObtainedName = dijit.byId("PlaceObtained").displayedValue;
+					//Year Obtained
+					var YearObtained = dijit.byId("YearObtained").value;
+					//QualificationLevel
+					var QualificationLevel = dijit.byId("QualificationLevel").value;
+					var QualificationLevelName = dijit.byId("QualificationLevel").displayedValue;
+					//Certificate
+					var Certificate = dijit.byId("Certificate");
+					var CertificateName = dijit.byId("Certificate").displayedValue;
+					//Institution
+					var Institution = dijit.byId("Institution");
+					var InstitutionName = dijit.byId("Institution").displayedValue;
+					//Institution Address 1
+					var InstitutionAddress1 = dijit.byId("InstitutionAddress1").value;
+					//Institution Address 2
+					var InstitutionAddress2 = dijit.byId("InstitutionAddress2").value;
+					//Result Item
+					var ResultItem = dijit.byId("ResultItem").value;
+					var ResultItemName = dijit.byId("ResultItem").displayedValue;
+					//Country
+					var Country = dijit.byId("Country").value;
+					var CountryName = dijit.byId("Country").displayedValue;
+					//Province
+					var Province = dijit.byId("Province").value;
+					var ProvinceName = dijit.byId("Province").displayedValue;
+					//City
+					var City = dijit.byId("City").value;
+					var CityName = dijit.byId("City").displayedValue;
+					//Result
+					var Result = dijit.byId("Result").value;
+					//Postcode
+					var PostCode = dijit.byId("PostCode").value;
+					
+					var trow=document.getElementById('hor').insertRow(rowid);
+					var tcol1=trow.insertCell(0);
+					var tcol2=trow.insertCell(1);
+					var tcol3=trow.insertCell(2);
+					var tcol4=trow.insertCell(3);
+					var tcol5=trow.insertCell(4);
+					var tcol6=trow.insertCell(5);
+					var tcol7=trow.insertCell(6);
+					var tcol8=trow.insertCell(7);
+					var tcol9=trow.insertCell(8);
+					tcol1.innerHTML="<input type='hidden' value='"+PlaceObtained+"' name=PlaceObtained[]>"+PlaceObtainedName +"<input type='hidden' class='QualificationLevel' name='QualificationLevel[]' value='"+QualificationLevel+"' /> <input type='hidden' name='InstitutionAddress1[]' value='"+InstitutionAddress1+"' /><input type='hidden' name='InstitutionAddress2[]' value='"+InstitutionAddress2+"' /> <input type='hidden' name='Country[]' value='"+Country+"' /> <input type='hidden' name='Province[]' value='"+Province+"' /> <input type='hidden' name='City[]' value='"+City+"' /> <input type='hidden' name='PostCode[]' value='"+PostCode+"' /><input type='hidden' name='IdApplicationQualification[]' value='new' />";
+					tcol2.innerHTML="<input type='hidden' value='"+YearObtained+"' name=YearObtained[]>"+YearObtained;
+					tcol3.innerHTML="<input type='hidden' value='"+Certificate+"' name=Certificate[]>"+CertificateName;
+					tcol5.innerHTML="<input type='hidden' value='"+ResultItem+"' name=ResultItem[]>"+ResultItemName;
+					tcol4.innerHTML="<input type='hidden' value='"+Institution+"' name=Institution[]>"+InstitutionName;
+					tcol6.innerHTML="<input type='hidden' value='"+Result+"' name=Result[]>"+Result;
+					tcol7.innerHTML="<table id='subject"+rowid+"' width='100%'><tr><th>Subject Name</th><th>Subject Grade</th><th>Delete</th></tr></table>";
+					tcol8.innerHTML='<a href="#" onclick="javascript:fnaddSubject('+rowid+');" id="add-subject" name="Add-Subject">Add Subject</a>';
+					tcol9.innerHTML="<a href='#' onClick='	deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+					rowid++;
+					$( this ).dialog( "close" );
+				}
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			dijit.byId('QualificationLevel').set('value','');
+			dijit.byId('QualificationLevel').set('placeHolder','Select');
+			dijit.byId("QualificationLevel").attr('required','false');
+
+			dijit.byId('Certificate').set('value','');
+			dijit.byId('Certificate').set('placeHolder','Select');
+			dijit.byId("Certificate").attr('required','false');
+
+			dijit.byId('Institution').set('value','');
+			dijit.byId('Institution').set('placeHolder','Select');
+			dijit.byId("Institution").attr('required','false');
+
+			dijit.byId('Country').set('value','');
+			dijit.byId('Country').set('placeHolder','Select');
+			dijit.byId("Country").attr('required','false');
+
+			dijit.byId('Province').set('value','');
+			dijit.byId('Province').set('placeHolder','Select');
+			dijit.byId("Province").attr('required','false');
+
+			dijit.byId('City').set('value','');
+			dijit.byId('City').set('placeHolder','Select');
+			dijit.byId("City").attr('required','false');
+
+			dijit.byId('ResultItem').set('value','');
+			dijit.byId('ResultItem').set('placeHolder','Select');
+			dijit.byId("ResultItem").attr('required','false');
+
+			dijit.byId('PlaceObtained').set('value','');
+			dijit.byId('PlaceObtained').set('placeHolder','Select');
+			dijit.byId("PlaceObtained").attr('required','false');
+
+			dijit.byId('YearObtained').set('value','');
+			dijit.byId("YearObtained").attr('required','false');
+
+			dijit.byId('InstitutionAddress1').set('value','');
+			dijit.byId("InstitutionAddress1").attr('required','false');
+
+			dijit.byId('InstitutionAddress2').set('value','');
+			dijit.byId("InstitutionAddress2").attr('required','false');
+
+			dijit.byId('PostCode').set('value','');
+			dijit.byId("PostCode").attr('required','false');
+
+			dijit.byId('Result').set('value','');
+			dijit.byId("Result").attr('required','false');
+		}
+	});
+
+	$( "#subjectgrade-form-dialog" ).dialog({
+		autoOpen: false,
+		height: 200,
+		width: 450,
+		zIndex : 910,
+		modal: true,
+		buttons: {
+			"Add Subject": function() {
+				var newrow = $(this).data('rowid');
+		          var qualificationlevel = $(".QualificationLevel");
+		          var selectedqua = $(qualificationlevel[(newrow-1)]).val();
+				var Subject = dijit.byId("Subject").value;
+				var SubjectName = dijit.byId("Subject").displayedValue;
+				var SubjectGrade = dijit.byId("SubjectGrade").value;
+				var SubjectGradeName = dijit.byId("SubjectGrade").displayedValue;
+				if(SubjectGradeName == "") {
+					alert("Please select subject.");
+					return false;
+				}
+                                var obj = $("#"+selectedrowid);
+                                if(obj) {
+                                	batchArray.push(Subject+selectedqua);
+                                	if(arrHasDupes(batchArray)){                
+                                        alert("Duplicate Entry of Subject");
+                                        batchArray = batchArray.unique();
+                                    }
+                                	else {
+	                                    var trow=obj[0].insertRow(subrowid);
+	                                    var tcol1=trow.insertCell(0);
+	                                    var tcol2=trow.insertCell(1);
+	                                    var tcol3=trow.insertCell(2);
+	                                    tcol1.innerHTML="<input type='hidden' value='"+Subject+"' name=Subject["+selectedrowid+"][]>"+SubjectName;
+	                                    tcol2.innerHTML="<input type='hidden' value='"+SubjectGrade+"' name=SubjectGrade["+selectedrowid+"][]>"+SubjectGradeName;
+	                                    tcol3.innerHTML="<a href='#' onClick=deleteSubjectRow(this,'"+selectedrowid+"'); return false;><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+	                                    subrowid++;
+	                                    $( this ).dialog( "close" );
+                                	}
+                                }
+			},
+			Cancel: function() {
+				$( this ).dialog( "close" );
+			}
+		},
+		close: function() {
+			//allFields.val( "" ).removeClass( "ui-state-error" );
+		}
+	});
+});
+
+function fnaddSubject(rowid){
+	$("#subjectgrade-form-dialog").dialog( "open" );
+	var qualificationlevel = $(".QualificationLevel");
+	console.log(qualificationlevel);
+	var selectedqua = $(qualificationlevel[(rowid-1)]).val();
+	loadSubject(selectedqua);
+	loadSubjectgradelist(selectedqua);
+	selectedrowid = "subject" + rowid;
+	subrowid = $("#subject"+rowid).find("tr").length;
+    if(subrowid == 0) {
+        subrowid = 1;
+    }
+
+}
+
+function loadSubject(IdQua){
+    var formData = {'IdQualification':IdQua};
+	$.ajax({
+	       type: 'POST',
+	       url: '<?php echo $this->baseUrl();?>'+'/onlineapplication/getsubjectlistforqualification',
+	       async: false,
+	       dataType: "json",
+	       data: formData,
+	       success: function(responseText) {
+	       		AutoFillNextEditableDropDown("Subject",responseText);                        
+		   }
+	});
+  }
+
+function loadSubjectgradelist(IdQua) {
+	var formData = {'IdQualification':IdQua};
+	console.log(formData);
+	$.ajax({
+	       type: 'POST',
+	       url: '<?php echo $this->baseUrl();?>'+'/onlineapplication/getsubjectgrade',
+	       async: false,
+	       dataType: "json",
+	       data: formData,
+	       success: function(responseText) {
+	       		console.log(responseText);
+	       		AutoFillNextEditableDropDown("SubjectGrade",responseText);
+		   }
+	});
+}
+
+function deleteRow(r)
+{
+	rowid--;
+
+	var i=r.parentNode.parentNode.rowIndex;
+	//batchArray.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+
+}
+
+function deleteSubjectRow(r,table_id) {
+        var i=r.parentNode.parentNode.rowIndex;
+	//batchArray.splice(parseInt(i-1),1);
+	document.getElementById(table_id).deleteRow(i);
+}
+
+
+
+function fnvalidateform() {
+	var flag = true;
+	var lstrplaceobtained = dijit.byId("PlaceObtained").displayedValue;
+
+	if(dijit.byId("YearObtained").value==''){
+	    dijit.byId("YearObtained").attr('required','true');
+		dijit.byId("YearObtained").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("QualificationLevel").value=='Invalid Date'){
+	    dijit.byId("QualificationLevel").attr('required','true');
+		dijit.byId("QualificationLevel").focus();
+		flag = false;
+	}
+	if(dijit.byId("Certificate").value==''){
+	    dijit.byId("Certificate").attr('required','true');
+		dijit.byId("Certificate").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("Institution").value==''){
+	    dijit.byId("Institution").attr('required','true');
+		dijit.byId("Institution").focus();
+		flag = false;
+	}
+
+	/*if(dijit.byId("InstitutionAddress1").value==''){
+	    dijit.byId("InstitutionAddress1").attr('required','true');
+		dijit.byId("InstitutionAddress1").focus();
+		flag = false;
+	}*/
+	if(lstrplaceobtained == "Outside") {
+		if(dijit.byId("Country").value==''){
+		    dijit.byId("Country").attr('required','true');
+			dijit.byId("Country").focus();
+			flag = false;
+		}
+	}
+	else {
+		dijit.byId("Country").attr('required','false');
+	}
+
+	/*if(dijit.byId("City").value==''){
+	    dijit.byId("City").attr('required','true');
+		dijit.byId("City").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("Province").value==''){
+	    dijit.byId("Province").attr('required','true');
+		dijit.byId("Province").focus();
+		flag = false;
+	}
+
+	if(dijit.byId("PostCode").value==''){
+	    dijit.byId("PostCode").attr('required','true');
+		dijit.byId("PostCode").focus();
+		flag = false;
+	}*/
+
+//	if(dijit.byId("ResultItem").value==''){
+//	    dijit.byId("ResultItem").attr('required','true');
+//		dijit.byId("ResultItem").focus();
+//		flag = false;
+//	}
+//
+//	if(dijit.byId("Result").value==''){
+//	    dijit.byId("Result").attr('required','true');
+//		dijit.byId("Result").focus();
+//		flag = false;
+//	}
+	if(!dijit.byId("YearObtained").validate()) {
+    	dijit.byId("YearObtained").attr('required','true');
+      dijit.byId("YearObtained").focus();
+      flag = false;
+    }
+	return flag;
+}
+function fnGetStateCityList(StCity){
+	if(StCity != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getstatecitylistonlineapp/idState/"+StCity,
+					handleAs:'json',
+					load:function(data){
+						AutoFillNextEditableDropDown("City",data);
+					}
+			   }
+			dojo.xhrGet(xhrArgs);
+		}
+	}
+function fnGetStateCityListofUniversity(idState){
+if(idState != "")
+	{ var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getstatecitylistonlineapp/idState/"+idState,
+				handleAs:'json',
+				load:function(data){
+					AutoFillNextEditableDropDown("City",data);
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+}
+function fnGetCountryStateList(idCountry,state){
+if(idCountry != "")
+	{
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/onlineapplication/getcountrystateslistonlineapp/idCountry/"+idCountry,
+				handleAs:'json',
+				load:function(data){
+					AutoFillNextEditableDropDown(state,data);
+				}
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+}
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+    var i, j, n;
+    n=A.length;
+    // to ensure the fewest possible comparisons
+    for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+      for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+        if (A[i]==A[j]) return true;
+      }	}
+    return false;
+  }
+
+  Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+
+function loadInstitutionAddress() {
+    var id = dijit.byId('Institution').value;
+    if(id!="") {
+    var formData = {'idInstitute':id};
+	    $.ajax({
+			         type: 'POST',
+			         url: '<?php echo $this->baseUrl();?>'+'/onlineapplication/getinstitutionaddress',
+			         async: false,
+			         data: formData,
+			         success: function(responseText) {
+			         				var data = eval("("+responseText+")");
+	                                $("#InstitutionAddress1").val(data[0].InstitutionAddress1);
+	                                $("#InstitutionAddress2").val(data[0].InstitutionAddress2);
+	                                dijit.byId("Country").setValue(data[0].Country);
+	                                fnGetCountryStateList(data[0].Country,'State');
+	                                dijit.byId("Province").setValue(data[0].State);
+	                                fnGetStateCityList(data[0].State);
+	                                dijit.byId("City").setValue(data[0].City);
+	                                dijit.byId("PostCode").setValue(data[0].Zip);
+			         }
+			  });
+    }
+}
+
+</script>

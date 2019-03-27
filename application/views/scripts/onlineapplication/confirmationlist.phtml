@@ -1,0 +1,297 @@
+<?php if($this->accepted == 1) {?>
+<div class="message notice"><strong>You have submitted your confirmation application</strong>.</div>
+
+<?php }?>
+
+<?php if($this->count > 0 && $this->accepted == 0) {?>
+<form onsubmit="return fnValidateForm()" id="mylobjStudentApplicationForm" action="" method="POST"  name= "mylobjStudentApplicationForm">
+
+<fieldset>
+	<legend><?php echo $this->translate("Student").' '.$this->translate("Application");?></legend>
+	<div  style="height:500px;width:99%;overflow:auto">
+	<?php foreach($this->studenteducationdetails as $studenteducationdetails){?>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		<tr>
+			<td>
+				<table class="table" width="100%" cellpadding="5" cellspacing="1">
+					<tr>
+						<th colspan ="4"><?php echo $this->translate("Personal").' '.$this->translate("Details");?></th>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("First").' '.$this->translate("Name");?></td>
+						<td><?php echo $studenteducationdetails['FName'];?></td>
+						<td><?php echo $this->translate("Middle").' '.$this->translate("Name");?></td>
+						<td><?php echo $studenteducationdetails['MName'];?>
+							<input type = "hidden" value = "<?php echo $this->IdApplication;?>" name= "IdApplication"></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Last").' '.$this->translate("Name");?></td>
+						<td><?php echo $studenteducationdetails['LName'];?></td>
+						<td><?php echo $this->translate("Date").' '.$this->translate("of").' '.$this->translate("Birth");?></td>
+						<td><?php echo date ( "d-m-Y", strtotime ( $studenteducationdetails['DateOfBirth']));?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Gender");?></td>
+						<td><?php if($studenteducationdetails['Gender'] == 1) {
+									echo "Male"; } else {
+									echo "Female";}?>
+						</td>
+						<td><?php echo $this->translate("Nationality");?></td>
+						<td><?php echo $studenteducationdetails['Nationality'];?></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate("Marital").' '.$this->translate("Status");?></td>
+						<td><?php if($studenteducationdetails['MaritalStatus'] == 1) {
+									echo "Single"; } else {
+									echo "Married";}?>
+						</td>
+						<td><?php echo $this->translate("No").' '.$this->translate("Of").' '.$this->translate("Children");?></td>
+						<td><?php echo $studenteducationdetails['NoOfChildren'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("IC").' '.$this->translate("Number");?><span class="reqMark">*</span></td>
+						<td><?php echo $studenteducationdetails['ICNumber'];?></td>
+						<td><?php echo $this->translate("Sponsor");?></td>
+						<td><?php echo $studenteducationdetails['Organisation'];?></span></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate("Hobbies");?><span class="reqMark"></span></td>
+						<td><?php echo $studenteducationdetails['hobbies'];?></td>
+						<td><?php echo $this->translate("Extra").' '.$this->translate("Curricular").' '.$this->translate("Activity");?><span class="reqMark"></span></td>
+						<td><?php echo $studenteducationdetails['othercurricularactivity'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+						<td><?php if($studenteducationdetails['Active'] == 1) {
+									echo "Yes"; } else {
+									echo "No";}?></td>
+						<td></td>
+						<td></td>
+					</tr>	
+					<tr>
+						<th colspan ="4"><?php echo $this->translate("Address").' '.$this->translate("Details");?></th>
+					</tr>			
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Permanent").' '.$this->translate("Address");?></td>
+						<td><?php echo $studenteducationdetails['PermAddressDetails'];?></td>
+						<td><?php echo $this->translate("Permanent").' '.$this->translate("City");?></td>
+						<td><?php echo $studenteducationdetails['PermCity'];?></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate("Permanent").' '.$this->translate("Country");?></td>
+						<td><?php echo $studenteducationdetails['PermCountryName'];?></td>
+						<td><?php echo $this->translate("Permanent").' '.$this->translate("State");?></td>
+						<td><?php echo $studenteducationdetails['PermStatename'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Permanent").' '.$this->translate("Zip");?></td>
+						<td><?php echo $studenteducationdetails['PermZip'];?></td>										
+						<td><?php echo $this->translate("Correspondence").' '.$this->translate("Address");?></td>
+						<td><?php echo $studenteducationdetails['CorrsAddressDetails'];?></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate("Correspondence").' '.$this->translate("City");?></td>
+						<td><?php echo $studenteducationdetails['CorrsCity'];?></td>
+						<td><?php echo $this->translate("Correspondence").' '.$this->translate("Country");?></td>
+						<td><?php echo $studenteducationdetails['CorrCountryName'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Correspondence").' '.$this->translate("State");?></td>						
+						<td><?php echo $studenteducationdetails['CorrStatename'];?></td>
+						<td><?php echo $this->translate("Correspondence").' '.$this->translate("Zip");?></td>
+						<td><?php echo $studenteducationdetails['CorrsZip'];?></td>
+					</tr>
+					<tr>
+						<td><?php echo $this->translate("Home").' '.$this->translate("Phone");?></td>
+						<td><?php echo $studenteducationdetails['HomePhone'];?></td>
+						<td><?php echo $this->translate("Cell").' '.$this->translate("Phone");?></td>
+						<td><?php echo $studenteducationdetails['CellPhone'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Fax");?></td>
+						<td><?php echo $studenteducationdetails['Fax'];?></td>
+						<td><?php echo $this->translate("Email").' '.$this->translate("Address");?></td>
+						<td><?php echo $studenteducationdetails['EmailAddress'];?></td>
+					</tr>
+					<?php if($studenteducationdetails['InternationalStd'] == 1 ) {?>
+					<tr>
+						<th colspan ="4"><?php echo $this->translate("International").' '.$this->translate("Student").' '.$this->translate("Details");?></th>
+					</tr>				
+					<tr>		
+						<td><?php echo $this->translate("International").' '.$this->translate("Student");?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+						<td><?php echo $this->translate("Passport").' '.$this->translate("No");?></td>
+						<td><?php echo $studenteducationdetails['PPNos'];?></td>
+						<td><?php echo $this->translate("Passport").' '.$this->translate("Issue").' '.$this->translate("Date");?></td>
+						<td><?php echo $studenteducationdetails['PPIssueDt'];?></td>					
+					</tr>								
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Passport").' '.$this->translate("Expiry").' '.$this->translate("Date");?></td>
+						<td><?php echo date ( "d-m-Y", strtotime ( $studenteducationdetails['PPExpDt']));?></td>
+							<?php if($this->PPField1 != ""){ ?>
+						<td><?php echo $this->translate("$this->PPField1");?></td>
+						<td><?php echo $studenteducationdetails['PPField1'];?></td>
+						<?php }else {?>
+						<td></td>
+						<td></td>
+						<?php }?>	
+					</tr>
+					<?php if($this->PPField2 !="" || $this->PPField3 !=""){ ?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+					<?php if($this->PPField2 !="" && $this->PPField3  ==""){ ?>						
+						<td><?php echo $this->translate("$this->PPField2");?></td>
+						<td><?php echo $studenteducationdetails['PPField2'];?></td>
+						<td></td>
+						<td></td>
+						<?php }else if($this->PPField2 =="" && $this->PPField3 !=""){ ?>
+						<td><?php echo $this->translate("$this->PPField3");?></td>
+						<td><?php echo $studenteducationdetails['PPField3'];?></td>
+						<td></td>
+						<td></td>
+						<?php }else if($this->PPField2 !="" && $this->PPField3 !=""){ ?>
+						<td><?php echo $this->translate("$this->PPField2");?></td>
+						<td><?php echo $studenteducationdetails['PPField2'];?></td>
+						<td><?php echo $this->translate("$this->PPField3");?></td>
+						<td><?php echo $studenteducationdetails['PPField3'];?></td>
+						<?php }?>
+					</tr>
+					<?php }?>
+					<?php if($this->PPField4 || $this->PPField5){ ?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+					<?php if($this->PPField4 && !$this->PPField5){ ?>						
+						<td><?php echo $this->translate("$this->PPField4");?></td>
+						<td><?php echo $studenteducationdetails['PPField4'];?></td>
+						<td></td>
+						<td></td>
+					<?php }else if(!$this->PPField4 && $this->PPField5){ ?>
+						<td><?php echo $this->translate("$this->PPField5");?></td>
+						<td><?php echo $studenteducationdetails['PPField5'];?></td>
+						<td></td>
+						<td></td>
+					<?php }else if($this->PPField4 && $this->PPField5){ ?>
+						<td><?php echo $this->translate("$this->PPField4");?></td>
+						<td ><?php echo $studenteducationdetails['PPField4'];?></td>
+						<td><?php echo $this->translate("$this->PPField5");?></td>
+						<td><?php echo $studenteducationdetails['PPField5'];?></td>
+					<?php }?>
+					</tr>
+					<?php }?>
+					<?php if($this->VisaDetailField1 || $this->VisaDetailField2){ ?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+					<?php if($this->VisaDetailField1 && !$this->VisaDetailField2){ ?>						
+						<td><?php echo $this->translate("$this->VisaDetailField1");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField1'];?></td>
+						<td></td>
+						<td></td>
+					<?php }else if(!$this->VisaDetailField1 && $this->VisaDetailField2){ ?>
+						<td><?php echo $this->translate("$this->VisaDetailField2");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField2'];?></td>
+						<td></td>
+						<td></td>
+						<?php }else if($this->VisaDetailField1 && $this->VisaDetailField2){ ?>
+						<td><?php echo $this->translate("$this->VisaDetailField1");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField1'];?></td>
+						<td><?php echo $this->translate("$this->VisaDetailField2");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField2'];?></td>
+					<?php }?>
+					</tr>
+					<?php }?>
+					<?php if($this->VisaDetailField3 || $this->VisaDetailField4){ ?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+					<?php if($this->VisaDetailField3 && !$this->VisaDetailField4){ ?>						
+						<td><?php echo $this->translate("$this->VisaDetailField3");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField3'];?></td>
+						<td></td>
+						<td></td>
+					<?php }else if(!$this->VisaDetailField3 && $this->VisaDetailField4){ ?>
+						<td><?php echo $this->translate("$this->VisaDetailField4");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField4'];?></td>
+						<td></td>
+						<td></td>
+					<?php }else if($this->VisaDetailField3 && $this->VisaDetailField4){ ?>
+						<td><?php echo $this->translate("$this->VisaDetailField3");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField3'];?></td>
+						<td><?php echo $this->translate("$this->VisaDetailField4");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField4'];?></td>
+					<?php }?>
+					</tr>
+					<?php }?>
+					<?php if($this->VisaDetailField5){ ?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">	
+						<td><?php echo $this->translate("$this->VisaDetailField5");?></td>
+						<td><?php echo $studenteducationdetails['VisaDetailField5'];?></td>
+						<td></td>
+						<td></td>
+					</tr>
+					<?php } }?>
+					<tr>
+						<th colspan ="4"><?php echo $this->translate("Branch").' '.$this->translate("Details");?></th>
+					</tr>	
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Branch Name");?></td>
+						<td><?php echo $studenteducationdetails['CollegeName'];?></td>			
+						<td><?php echo $this->translate("Program");?></td>
+						<td><?php echo $studenteducationdetails['ProgramName'];?></td>
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Placement").' '.$this->translate("Test");?></td>
+						<td><?php echo $studenteducationdetails['PlacementTestName'];?></td>	
+						<td><?php echo date ( "d-m-Y", strtotime ( $studenteducationdetails['PlacementTestDate']));?></td>
+						<td><?php echo $studenteducationdetails['PlacementTestTime'];?></td>																	
+					</tr>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $this->translate("Please").' '.$this->translate("Enter").' '.$this->translate("Your").' '.$this->translate("Student Id")."<br/>".$this->translate("If").' '.$this->translate("Provided").' '.$this->translate("By").' '.$this->translate("College");?></td>
+						<td><?php echo $studenteducationdetails['StudentCollegeId'];?></td>
+						<td></td>
+						<td></td>
+					</tr>
+					</table>
+					<table class="table" width="100%" cellpadding="5" cellspacing="1">
+					<tr>
+						<th colspan ="8"><?php echo $this->translate("Education").' '.$this->translate("Details");?></th>
+					</tr>	
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<th><?php echo $this->translate("Institution").' '.$this->translate("Name");?></th>	
+						<th><?php echo $this->translate("University").' '.$this->translate("Name");?></th>	
+						<th><?php echo $this->translate("Study").' '.$this->translate("Place");?></th>	
+						<th><?php echo $this->translate("Major").' '.$this->translate("Field").' '.$this->translate("of").' '.$this->translate("Study");?></th>	
+						<th><?php echo $this->translate("Year").' '.$this->translate("Of").' '.$this->translate("Study").' '.$this->translate("From");?></th>
+						<th><?php echo $this->translate("Year").' '.$this->translate("Of").' '.$this->translate("Study").' '.$this->translate("To");?></th>	
+						<th><?php echo $this->translate("Degree").' '.$this->translate("Type");?></th>	
+						<th><?php echo $this->translate("Grade").'/'.$this->translate("CGPA").' '.$this->translate("of").' '.$this->translate("Study");?></td>	
+					</tr>
+					<?php foreach ($this->educationdetails as $educationdetails) {?>
+					<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+						<td><?php echo $educationdetails['InstitutionName'];?></td>
+						<td><?php echo $educationdetails['UniversityName'];?></td>
+						<td><?php echo $educationdetails['StudyPlace'];?></td>
+						<td><?php echo $educationdetails['MajorFiledOfStudy'];?></td>
+						<td><?php echo date ( "d-m-Y", strtotime ( $educationdetails['YearOfStudyFrom']));?></td>
+						<td><?php echo date ( "d-m-Y", strtotime ( $educationdetails['YearOfStudyTo']));?></td>
+						<td><?php echo $educationdetails['DefinitionDesc'];?></td>
+						<td><?php echo $educationdetails['GradeOrCGPA'];?></td>
+					</tr>
+					<?php }?>
+					</table>
+				</td>
+			</tr>
+		</table>
+	</div>	
+	<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		<tr>
+		<td align = "right">
+			<input type = "submit" name = "Accept" value = "Accept" dojotype="dijit.form.Button" class="NormalBtn" label="<?php echo $this->translate("Accept"); ?>">
+			<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'default','controller'=>'onlineapplication', 'action'=>'confirmation'),'default',true);?>';" /></td>	
+		</tr>
+	
+	
+	</table>
+</fieldset>	
+<?php } ?>
+</form>
+<?php } if($this->count == 0) {?>
+<div class="message error"><strong>No application. <a href="<?php echo $this->baseUrl();?>/onlineapplication/newstudentapplication">Go to Online Application</a></strong>.</div>
+
+
+<?php }?>

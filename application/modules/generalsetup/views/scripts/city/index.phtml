@@ -1,0 +1,56 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+	});
+</script>
+
+<fieldset>
+<legend><?php echo $this->translate("City").' '.$this->translate("Master");?></legend>
+
+                    <form action="<?php echo $this->baseUrl();?>/generalsetup/city/index/search/1" method="POST">
+                            <table width="100%">
+                                <tr>
+                                 <td><?php echo $this->translate("Country").' '.$this->translate("Name");?></td>
+                                 <td ><?php echo $this->lobjform->field3;?></td>
+                                 <td><?php echo $this->translate("State").' '.$this->translate("Name");?></td>
+                  				 <td ><?php echo $this->lobjform->field2;?></td>
+                                </tr>
+                                 <tr>
+                                <td ><?php echo $this->translate("Active");?></td>
+                   				<td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+
+                                <tr>
+									<td colspan="4" align="center">
+									<?php echo $this->lobjform->Search;?>
+									<?php echo $this->lobjform->Clear;?>
+									</td>
+                                </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+  <br/>       
+<fieldset>
+
+<table class="table" width="100%" cellpadding="5" cellspacing="1">
+    <tr>
+        <th><?php echo $this->translate("State").' '.$this->translate("Name") ?></th>
+        <th><?php echo $this->translate("State").' '.$this->translate("Code") ?></th>
+    </tr>
+        <?php if (count($this->paginator)): ?>
+        <?php foreach ($this->paginator as $lobjCountry ): ?>
+    <tr>
+    <tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+    <td><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'city', 'action'=>'citylist' ,'id'=>$lobjCountry['idState']),'default',true);?>" ><?php print_r($this->escape($lobjCountry['StateName']));?></a></td>   
+  	 <td><?php echo $lobjCountry['StateCode'];?></td>
+     <?php endforeach; ?>
+     <?php endif; ?>
+                
+    </tr>
+    <tr>
+	        	<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   	</tr>
+</table>
+</fieldset>
+
+

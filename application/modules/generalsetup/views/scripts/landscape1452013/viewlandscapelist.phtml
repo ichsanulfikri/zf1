@@ -1,0 +1,212 @@
+
+<fieldset>
+	<legend>
+		<?php echo $this->translate($this->Landscape);?>
+	</legend>
+	<Form dojoType="dijit.form.Form" id="myForm" action="" method="post"
+		name="myForm">
+		<script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					if(TotalSubHours < ProgramCreditHours)
+					{
+						alert("Subjects Total Credit Hours Should be Equal to Program Total Credit Hours");
+						return false;
+					}
+					else
+						return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php if($this->LandscapeType==43) {?>
+		<table class="table" width="100%">
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Program).' '.$this->translate("Name");?>
+				</th>
+			</tr>
+			<tr>
+				<td colspan="2"><?php echo $this->program;?></td>
+				<td colspan="2"><?php echo $this->translate("Total")." ".$this->translate("Credit")." ".$this->translate("Hours")." : ".$this->programcredit?>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Landscape).' '.$this->translate("Details");?>
+				</th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate($this->Landscape);?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->DefinitionDesc;?> <?php echo $this->lobjlandscapeform->UpdDate;?>
+					<?php echo $this->lobjlandscapeform->UpdUser;?> <?php echo $this->lobjlandscapeform->IdProgram;?>
+				</td>
+				<td><?php echo $this->translate("Start");?> <?php echo $this->translate("Semester");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->SemesterMasterName;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("No").' '.$this->translate("of").' '.$this->translate("Semester");?>
+				</td>
+				<td><?php echo $this->SemsterCount;?></td>
+				<td><?php echo $this->translate("Active");?><span class="reqMark"></span>
+				</td>
+				<td><?php echo $this->Active;?></td>
+			</tr>
+
+		</table>
+		<table id="hor" class="table" width="100%">
+			<?php if($this->idlandscape) {?>
+			<tr>
+				<th><?php echo $this->translate->_("Subject").' '.$this->translate->_("Type")?>
+				</th>
+				<th><?php echo $this->translate->_("Credit").' '.$this->translate->_("Hours")?>
+				</th>
+			</tr>
+			<?php 
+						foreach($this->programreqresult as $programreqresult) { ?>
+			<tr>
+				<td><?php echo $programreqresult['DefinitionDesc'];?></td>
+				<td><?php echo $programreqresult['CreditHours'];?></td>
+			</tr>
+			<?php } 
+}?>
+		</table>
+
+		<table id="hor1" class="table" width="100%">
+			<tr>
+				<th><?php echo $this->translate->_("Subject");?></th>
+				<th><?php echo $this->translate->_("Subject").' '.$this->translate->_("Type");?>
+				</th>
+				<th><?php echo $this->translate->_("Credit").' '.$this->translate->_("Hours");?>
+				</th>
+				<th><?php echo $this->translate->_("Compulsory")?></th>
+			</tr>
+			<?php foreach($this->landscapesubresult as $programreqresult) { ?>
+			<tr>
+				<td><?php echo $programreqresult['SubjectName'];?></td>
+				<td><?php echo $programreqresult['DefinitionDesc'];?></td>
+				<td><?php echo $programreqresult['CreditHours'];?></td>
+				<td><?php echo ($programreqresult['Compulsory'] == 1 ? "Yes":"No");?>
+				</td>
+			</tr>
+			<?php } ?>
+		</table>
+		<table class="table" width="100%">
+			<tr align="right">
+				<td><input type="button" class="NormalBtn"
+					dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Back"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'addlandscape','id'=>$this->IdProgram),'default',true);?>';" />
+
+
+				</td>
+			</tr>
+
+		</table>
+		<?php }else{?>
+		<!-- Block Based -->
+
+		<table class="table" width="100%">
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Program).' '.$this->translate("Name");?>
+				</th>
+			</tr>
+			<tr>
+				<td colspan="2"><?php echo $this->program;?></td>
+				<td colspan="2"><?php echo $this->translate("Total")." ".$this->translate("Credit")." ".$this->translate("Hours")." : ".$this->programcredit?>
+				</td>
+			</tr>
+			<tr>
+				<th colspan="4"><?php echo $this->translate($this->Landscape).' '.$this->translate("Details");?>
+				</th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate($this->Landscape);?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->DefinitionDesc;?>
+				
+				<td><?php echo $this->translate("Start");?> <?php echo $this->translate("Semester");?><span
+					class="reqMark"></span></td>
+				<td><?php echo $this->SemesterMasterName;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("No").' '.$this->translate("of").' '.$this->translate("Semester");?>
+				</td>
+				<td><?php echo $this->SemsterCount;?></td>
+				<td><?php echo $this->translate("Active");?><span class="reqMark"></span>
+				</td>
+				<td><?php echo $this->Active;?></td>
+			</tr>
+		</table>
+		<table id="hor" class="table" width="100%">
+			<tr>
+				<th><?php echo $this->translate->_("No of Blocks");?></th>
+				<th><?php echo $this->translate->_("Block").' '.$this->translate->_("Name");?>
+				</th>
+			</tr>
+			<?php if ($this->larrLandScapeBlock):?>
+			<?php foreach ($this->larrLandScapeBlock as $larrLandScapeBlock): ?>
+
+			<tr>
+				<td><?php echo $larrLandScapeBlock['block'];?></td>
+				<td><?php echo $this->escape($larrLandScapeBlock['blockname']);?></td>
+			</tr>
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</table>
+
+
+		<table id="hor" class="table" width="100%">
+			<tr>
+				<th colspan="2"><?php echo $this->translate->_("Block").' '.$this->translate->_("Subject Details");?>
+				</th>
+			</tr>
+			<tr>
+				<th><?php echo $this->translate->_("Block").' '.$this->translate->_("Name");?>
+				</th>
+				<th><?php echo $this->translate->_("Subject");?></th>
+			</tr>
+			<?php if ($this->larrLandScapeBlockSubject):?>
+			<?php foreach ($this->larrLandScapeBlockSubject as $larrLandScapeBlockSubject): ?>
+			<tr>
+				<td><?php echo $this->escape($larrLandScapeBlockSubject['blockname']);?>
+				</td>
+				<td><?php echo $this->escape($larrLandScapeBlockSubject['SubjectName']);?>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</table>
+		<table id="hor" class="table" width="100%">
+			<tr>
+				<th><?php echo $this->translate->_("Block").' '.$this->translate->_("Name");?>
+				</th>
+				<th><?php echo $this->translate->_("Semester");?></th>
+			</tr>
+			<?php if ($this->larrLandScapeBlockSemester):?>
+			<?php foreach ($this->larrLandScapeBlockSemester as $larrLandScapeBlockSemester): ?>
+			<tr>
+				<td><?php echo $this->escape($larrLandScapeBlockSemester['blockname']);?>
+				</td>
+				<td><?php echo $this->escape($larrLandScapeBlockSemester['semesterid']);?>
+				</td>
+			</tr>
+			<?php endforeach; ?>
+			<?php endif; ?>
+		</table>
+		<table class="table" width="100%">
+			<tr align="right">
+				<td><input type="button" class="NormalBtn"
+					dojotype="dijit.form.Button"
+					label="<?php echo $this->translate("Back"); ?>"
+					onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'addlandscape','id'=>$this->IdProgram),'default',true);?>';" />
+
+
+				</td>
+			</tr>
+
+		</table>
+
+		<?php }?>
+	</Form>
+
+</fieldset>

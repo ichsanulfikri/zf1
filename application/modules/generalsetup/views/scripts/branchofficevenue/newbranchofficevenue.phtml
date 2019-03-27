@@ -1,0 +1,353 @@
+<script type="text/javascript">
+var batchArray1  = new Array();
+var batchArray2  = new Array();
+var rowids=1;
+dojo.addOnLoad(function(){
+
+	if(dijit.byId('AffiliatedTo')) {
+		dijit.byId('AffiliatedTo').set('value','');
+		dijit.byId('AffiliatedTo').set('placeHolder','Select');
+	}
+	if(dijit.byId('RegistrationLoc')) {
+		dijit.byId('RegistrationLoc').set('value','');
+		dijit.byId('RegistrationLoc').set('placeHolder','Select');
+	}
+	if(dijit.byId('Programme')) {
+		dijit.byId('Programme').set('value','');
+		dijit.byId('Programme').set('placeHolder','Select');
+	}
+	if(dijit.byId('Branch')) {
+		dijit.byId('Branch').set('value','');
+		dijit.byId('Branch').set('placeHolder','Select');
+	}
+	dijit.byId('IdType').set('value','');
+	dijit.byId('IdType').set('placeHolder','Select');
+	dijit.byId('idCountry').set('value','');
+	dijit.byId('idCountry').set('placeHolder','Select');
+
+});	
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+	
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+	                
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("idState",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+	var options = {
+				label:"name",
+				identifier:"key",
+				items:JSONText
+			  };
+	ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+function registrationLocInsert() {
+	var flag = true;
+	 if(dijit.byId("RegistrationLoc").value==''){
+		    dijit.byId("RegistrationLoc").attr('required','true');
+			dijit.byId("RegistrationLoc").focus();flag = false;
+		}
+		if(dijit.byId("Programme").value==''){
+		    dijit.byId("Programme").attr('required','true');
+			dijit.byId("Programme").focus();flag = false;
+		}	
+    if(flag == true) {
+		RegistrationInsertion();	
+	}		
+   
+	return flag;
+}
+
+function RegistrationInsertion() {
+	var RegistrationLoc = dijit.byId("RegistrationLoc").value;
+	var RegistrationLocName = dijit.byId("RegistrationLoc").displayedValue;
+	var Programme = dijit.byId("Programme").value;
+	var ProgrammeName = dijit.byId("Programme").displayedValue;
+	var duplication1 = RegistrationLoc;
+	var duplication2 = ProgrammeName;
+	batchArray1.push(RegistrationLoc+ProgrammeName);
+	//batchArray2.push(duplication2);
+	if(arrHasDupes(batchArray1))
+	{
+		batchArray1 = batchArray1.unique();
+		//batchArray2 = batchArray2.unique();
+		alert("Duplicate Entry");
+	} 
+	else 
+	{
+		var trow = document.getElementById('hor').insertRow(rowids);
+		var tcol0=trow.insertCell(0);
+		var tcol1=trow.insertCell(1);
+		var tcol2=trow.insertCell(2);
+		
+		tcol0.innerHTML="<input type='hidden' value='"+RegistrationLoc+"' name=RegistrationLocgrid[]>"+RegistrationLocName;
+		tcol1.innerHTML="<input type='hidden' value='"+Programme+"' name=Programmegrid[]>"+ProgrammeName;
+		tcol2.innerHTML="<a href='#' onClick='deleteRows(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowids++;
+	}
+	
+}
+function deleteRows(r)
+{
+	rowids--;
+	var i=r.parentNode.parentNode.rowIndex;
+	batchArray1.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+}
+
+function checkphonefield(){
+ var workphone = dijit.byId("Phone").value;
+ var workcountrycode = dijit.byId('countrycode').value;
+ var workstatecode = dijit.byId('statecode').value;
+ if(workcountrycode!=''){
+   if(workstatecode == ''){
+    dijit.byId("statecode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("statecode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("Phone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(workstatecode!=''){
+   if(workcountrycode == ''){
+    dijit.byId("countrycode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("countrycode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("Phone").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone").set( "state", "Error" );
+    return false;
+   }
+ }
+  if(workphone != ''){
+    var len = workphone.length;
+    if(len < 5){
+      dijit.byId("Phone").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone").set( "state", "Error" );
+      return false;
+    }
+    if(workcountrycode == ''){
+      dijit.byId("countrycode").focus();
+       alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("countrycode").set( "state", "Error" );
+      return false;
+    }
+    if(workstatecode == ''){
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("statecode").focus();
+      dijit.byId("statecode").set( "state", "Error" );
+      return false;
+    }
+  }
+  return true;
+}
+</script>
+<fieldset>
+<legend><?php echo $this->translate->_($this->idbrch);?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+                  if(checkphonefield()){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
+				</script>
+		<?php echo $this->lobjBranchofficevenueform->UpdDate;?>
+		<?php echo $this->lobjBranchofficevenueform->UpdUser;?>
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate->_($this->idbrch).' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate($this->idbrch).' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->BranchName;?></td>
+				<td><?php echo $this->translate($this->idbrch).' '.$this->translate("Short").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->ShortName;?></td>
+				
+			</tr>
+			
+			
+						<?php if($this->lintidbrc == 1){?>
+                        <tr>
+                        <td ><?php echo $this->translate($this->idbrch).' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->BranchCode;?></td>
+                        <td ><?php echo $this->translate("Type");?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->IdType;?></td>
+                        </tr>
+                        <tr>
+                         <td><?php echo $this->translate($this->defaultlanguage);?></td>
+                            <td ><?php echo $this->lobjBranchofficevenueform->Arabic;?></td>
+                         </tr>
+                        
+                        
+                        <?php } else if($this->lintidbrc == 2) {?>
+                        <tr>
+                        <td ><?php echo $this->translate($this->idbrch).' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->BranchCode;?></td>
+                        <td ><?php echo $this->translate("Branch")?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->Branch;?></td>
+                        </tr>
+                        
+                        <tr>
+                        <td ><?php echo $this->translate("Type");?><span class="reqMark"></span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->IdType;?></td>
+
+                        <td><?php echo $this->translate($this->defaultlanguage);?></td>
+                           <td ><?php echo $this->lobjBranchofficevenueform->Arabic;?></td>
+                        </tr>
+                            
+                            
+                        <?php } else {?>
+                        <tr>
+                        <td ><?php echo $this->translate($this->idbrch).' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->BranchCode;?></td>
+                        <td ><?php echo $this->translate("Office")?><span class="reqMark">*</span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->Branch;?></td>
+                        </tr>
+                        
+                        <tr>
+                        <td ><?php echo $this->translate("Type");?><span class="reqMark"></span></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->IdType;?></td>
+                        <td><?php echo $this->translate($this->defaultlanguage);?></td>
+                        <td ><?php echo $this->lobjBranchofficevenueform->Arabic;?></td>
+                        </tr>
+                        <?php }?>
+			
+			
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Address").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Address1");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Addr1;?></td>
+				<td><?php echo $this->translate("Address2");?></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Addr2;?></td>
+				
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->idCountry;?></td>
+				<td><?php echo $this->translate("Province");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->idState;?></td>
+				
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Email");?></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Email;?></td>
+				<td ><?php echo $this->translate("Phone");?><span class="reqMark"></span></td>
+                <td ><?php echo $this->lobjBranchofficevenueform->countrycode;?><?php echo $this->lobjBranchofficevenueform->statecode;?><?php echo $this->lobjBranchofficevenueform->Phone;?></td>
+				
+			</tr>
+			<tr>
+				<td ><?php echo $this->translate("Zip Code");?><span class="reqMark"></span></td>
+                <td ><?php echo $this->lobjBranchofficevenueform->zipCode;?></td>
+				<?php if($this->lintidbrc == 1){?>
+				<td><?php echo $this->translate("Affiliated").' '.$this->translate("To");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->AffiliatedTo;?></td>
+				<?php }?>
+				
+			</tr>
+			
+                <!--
+                <td ><?php echo $this->translate("Link");?><span class="reqMark"></span></td>
+                <td ><?php echo $this->lobjBranchofficevenueform->IdLink;?></td>
+			-->
+			<tr>
+				
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Active;?></td>
+			</tr>
+			<!--<tr>
+				<td><?php echo $this->translate("Link Type");?></td>
+				<td><?php echo $this->lobjBranchofficevenueform->IdLinkType;?></td>
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Active;?></td>
+			</tr>
+			
+		--></table>
+		<?php if($this->lintidbrc == 1) {?>
+		<!--<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Registration").' '.$this->translate("Location");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Registration").' '.$this->translate("Location");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->IdRegistration;?><?php echo $this->lobjBranchofficevenueform->RegistrationLoc;?></td>
+				<td><?php echo $this->translate("Programme");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjBranchofficevenueform->Programme;?></td>
+				
+			</tr>
+			<tr>
+                <td colspan="4" align = "right"><?php echo $this->lobjBranchofficevenueform->Add;?></td> 
+            </tr>
+			</table>
+			 <table  class="table" width="100%"  id="hor">
+	                        <tr>
+	                        	<th><?php echo $this->translate("Registration").' '.$this->translate("Location");?></th>
+	                        	<th><?php echo $this->translate("Programme");?></th>	
+	                        	<th><?php echo $this->translate("Delete");?></th>
+	                        </tr>
+	        </table>
+	        --><?php }?>
+							
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjBranchofficevenueform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'branchofficevenue', 'action'=>'index','idbrc' => $this->lintidbrc),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>		

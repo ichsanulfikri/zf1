@@ -1,0 +1,264 @@
+<script type="text/javascript"><!--
+	var rowid = <?php echo count($this->larrintakedetails) + 1; ?>;
+	var batchArray  = new Array();
+	var oldContent = "";
+	var NoCnt	=	0;
+	<?php foreach($this->larrintakedetails as $Data) {   ?>
+					batchArray.push('<?php echo $Data['Program'].$Data['BranchName']; ?>');
+	<?php } ?>
+	var allprograms = new Array();
+	dojo.addOnLoad(function() {
+		dijit.byId('Faculty').set('value','');
+		dijit.byId('Faculty').set('placeHolder','Select');
+
+		dijit.byId('Branch').set('value','');
+		dijit.byId('Branch').set('placeHolder','Select');
+
+		dijit.byId('Program').set('value','');
+		dijit.byId('Program').set('placeHolder','Select');		
+	});
+
+	function fnloadPrograms(idCollege) {
+		//dijit.byId('Program').store = new dojo.data.ItemFileReadStore({url: "<?php echo $this->baseUrl();?>"+"/generalsetup/intake/getprogramlist/idCollege/"+idCollege});
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/intake/getprogramlist/idCollege/"+idCollege,
+				handleAs:'json',
+				load:function(data){
+					if(data){			
+						AutoFillNextEditableDropDown('Program',data);
+					}								 
+				},
+			      error: function(error){						          
+			        }
+		   }
+		dojo.xhrGet(xhrArgs);
+	}
+
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+	    var options = {
+						label:"name",
+						identifier:"key",
+						items:JSONText
+					  };
+	    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+
+	function addentry() {
+		var flag = true;
+
+		if(dijit.byId("Program").value==''){
+		    dijit.byId("Program").attr('required','true');
+			dijit.byId("Program").focus();
+			flag = false;
+		}
+
+		if(dijit.byId("Branch").value==''){
+		    dijit.byId("Branch").attr('required','true');
+			dijit.byId("Branch").focus();
+			flag = false;
+		}
+
+		if(flag == true) {
+			
+			intakeinsert();	
+		}			
+		return flag;
+	}
+
+	
+
+	function intakeinsert() {
+		var Program = dijit.byId("Program");
+		var ProgramName = dijit.byId("Program").displayedValue;
+
+		var Branch = dijit.byId("Branch");
+		var BranchName = dijit.byId("Branch").displayedValue;
+
+		var Faculty = dijit.byId("Faculty");
+
+		if(ProgramName == "All") {
+			var storeprogram = dijit.byId("Program").store;
+			storeprogram.fetch({onComplete : returnprograms});
+		}
+		else {
+			allprograms[0] = {'key' : Program, 'name' : ProgramName};
+		}
+		for(i=0;i<(allprograms.length);i++) { 
+			program_name = allprograms[i].name;
+			program_id = allprograms[i].key;
+			if(program_name == "All") { continue; }
+			batchArray.push(program_name+BranchName);
+			if(arrHasDupes(batchArray)) {
+				batchArray = batchArray.unique();
+				alert("Duplicate Entry");
+			}
+			else {
+				var trow=document.getElementById('hor').insertRow(rowid);
+				var tcol1=trow.insertCell(0);
+				var tcol2=trow.insertCell(1);
+				var tcol3=trow.insertCell(2);
+		
+				tcol1.innerHTML="<input type='hidden' value='"+program_id+"' name=IdProgram[]>"+program_name;
+				tcol2.innerHTML="<input type='hidden' value='"+Branch+"' name=IdBranch[]><input type='hidden' value='"+Faculty+"' name=IdFaculty[]>"+BranchName;
+				tcol3.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+				rowid++;
+			}
+		}
+	}
+
+	function returnprograms(items,request) {
+		allprograms = items;
+	}
+
+	function deleteRow(r){
+		rowid--;
+		var i=r.parentNode.parentNode.rowIndex;
+		batchArray.splice(parseInt(i-1),1);
+		document.getElementById('hor').deleteRow(i);
+	}
+
+	function clearpageAdd() {
+		dijit.byId('Branch').set('value','');
+		dijit.byId('Branch').set('placeHolder','Select');
+
+		dijit.byId('Program').set('value','');
+		dijit.byId('Program').set('placeHolder','Select');
+	}
+
+	function deleteintakedetails(Id) {
+		var ans = confirm("Do you want to delete?")
+		if(ans) {
+			var xhrArgs = {url: "<?php echo $this->baseUrl();?>" + "/generalsetup/intake/deleteintakedetails/id/" + Id,
+					handleAs:'text',
+					load:function(data){
+						console.log(data); 
+						if(data == '1') {
+							window.location = "<?php echo $this->baseUrl(); ?>/generalsetup/intake/editintake/id/<?php echo $this->IdIntake;?>";
+						}
+					}
+			}
+			dojo.xhrPost(xhrArgs);
+		}
+	}
+
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+	
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+	                
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+	
+	
+</script>
+<!-- Form for Intake -->
+<fieldset><legend><?php echo $this->translate("Intake");?></legend>
+
+<Form dojoType="dijit.form.Form" id="myForm" action="" method="post"
+	name="myForm"><script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+<table class="table" width="100%">
+	<tr>
+		<th colspan="4"><?php echo $this->translate("Intake").' '.$this->translate("Details")?></th>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Intake").' '.$this->translate("Id");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->IntakeId;?></td>
+		<td><?php echo $this->translate("Intake").' '.$this->translate("Description");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->IntakeDesc;?></td>
+	</tr>
+
+	<tr>
+		<td><?php echo $this->defaultlanguage;?></td>
+		<td><?php echo $this->lobjIntakeForm->IntakeDefaultLanguage;?></td>
+		<td><?php echo $this->translate("Application Start Date");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->ApplicationStartDate;?><?php echo $this->lobjIntakeForm->UpdDate;?><?php echo $this->lobjIntakeForm->UpdUser;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Application End Date");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->ApplicationEndDate;?></td>
+		<td><?php echo $this->translate("PSSB First 3-digit code (No Formulir)");?></td>
+		<td><?php echo $this->lobjIntakeForm->IntakePSSBcode;?></td>		
+	</tr>
+</table>
+<!--<table class="table" width="100%">
+	<tr>
+		<th colspan="4"><?php echo $this->translate("List of Programs")?></th>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Faculty");?></td>
+		<td><?php echo $this->lobjIntakeForm->Faculty;?></td>
+		<td><?php echo $this->translate("Program");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->Program;?></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Branch");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjIntakeForm->Branch;?></td>
+	</tr>
+	<tr>
+		<td colspan="4" align="right"><?php echo $this->lobjIntakeForm->Add;?><?php echo $this->lobjIntakeForm->Clear;?>
+		</td>
+	</tr>
+</table>
+<table class="table" width="100%" id="hor">
+	<tr>
+		<th><?php echo $this->translate("Program").' '.$this->translate("Name")?></th>
+		<th><?php echo $this->translate("Branch") ?></th>
+		<th><?php echo $this->translate("Delete") ?></th>
+	</tr>
+	<?php foreach($this->larrintakedetails as $Data) { ?>
+	<tr id="<?php echo $Data['Id']; ?>" style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td><?php echo $Data['Program'] ?><input type="hidden"
+			value="<?php echo $Data['IdProgram'] ?>" name="IdProgram[]" /></td>
+		<td><?php echo $Data['BranchName'] ?><input type="hidden"
+			value="<?php echo $Data['IdBranch'] ?>" name="IdBranch[]" /> </td>
+		<td><a href="#"
+			onClick="deleteintakedetails('<?php echo $Data['Id'];?>');"> <img
+			src='<?php echo $this->baseUrl();?>/images/delete.png' border=0
+			width='16' height='16'> </a></td>
+	</tr>
+	<?php }?>
+</table>
+--><table class="table" width="100%">
+	<tr>
+		<td align="right"><?php echo $this->lobjIntakeForm->Save;?> <input
+			type="button" class="NormalBtn" dojotype="dijit.form.Button"
+			label="<?php echo $this->translate("Back"); ?>"
+			onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'intake', 'action'=>'index'),'default',true);?>';" />
+		</td>
+	</tr>
+</table>
+</Form>
+</fieldset>
+

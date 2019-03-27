@@ -1,0 +1,25 @@
+<fieldset>
+	<legend><?php echo $this->translate("Confirmation");?></legend>
+		<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/onlineapplication/confirmationlist" method="POST"  name= "myform" id= "myform">
+			<script type="dojo/method" event="onSubmit">
+  				if (this.validate()) {
+				return true;
+				} else {
+				return false;}
+			</script>
+			<table class="table" width="100%" >
+				<tr>
+					<td align = "center"><?php echo $this->translate("To check application status, please enter Personal ID. ");?><span class="reqMark">*</span></td>
+				</tr>
+				<tr>
+					<td align = "center"><input type = "text" name = "ICNumber" value = "" dojoType = "dijit.form.ValidationTextBox" required = "true"></td>
+				</tr>
+				<tr>
+                	<td colspan = "4" align = "right">
+                		<input type = "submit" name = "Save" value = "Save" dojotype="dijit.form.Button" class="NormalBtn" label="<?php echo $this->translate("Save"); ?>">
+						<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'default','controller'=>'index', 'action'=>'index'),'default',true);?>';" />	
+                     </td> 
+				</tr>	
+			</table>
+		</form>
+</fieldset>

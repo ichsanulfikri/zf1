@@ -1,0 +1,73 @@
+<script type="text/javascript">
+		dojo.addOnLoad(function (){
+			dijit.byId('field5').set('value','');
+			dijit.byId('field5').set('placeHolder','Select');
+			dijit.byId('field8').set('value','');
+			dijit.byId('field8').set('placeHolder','Select');
+		});
+</script>
+<fieldset>
+	<legend><?php echo $this->translate("Student").' '.$this->translate("Search");?></legend>
+                    <form action="<?php echo $this->baseUrl();?>/application/manualapplication/index/search/1" method="POST">
+                            <table width="100%">
+                                <tr>
+                                    <td><?php echo $this->translate("Student").' '.$this->translate("Name");?></td>
+                                    <td><?php echo $this->lobjform->field3;?></td>
+                                    <td><?php echo $this->translate("Personal").' '.$this->translate("ID");?></td>
+                                    <td><?php echo $this->lobjform->field2;?></td>
+                                </tr>
+                                 <tr>
+                                    <td><?php echo $this->translate("Program");?></td>
+                                    <td><?php echo $this->lobjform->field5;?></td>
+                                    <td><?php echo $this->translate($this->Branch);?></td>
+                                    <td><?php echo $this->lobjform->field8;?></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjform->field7;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "center" colspan = "4">
+
+											<?php echo $this->lobjform->Search;?>
+											<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'application','controller'=>'manualapplication', 'action'=>'newstudentapplication'),'default',true);?>';" />	
+											<?php echo $this->lobjform->Clear;?>
+								</td>
+							    
+                                </tr>
+                        </table>
+                    </form>	
+    </fieldset> 
+ 
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+		<th><?php echo $this->translate->_("Student").' '.$this->translate->_("Name");?></th>
+		<th><?php echo $this->translate->_("Personal").' '.$this->translate->_("ID");?></th>
+		<th><?php echo $this->translate->_($this->Branch);?></th>
+		<th><?php echo $this->translate->_("Award");?></th>
+		<th><?php echo $this->translate->_("Program");?></th>
+		<th><?php echo $this->translate->_("Offered?");?></th>
+		<th><?php echo $this->translate->_("Accepted?");?></th>
+		<th><?php echo $this->translate->_("Registered?");?></th>				
+	</tr>
+	<?php if (count($this->paginator)): 
+		foreach ($this->paginator as $studentApplication ): ?>
+	<tr>
+		<td>
+			<a href="<?php echo $this->baseUrl;?>/application/manualapplication/studentapplicationlist/id/<?php echo $this->escape($studentApplication['IdApplication']);?>">
+				<?php echo $this->escape($studentApplication['FName']);?>
+			</a>
+		</td>
+		<td> <?php echo $this->escape($studentApplication['ICNumber']);?> </td>
+		<td> <?php echo $this->escape($studentApplication['CollegeName']);?> </td>
+		<td> <?php echo $this->escape($studentApplication['DefinitionDesc']);?> </td>
+		<td> <?php echo $this->escape($studentApplication['ProgramName']);?> </td>
+		<td> <?php echo $this->escape($studentApplication['Offered'] ? 'Yes' : 'No');?> </td>
+		<td> <?php echo $this->escape($studentApplication['Accepted'] ? 'Yes' : 'No');?> </td>
+		<td> <?php echo $this->escape($studentApplication['Registered'] ? 'Yes' : 'No');?> </td>
+	</tr>
+		<?php endforeach;
+	endif; ?>
+</table>
+</fieldset>

@@ -1,0 +1,241 @@
+<style>
+.custom-combobox {
+position: relative;
+display: inline-block;
+}
+.custom-combobox-toggle {
+position: absolute;
+top: 0;
+bottom: 0;
+margin-left: -1px;
+padding: 0;
+/* support: IE7 */
+*height: 1.7em;
+*top: 0.1em;
+}
+.custom-combobox-input {
+margin: 0;
+padding: 0.3em;
+}
+</style>
+<script>
+(function( $ ) {
+    $.widget( "custom.combobox", {
+        _create: function() {
+            this.wrapper = $( "<span>" )
+            .addClass( "custom-combobox" )
+            .insertAfter( this.element );
+            this.element.hide();
+            this._createAutocomplete();
+            this._createShowAllButton();
+        },
+        _createAutocomplete: function() {
+            var selected = this.element.children( ":selected" ),
+            value = selected.val() ? selected.text() : "";
+            this.input = $( "<input>" )
+            .appendTo( this.wrapper )
+            .val( value )
+            .attr( "title", "" )
+            .addClass( "custom-combobox-input ui-widget ui-widget-content ui-state-default ui-corner-left" )
+            .autocomplete({
+            delay: 0,
+            minLength: 0,
+            source: $.proxy( this, "_source" )
+            })
+            .tooltip({
+            tooltipClass: "ui-state-highlight"
+            });
+            this._on( this.input, {
+            autocompleteselect: function( event, ui ) {
+            ui.item.option.selected = true;
+            this._trigger( "select", event, {
+            item: ui.item.option
+            });
+            },
+            autocompletechange: "_removeIfInvalid"
+            });
+        },
+        _createShowAllButton: function() {
+            var input = this.input,
+            wasOpen = false;
+            $( "<a>" )
+                .attr( "tabIndex", -1 )
+                .attr( "title", "Show All Items" )
+                .tooltip()
+                .appendTo( this.wrapper )
+                .button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-s"
+                    },
+                    text: false
+                })
+                .removeClass( "ui-corner-all" )
+                .addClass( "custom-combobox-toggle ui-corner-right" )
+                .mousedown(function() {
+                    wasOpen = input.autocomplete( "widget" ).is( ":visible" );
+                })
+            .click(function() {
+                input.focus();
+                // Close if already visible
+                if ( wasOpen ) {
+                    return;
+                }
+                // Pass empty string as value to search for, displaying all results
+                input.autocomplete( "search", "" );
+            });
+        },
+        _source: function( request, response ) {
+            var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
+            response( this.element.children( "option" ).map(function() {
+                var text = $( this ).text();
+                if ( this.value && ( !request.term || matcher.test(text) ) )
+                return {
+                label: text,
+                value: text,
+                option: this
+                };
+            }) );
+        },
+        _removeIfInvalid: function( event, ui ) {
+            // Selected an item, nothing to do
+            if ( ui.item ) {
+                return;
+            }
+            // Search for a match (case-insensitive)
+            var value = this.input.val(),
+            valueLowerCase = value.toLowerCase(),
+            valid = false;
+            this.element.children( "option" ).each(function() {
+                if ( $( this ).text().toLowerCase() === valueLowerCase ) {
+                    this.selected = valid = true;
+                return false;
+                }
+            });
+            // Found a match, nothing to do
+            if ( valid ) {
+                return;
+            }
+            // Remove invalid value
+            this.input
+                .val( "" )
+                .attr( "title", value + " didn't match any item" )
+                .tooltip( "open" );
+                this.element.val( "" );
+                this._delay(function() {
+                this.input.tooltip( "close" ).attr( "title", "" );
+                }, 2500 );
+            this.input.data( "ui-autocomplete" ).term = "";
+        },
+        _destroy: function() {
+        this.wrapper.remove();
+        this.element.show();
+        }
+    });
+})( jQuery );
+$(function() {
+    $( "#combobox" ).combobox({
+        select: function( event, ui ) {
+           
+           window.location.replace('/generalsetup/program/edit-program-gpa/id/<?php echo $this->program_id;?>/intake/'+ ui.item.value)
+            //alert(ui.item.value);
+        }
+    });
+    
+    $( "#toggle" ).click(function() {
+        $( "#combobox" ).toggle();
+    });
+    //$("#saveDiv").hide();
+    $("#addRow").click(function(){
+        var newRow = '<tr><td><input type="text" name="lower[]" /></td><td><input type="text" name="upper[]" /></td><td><input type="text" name="grade[]" /></td></tr>';
+        $("#gpa").append(newRow);
+        
+        $("#saveDiv").show();
+    });
+});
+   
+</script>
+<fieldset>
+    <form method="POST">
+    <legend>Program GPA Limit</legend>
+    <table class="table" width="100%">
+        <tr>
+            <td><?php echo $this->translate($this->Program).' '.$this->translate("Name");?></td>
+            <td><?php echo $this->program['ProgramName'];?></td>
+            <td><?php echo $this->translate($this->defaultlanguage);?></td>
+            <td><?php echo $this->program['ArabicName'];?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate("Short").' '.$this->translate("Name");?></td>
+            <td><?php echo $this->program['ShortName'];?></td>
+            <td><?php echo $this->translate("Program").' '. $this->translate("Code");?></td>
+            <td><?php echo $this->program['ProgramCode'];?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate("Total Credit Hours");?></td>
+            <td><?php echo $this->program['TotalCreditHours'];?></td>
+            <td><?php echo $this->translate('Duration');?></td>
+            <td><?php echo $this->program['Duration'];?></td>
+        </tr>
+        <tr>
+            <td><?php echo $this->translate("Intake");?></td>
+            <td colspan="3">
+                <div class="ui-widget">
+                    <select id="combobox" name="idIntake">
+                        <option value="">Please Select</option>
+                    <?php foreach($this->intakes as $intake):?>
+                        <?php if ($intake['key'] == $this->intake_id):?>
+                        <option value="<?php echo $intake['key'];?>" selected><?php echo $intake['name'];?></option>
+                        <?php else:?>
+                        <option value="<?php echo $intake['key'];?>"><?php echo $intake['name'];?></option>
+                        <?php endif; ?>
+                    <?php endforeach;?>
+                    </select>
+                    <input type="hidden" id="IdProgram" name="IdProgram" />
+                </div>
+            </td>
+        </tr>
+    </table>
+    <br />
+    <div style="float:right">
+        <input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" id="addRow" name="addRow" />
+    </div>
+    <table class="table" width="100%" id="gpa">
+        <tr>
+            <th>From</th>
+            <th>To</th>
+            <th>Grade</th>
+        </tr>
+        <?php
+            if(isset($this->gpaDetails))
+            {
+                if(count($this->gpaDetails > 0))
+                {
+                    foreach($this->gpaDetails as $gpa)
+                    {
+        ?>
+        <tr>
+            <td><input type="text" name="lower[]" value="<?php echo $gpa['rstart'] ?>"/></td>
+            <td><input type="text" name="upper[]" value="<?php echo $gpa['rend'] ?>"/></td>
+            <td><input type="text" name="grade[]" value="<?php echo $gpa['chlimit'] ?>"/><input type="hidden" name="clid[]" value="<?php echo $gpa['chlimit'] ?>"/></td>
+        </tr>
+        <?php
+                    }
+                }
+            }
+        ?>
+    </table>
+    <?php 
+    $style = 'none';
+    if(isset($this->gpaDetails))
+    {
+        if(count($this->gpaDetails) > 0)
+        {
+            $style = 'block';
+        }
+    }
+    ?>
+    <div id="saveDiv" style="display:<?php echo $style; ?>;float:right">
+        <input type="submit" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Save"); ?>" id="save" name="save" />
+    </div>
+    </form>
+</fieldset>

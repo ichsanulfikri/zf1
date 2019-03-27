@@ -1,0 +1,261 @@
+<script type="text/javascript">
+
+$(document).ready(function() {
+	init();
+});
+
+function init(){
+
+	$('#tbl_sidebar tr:even').addClass('alt');
+	
+	$("#tbl_sidebar").tableDnD({
+   	 	onDragClass: 'drag',
+      	dragHandle: "dragHandle",
+      	onDrop: function(table, row) {
+      		
+            //console.log(row.id);
+            var order_row_atas =  $(row).prev().find('td').next().next().next().next().html();
+            var order_row_current =  $(row).find('td').next().next().next().next().html();
+            
+            if(order_row_current>order_row_atas){
+            	move_up(row.id,order_row_current,order_row_atas);
+            }else
+            if(order_row_current<order_row_atas){
+                //console.log('Turun Bawah');
+                //console.log("SELECT * FROM tbl_nav_sidebar as nav WHERE nav.nav_menu_id = 6 and nav.order <= "+order_row_atas+" and nav.order > "+order_row_current);
+            	move_down(row.id,order_row_current,order_row_atas);
+            } 
+   
+         }
+    });
+}
+
+
+
+function move_up(id,current_order,above_order){
+	var url = '<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'move-sidebar'));?>';
+	var data_up = {'role_id':'<?php echo $this->role_id ?>','menu_id':'<?php echo $this->menu_id ?>','direction':'up', 'current_id':id, 'current_order':current_order,'above_order':above_order};
+	
+	$.ajax({
+  		type: "POST",
+  	  	url: url,
+  	  	data: data_up,
+  	  	dataType: 'text'
+  	})
+  	.done(function() { 
+    	reload_table();
+  	})
+  	.fail(function() { alert("error"); });
+}
+
+function move_down(id,current_order,above_order){
+	var url = '<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'move-sidebar'));?>';
+	var data_down = {'role_id':'<?php echo $this->role_id ?>','menu_id':'<?php echo $this->menu_id ?>','direction':'down', 'current_id':id, 'current_order':current_order,'above_order':above_order};
+	
+	$.ajax({
+  		type: "POST",
+  	  	url: url,
+  	  	data: data_down,
+  	  	dataType: 'text'
+  	})
+  	.done(function() { 
+    	reload_table();
+  	})
+  	.fail(function() { alert("error"); });
+}
+
+function reload_table(){
+
+	$('#tbl_sidebar tbody').empty();
+	
+	var url = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'sidebar-ajax'),"default",true);?>";
+	var data_table = {'menu_id':'<?php echo $this->menu_id?>'};
+	
+	$.ajax({
+  		type: "POST",
+  	  	url: url,
+  	  	data: data_table,
+  	  	dataType: 'json'
+  	})
+  	.done(function(data) {
+
+  	  	var content = "";
+    	$.each(data,function(index){
+			var header = "";
+			var name = "";
+			var visibility = "";
+			var path ="";
+			
+        	if(data[index].title_head==1){
+            	header = "Yes";
+            	name = "<b>"+data[index].name+"</b>";
+        	}else{
+        		header = "No";
+            	name = data[index].name;
+            	path = data[index].module+'/'+data[index].controller+'/'+data[index].action;
+        	}
+
+        	if(data[index].visible==1){
+        		visibility = "Yes";
+        	}else{
+        		visibility = "No";
+        	}
+        	
+    		content +=	'<tr id="'+data[index].id+'" >';
+    		content +=	'	<td align="center"><input type="radio" name="id" value="'+data[index].id+'" /></td>';
+    		content +=	'	<td>';
+    		content +=	'	'+name;	        		
+    		content +=	'	</td>';
+    		content +=	'	<td align="center">'+header+'</td>';
+    		content +=	'	<td>';
+    		content +=	'	'+path;	        		
+    		content +=	'	</td>';
+    		content +=	'	<td align="center">'+data[index].seq_order+'</td>';
+    		content +=	'	<td align="center">'+visibility+'</td>';
+    		content +=	'</tr>';
+  	  	});
+
+    	$('#tbl_sidebar tbody').html(content);
+
+    	init();
+  	})
+  	.fail(function() { 
+  	  	alert("error"); 
+  	});
+}
+
+function add(){
+	window.location="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'add-sidebar', 'menu_id'=>$this->menu_id));?>";
+}
+
+function edit(){
+	var id = $('input[name=id]:checked').val();
+
+	if(!id){
+		alert('<?php echo $this->translate('Please select any sidebar first'); ?>');
+	}else{
+		window.location="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'edit-sidebar'));?>/id/"+id;
+	}
+}
+
+function del(title, id){
+	var id = $('input[name=id]:checked').val();
+
+	if(!id){
+		alert('<?php echo $this->translate('Please select any sidebar first'); ?>');
+	}else{
+		if(confirm('Are you sure to delete this sidebar ?')){
+			window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'delete-sidebar')); ?>/id/"+id;
+		}
+	}
+}
+</script>
+
+<style>
+	tr.alt td{
+		background-color: rgb(240, 240, 240);
+	}
+	
+	tr.drag td{
+		background: red;
+	}
+</style>
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>
+			<li>
+				<a href="#" onclick="javascript:add()">
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:edit()">
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="javascript:del()">
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+			<li class="divider"></li>
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'navigation', 'action'=>'menu', 'role_id'=>$this->role_id),'default',true); ?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br />
+<fieldset>
+	<table class="table5">
+		<tr>
+			<th>Role</th>
+			<th>:</th>
+			<td><?php echo $this->role['DefinitionCode']; ?></td>
+		</tr>
+		<tr>
+			<th>Top Menu</th>
+			<th>:</th>
+			<td><?php echo $this->menu['label']; ?></td>
+		</tr>
+	</table>
+</fieldset>
+<br />
+<table id="tbl_sidebar" class="table" width="100%" cellpadding="5" cellspacing="1">
+	<thead>
+	<tr>
+		<th width="25px">&nbsp;</th>
+    	<th><?php echo $this->translate("Sidebar Name");?></th>
+    	<th><?php echo $this->translate("Header");?></th>
+    	<th><?php echo $this->translate("Path");?></th>
+        <th><?php echo $this->translate("Order");?></th>
+        <th><?php echo $this->translate("Visibility");?></th>
+    </tr>
+    </thead>
+    <tbody>
+    <?php 
+    if (count($this->sidebarList)): 
+    	foreach ($this->sidebarList as $sidebar): 
+    ?>
+  		<tr id="<?php echo $sidebar['id']; ?>" >
+  			<td align="center"><input type="radio" name="id" value="<?php echo $sidebar['id'];?>" /></td>
+        	<td>
+        		<?php
+        			if($sidebar['title_head']==1){ 
+        				echo "<b>".$sidebar['name']."</b>";
+        			}else{
+        				echo "&nbsp;&nbsp;".$sidebar['name'];
+        			}
+        		?>
+        	</td>
+        	<td align="center"><?php echo $sidebar['title_head']==1?"Yes":"No";?></td>
+        	<td>
+        		<?php
+        		if($sidebar['title_head']==0){ 
+        			echo $sidebar['module']."/".$sidebar['controller']."/".$sidebar['action'];
+        		}
+        		?>
+        	</td>
+        	<td align="center"><?php echo $sidebar['seq_order'];?></td>
+        	<td align="center"><?php echo $sidebar['visible']==1?"Show":"Hide";?></td>
+       	</tr>
+	<?php 
+		endforeach;
+	endif; 
+	?>
+	</tbody>
+</table>
+<br />	

@@ -1,0 +1,45 @@
+<html>
+<head>
+<link rel="stylesheet" href="<?php  echo $this->baseUrl();?>/css/colorpicker/colorpicker.css" type="text/css" />
+    <link rel="stylesheet" media="screen" type="text/css" href="<?php  echo $this->baseUrl();?>/css/colorpicker/layout1.css" />    
+	<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/jquery-1.4.3.js"></script>
+	<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/colorpicker/colorpicker.js"></script>
+    <script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/colorpicker/eye.js"></script>
+    <script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/colorpicker/utils.js"></script>
+    <script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/colorpicker/layout.js"></script>
+
+</head>
+</html>
+<fieldset>
+<legend><?php echo $this->translate("Add").' '.$this->translate("Activity");?></legend>
+</fieldset>	
+<fieldset>
+<Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/activity/newactivity" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } 
+				else {
+                    return false;
+                }
+				</script>
+ 	<table class="table" width="100%" >
+           
+              <tr>
+                   <td ><?php echo $this->translate("Activity").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                   <td ><?php echo $this->lobjActivityForm->ActivityName;?><?php echo $this->lobjActivityForm->UpdDate;?> 
+                   <?php echo $this->lobjActivityForm->UpdUser;?></td>
+              </tr>
+              <tr>
+              		<td ><?php echo $this->translate("Calendar").' '.$this->translate("Color");?><span class="reqMark">*</span></td>
+                   	<td ><?php echo $this->lobjActivityForm->ActivityColorCode;?></td>
+              </tr>
+              <tr>
+                    <td colspan=4 align = "right"><?php echo $this->lobjActivityForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back");?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'activity', 'action'=>'index'),'default',true);?>';" />	
+                    </td> 
+                               
+              </tr>   
+     </table>         
+      
+</fieldset>

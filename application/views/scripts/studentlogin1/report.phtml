@@ -1,0 +1,59 @@
+<head>
+	
+
+<!-- ///////////////////////// DOJO ////////////////////////// -->
+	<script type="text/javascript">
+		dojo.addOnLoad(function(){
+			
+		});
+		</script>  
+		</head>
+		<body class='claro'>
+
+		<div>
+		<fieldset>
+			<legend><?php echo $this->translate("Student").' '.$this->translate("Examination").' '.$this->translate("Slip");?></legend>
+			<div class="search" style="margin-left:20px;">
+		 		<form dojoType="dijit.form.Form"  id="myForm" action="" method="POST">		 			
+				<table width="30%">
+				<tr>
+					<th colspan ="2"><?php echo $this->translate("Student").' '.$this->translate("Details");?></th>
+				</tr>
+						<tr>
+							<td><?php echo $this->translate("Student").' '.$this->translate("Name   :") ?></td>
+							<td><?php echo $this->studentname;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $this->translate("Registration Id :") ?></td>
+							<td><?php echo $this->IdRegistration;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $this->translate("Program").' '.$this->translate("Name  :") ?></td>
+							<td><?php echo $this->Programname;?></td>
+						</tr>
+						<tr>	
+							<td><?php echo $this->translate("College").' '.$this->translate("Name   :") ?></td>
+							<td><?php echo $this->Collegename;?></td>
+						</tr>
+						
+							
+						<!--<tr>	
+						  <td></td>
+							<td>Signature of Candidate:</td>
+							
+						</tr>			
+		                 
+		                 
+						--><tr>
+							<td colspan="2" align="right">							
+							<input name="Print" id="Print" type="button" onClick="window.location.href='<?php echo $this->url(array('module'=>'default','controller'=>'studentlogin','action'=>'pdfexport'),'default',true);?>';" class="NormalBtn" dojoType=dijit.form.Button label = <?php echo $this->translate("Print");?> value=<?php echo $this->translate("Print");?>>						
+							</td>
+						</tr>
+				</table>
+			</form>	
+				</div>
+			</fieldset> 
+		</div>             
+		</body>
+		</html>
+				

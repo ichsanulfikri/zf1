@@ -1,0 +1,28 @@
+
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr>		  
+			<th ><?php echo $this->translate("Course Name")?></th>
+			<th ><?php echo $this->translate("Course Code")?></th>	
+			<th ><?php echo $this->translate("Prerequisite Type")?></th>	
+			<th ><?php echo $this->translate("Grade")?></th>
+		
+		</tr>
+		<?php 
+		if(count($this->subject_prerequisite)>0){
+			foreach($this->subject_prerequisite as $sp){			
+		?>
+		<tr>
+			<td><?php echo $sp["BahasaIndonesia"]; ?></td>
+			<td><?php echo $sp["SubCode"]; ?></td>
+			<td><?php if($sp["PrerequisiteType"]==1) echo $this->translate('Complete Subject'); else echo $this->translate('Pass with Grade'); ?></td>
+			<td><?php if($sp["PrerequisiteType"]!=1) echo $sp["PrerequisiteGrade"]; else echo '-';?></td>
+			
+		</tr>
+		<?php } }else{ ?>
+		<tr>
+			<td colspan="5"><?php echo $this->translate("There is no data in the list")?></td>
+		</tr>
+		<?php }//end if else?>
+	</table>	
+
+<br>

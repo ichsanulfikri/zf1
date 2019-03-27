@@ -1,0 +1,179 @@
+<head>
+	<script type="text/javascript">
+			dojo.addOnLoad(function() {
+ 				$("input#StateName").focus();
+			});
+			function validateCityName( value, constraint )
+			{
+				
+			// I believe the whole reason you have to hack at control to get it to 
+			// display an error is due to the nature of the xhrGet call. Since the
+			// call is being made asychronously, the method would have already
+			// returned a result to the html control before query has finished.
+			// Therefore you have to do the extra method calls below. Also note
+			// that when the form goes for submission, it calls each controls validator
+			// method again! Meaning it will query the webpage again.
+			var loginID = dijit.byId( "CityName" );
+			var countryId=<?php echo $this->idcountry?>;
+			
+			var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+			if( "" == loginID.value ) {
+			    // for some required=true is not kicking in, so we are forcing it.
+			    bNoNameFound = false;
+			}
+			else {      
+			    if( false == loginID._focused ) {
+			        console.log( "Checking username..." );
+			        dojo.xhrGet({
+			            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/city/getcityname/cityName/"+value+"/stateId/"+countryId,
+			            handleAs: 'text',
+			            content: { l: value},
+			            timeout: 10000, 
+			            load: function( data ) {				      
+			                if ( data ) {
+			                    // setting the state to error since the username is already taken			                    
+			                    bNoNameFound = false;
+			                    loginID.set( "state", "Error" );
+			                    loginID.displayMessage( "The City is already taken..." );
+			                    // used to change the style of the control to represent a error
+			                    loginID._setStateClass();			                  
+			                }
+			                else
+			                {
+			                    bNoNameFound = true;
+			                    loginID.set( "state", "" );
+			                    loginID.displayMessage( "" );
+			                }
+			            }
+			        });
+			    }
+			}
+
+			return bNoNameFound;
+			}
+
+
+
+			function validateCityCode( value, constraint )
+			{
+				
+			// I believe the whole reason you have to hack at control to get it to 
+			// display an error is due to the nature of the xhrGet call. Since the
+			// call is being made asychronously, the method would have already
+			// returned a result to the html control before query has finished.
+			// Therefore you have to do the extra method calls below. Also note
+			// that when the form goes for submission, it calls each controls validator
+			// method again! Meaning it will query the webpage again.
+				
+			var loginID = dijit.byId( "CityCode" );
+			var countryId=<?php echo $this->idcountry?>;			
+			
+			var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+			
+			if( "" == loginID.value ) {
+			    //for some required=true is not kicking in, so we are forcing it.
+			    bNoNameFound = false;
+			}
+			else {      
+			    if( false == loginID._focused ) {
+			        console.log( "Checking username..." );
+			        dojo.xhrGet({
+			            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/city/getcitycode/cityCode/"+value+"/stateId/"+countryId,
+			            handleAs: 'text',
+			            content: { l: value},
+			            timeout: 10000, 
+			            load: function( data ) {				         
+			                if ( data ) {
+			              
+			                    //setting the state to error since the username is already taken
+			                    console.log(data)
+			                    bNoNameFound = false;
+			                    loginID.set( "state", "Error" );
+			                    loginID.displayMessage( "The City Code is already taken..." );
+			                    //used to change the style of the control to represent a error
+			                    loginID._setStateClass();
+			                    console.log( "Invalid username" ); 
+			                }
+			                else
+			                {			                	
+			                    bNoNameFound = true;
+			                    loginID.set( "state", "" );
+			                    loginID.displayMessage( "" );
+			                }
+			            }
+			        });
+			    }
+			}
+			
+			return bNoNameFound;
+			}
+
+			
+		</script>
+	</head>
+
+	<fieldset>
+    	<legend><?php echo $this->translate("City");?></legend>
+        		<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+						<?php echo $this->lobjStateForm->UpdUser;?><?php echo $this->lobjStateForm->UpdDate;?>
+						<script type="dojo/method" event="onSubmit" >
+                			if (this.validate()) {
+								return true;
+                			} else {
+                    			return false;
+                			}
+						</script>
+                        <table class="table" width="100%" >
+							<tr>
+                            <th colspan = "4"><?php echo $this->translate("City").' '.$this->translate("Details") ;?></th>
+                       		</tr>
+                        	<tr>
+                            	<td><?php echo $this->translate("State").' '.$this->translate("Name") ?></td>
+                             	<td><?php echo $this->lobjStateForm->idState;?></td> 
+                             	
+                          	</tr>
+                          	<tr>
+                            	<td><?php echo $this->translate("City").' '.$this->translate("Name")?><span class="reqMark">*</span></td>
+                             	<td><?php echo $this->lobjStateForm->CityName;?></td>
+                             	          
+                        	</tr>
+                        	<tr>
+                            	<td><?php echo $this->translate("City").' '.$this->translate("Code")?><span class="reqMark">*</span></td>
+                             	<td><?php echo $this->lobjStateForm->CityCode;?></td>
+                             	          
+                        	</tr>
+                        	<tr>
+                        		<td><?php echo $this->translate("Active") ?></td>
+                        		<td><?php echo $this->lobjStateForm->Active;?></td> 
+                            	
+                        	</tr>
+                			<tr>
+                            	<td align = "right" colspan="4"><?php echo $this->lobjStateForm->Save;?>
+                           		<input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'city', 'action'=>'index'),'default',true);?>';" />	
+                            	</td> 
+                       		</tr>
+                		</table>
+            		</form>
+        	</fieldset>
+			<fieldset>
+				<table class="table" width="100%" cellpadding="5" cellspacing="1">
+					<tr>
+						<th><?php echo $this->translate("City").' '.$this->translate("Name");?></th>
+					    <th><?php echo $this->translate("City").' '.$this->translate("Code");?></th>
+					</tr>
+				
+						<?php if (count($this->paginator)): ?>
+						<?php foreach ($this->paginator as $lobjStateModel ): ?>
+						<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+    					<td><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'city', 'action'=>'citylist' ,'id'=>$lobjStateModel['idState'],'edit'=>'true','idCity'=>$lobjStateModel['idCity']),'default',true);?>" ><?php print_r($this->escape($lobjStateModel['CityName']));?></a></td> 
+    					<td><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'city', 'action'=>'citylist' ,'id'=>$lobjStateModel['idState'],'edit'=>'true','idCity'=>$lobjStateModel['idCity']),'default',true);?>" ><?php print_r($this->escape($lobjStateModel['CityCode']));?></a></td>  
+   		
+							<?php endforeach; ?>
+						<?php endif; ?>
+						<tr>
+	        			<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjpaginator,'Sliding',
+	                                    '/partials/my_pagination_control.phtml'); ?></div></td>
+   						</tr>
+			</table>
+		</fieldset>

@@ -1,0 +1,103 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+
+	});
+
+var rowid = <?php echo count($this->paginator)+1;?>;
+
+function addAwardlevelDetails() {
+	
+	var IdLevel = dijit.byId("IdLevel").value;
+	var IdLevelName = dijit.byId("IdLevel").displayedValue;		
+	var IdAllowanceLevelid = dijit.byId("IdAllowanceLevel").value;
+	var IdAllowanceLevelName = dijit.byId("IdAllowanceLevel").displayedValue;
+	
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);		
+		var tcol3=trow.insertCell(2);
+		
+		tcol1.innerHTML= "<input type='hidden' value='"+IdLevel+"' name=IdLevelgrid[]><input type='hidden' value='"+IdLevelName+"' name=IdLevelNamegrid[]>"+IdLevelName;;
+		tcol2.innerHTML= "<input type='hidden' value='"+IdAllowanceLevelid+"' name=IdAllowanceLevelidgrid[]><input type='hidden' value='"+IdAllowanceLevelName+"' name=IdAllowanceLevelNamegrid[]>"+IdAllowanceLevelName;
+		tcol3.innerHTML="<a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowid++;
+	
+}
+
+function deleteRow(r)
+{
+	rowid--;
+	
+	var i=r.parentNode.parentNode.rowIndex;
+	document.getElementById('hor').deleteRow(i);
+	
+}
+
+</script>
+<fieldset>
+<legend><?php echo $this->translate("Allowed Program").' '.$this->translate("Change  Request");?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php echo $this->lobjAwardlevelform->UpdDate;?>
+		<?php echo $this->lobjAwardlevelform->UpdUser;?>
+		
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Subject").' '.$this->translate("Program").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Award").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjAwardlevelform->IdLevel;?></td>
+				<td><?php echo $this->translate("Allowed Level");?></td>
+				<td><?php echo $this->lobjAwardlevelform->IdAllowanceLevel;?></td>
+			</tr>	
+			<tr>
+				<td colspan = "4" align = "right"><?php echo $this->lobjAwardlevelform->Add;?></td>
+			</tr>				
+		</table>
+		<table id="hor"  class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th><?php echo $this->translate("Award").' '.$this->translate("Name");?></th>
+				<th><?php echo $this->translate("Award Level").' '.$this->translate("Name");?></th>	     
+				<th><?php echo $this->translate("Delete");?></th>   	
+			</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjAwardList ): ?>
+					<tr>
+						<td>				
+								<?php echo $this->escape($lobjAwardList['awardlevel']);?>		
+								<input type='hidden' value="<?php echo $this->escape($lobjAwardList['awardlevel']);?>" name=IdLevelgrid[]>					
+						</td>
+						<td>	<?php print_r($this->escape($lobjAwardList['allowdlevel']));?>
+								<input type='hidden' value="<?php echo $this->escape($lobjAwardList['IdAllowanceLevel']);?>" name=IdAllowanceLevelidgrid[]>
+						</td>
+						<td><a href='#' onClick='deleteRow(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a></td>
+						
+					</tr>
+				<?php endforeach;
+				?>
+				<tr>
+				<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+			</tr>
+				<?php 	endif; ?>
+			
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjAwardlevelform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'awardlevel', 'action'=>'index'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>	
+
+	 

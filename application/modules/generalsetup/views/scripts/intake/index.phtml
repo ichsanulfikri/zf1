@@ -1,0 +1,72 @@
+<script type="text/javascript">
+	var rowid=1;
+	dojo.addOnLoad(function() {
+		dijit.byId('field5').set('value','');
+		dijit.byId('field5').set('placeHolder','Select');
+
+	});
+</script>
+
+<body class="claro">
+    <fieldset>
+		<legend><?php echo $this->translate("Intake");?></legend>
+	</fieldset>
+    <fieldset>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/intake/index/search/1" method="POST">
+		<table width="100%">
+			<tr>
+				<td><?php echo $this->translate("Intake").' '.$this->translate("Id");?></td>
+				<td><?php echo $this->lobjform->field3;?></td>
+		        <td><?php echo $this->translate("Intake").' '.$this->translate("Description");?></td>
+				<td><?php echo $this->lobjform->field4;?></td>
+           </tr>
+           
+           <tr>	
+				<td><?php echo $this->translate($this->defaultlanguage);?></td>
+				<td><?php echo $this->lobjform->field28;?></td>
+           </tr>
+
+      <!--<tr>	
+				<td><?php echo $this->translate("Scheme");?></td>
+				<td><?php echo $this->lobjform->field5;?></td>
+
+      </tr>
+
+			--><tr>
+				<td colspan="4" align="center">
+							<?php echo $this->lobjform->Search;?><input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Add')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'intake', 'action'=>'newintake'),'default',true);?>';" /><?php echo $this->lobjform->Clear;?>
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>
+<br />
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	    	<tr>
+	        	<th><?php echo $this->translate("Intake").' '.$this->translate("Id");?></th>
+	        	<th><?php echo $this->translate("Intake").' '.$this->translate("Description");?></th>
+	        	<th><?php echo $this->translate($this->defaultlanguage);?></th>
+	        	<th><?php echo $this->translate("Intake status");?></th>
+	    	</tr>
+	    	<?php if (count($this->paginator)): ?>
+	    	<?php foreach ($this->paginator as $intake): ?>
+	    	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+	    		<td><a href="<?php echo $this->baseUrl();?>/generalsetup/intake/editintake/id/<?php echo $this->escape($intake['IdIntake']);?>" ><?php print_r($this->escape($intake['IntakeId']));?></a></td>
+	    		<td ><?php echo $this->escape($intake['IntakeDesc']);?></td>
+	    		 <td ><?php echo $this->escape($intake['IntakeDefaultLanguage']);?></td>
+	    		  <td ><?php
+	    		  $intakedb = new GeneralSetup_Model_DbTable_Intake();
+	    		  $status = $intakedb->getCurrentIntakeBydate(date("Y-m-d"));
+	    		  if($status==$intake['IdIntake']){
+	    		  	echo $this->translate("Current"); 
+	    		  }else{
+	    		  	echo $this->translate("Inactive");
+	    		  }
+	    		  ?></td>
+	    	</tr>
+	    	<?php endforeach; ?>
+	    	<?php endif; ?>
+	   </table>
+</fieldset>
+</body>

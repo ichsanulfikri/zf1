@@ -1,0 +1,84 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang;?>" lang="<?php echo $this->lang;?>" dir="<?php echo $this->rtl;?>">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+	<link rel="stylesheet" type="text/css"  href="<?php  echo $this->baseUrl();?>/css/jquery-ui-1.8.6.custom.css" />
+	<link rel="stylesheet" type="text/css"  href="<?php echo $this->baseUrl();?>/css/default.css" />
+	<link rel="stylesheet" type="text/css"  href="<?php echo $this->baseUrl();?>/css/site2.css" />
+	
+	<script language="javascript" src="<?php  echo $this->baseUrl();?>/js/jquery-1.4.3.js"></script>
+	<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/jquery-ui.js"></script>
+	<script language="javascript" src="<?php  echo $this->baseUrl();?>/js/sams-common.js"></script>
+
+	<!-- ///////////////////////// DOJO ////////////////////////// -->
+	<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/dojo/dojo/dojo.js" djConfig="parseOnLoad: true,locale:'<?php echo $this->lang;?>'"></script>
+	<script type="text/javascript" src="<?php  echo $this->baseUrl();?>/js/dojo/dojo/nls/dojo_<?php echo $this->lang;?>.js"></script>
+	<link rel="stylesheet" type="text/css" href="<?php  echo $this->baseUrl();?>/js/dojo/dijit/themes/claro/claro.css" />
+	<link rel="stylesheet" type="text/css" href="<?php  echo $this->baseUrl();?>/js/dojo/dojo/resources/dojo.css" />
+	<!-- ///////////////////////// DOJO ////////////////////////// -->
+
+
+	<script type="text/javascript">
+		function fnValidate(){
+			flag = true;
+
+			if(document.getElementById("defTypeDesc").value==""){
+				document.getElementById("errDefTypeDesc").innerHTML ="Value can't be empty";
+				flag = false;
+			}
+			return flag;
+		}
+		function fnCloseLyteBox()
+		{
+			parent.window.document.getElementById("lbOverlay").style.display = "none";
+			parent.window.document.getElementById("lbMain").style.display = "none";
+		}
+	</script>
+</head>
+<body class = "claro">
+	<div id="container">
+		<div id="header">
+		<div id="content">&nbsp;</div>
+			<div id="cont-right">
+				<div class="selected">&nbsp;</div> 
+ 				<fieldset>
+					<legend><?php echo $this->translate->_("New")." ".$this->translate->_("Maintenance");?></legend>
+					<div class="register">
+						<div class="profile_tab">
+							<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/maintenance/newmaintenance" method="POST"  name= "myform" id="myform">
+								<script type="dojo/method" event="onSubmit">
+ 									 if (this.validate()) {
+										return true;
+									} else {
+										return false;
+									}
+								</script>
+								<table id="hor-minimalist-b">
+									<tr>
+										<td>&nbsp;</td>
+										<td>
+											<?php echo $this->translate->_("Definition")." ".$this->translate->_("Description");?><span class="reqMark">*</span>&nbsp;&nbsp;
+											<?php echo $this->lobjMaintenanceForm->defTypeDesc;?><br/><span id="errDefTypeDesc" class="error"></span><
+										</td>
+									</tr>
+								</table>
+                
+                				<table>
+                					<tr>
+										<td <?php if( $this->rtl=='rtl'){?>align = "left"<?php }else{?>align = "right"<?php }?>>
+											<?php foreach($this->roles as $resultItem):?>
+											    <?php if($resultItem['functionCode']=='MAINT' && $resultItem['operationCode']=='ADD'){?>
+											    	<?php echo $this->lobjMaintenanceForm->Save;?>
+												<?php }?>
+										    <?php endforeach;?>
+                             				<?php echo $this->lobjMaintenanceForm->Close;?>
+										</td>
+									</tr>
+								</table>
+							</form>
+						</div>
+					</div>
+				</fieldset>
+			</div>
+		</div>
+	</div>
+</body>

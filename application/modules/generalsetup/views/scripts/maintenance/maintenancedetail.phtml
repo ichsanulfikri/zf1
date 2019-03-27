@@ -1,0 +1,112 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="<?php echo $this->lang;?>" lang="<?php echo $this->lang;?>" dir="<?php echo $this->rtl;?>">
+<head>
+		<script type="text/javascript">
+				function redirect(val)
+		{
+			if(val == 1){
+				parent.location.href='<?php  echo $this->baseUrl();?>/generalsetup/maintenance';
+			}else{
+				<?php echo $this->lstrredirecturl; ?>
+			}
+		}
+	</script>
+</head>
+<body class = "claro">
+	<fieldset>
+		<legend><?php echo $this->translate("Maintenance");?></legend>
+		<div class="register">
+			<div class="profile_tab">
+
+<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/generalsetup/maintenance/updatemaintenance<?php echo $this->lstrredirectaction?>" method="POST"  name= "myform" id="myform">
+<script type="dojo/method" event="onSubmit">
+  if (this.validate()) {
+	return true;
+} else {
+	return false;}
+</script>
+					<?php echo $this->lobjMaintenanceForm->idDefType;?>
+					<?php echo $this->lobjMaintenanceForm->idDefinition;?>
+					  <table class="table" width="100%" >
+						<tr>
+							<td><?php echo $this->translate("Definition")." ".$this->translate("Code");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->DefinitionCode;?><br/><span id="errDefCode" class="error"></span></td>
+							<td><?php echo $this->translate("Definition")." ".$this->translate("Description");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->DefinitionDesc;?><br/><span id="errDefDesc" class="error"></span></td>
+						</tr>
+							<tr>
+							<td style="width:150px"><?php echo $this->defaultlanguage;?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->BahasaIndonesia;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+							<td style="width:150px"><?php echo $this->translate("Description");?><span class="reqMark"></span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>>
+								<?php echo $this->lobjMaintenanceForm->Description;?>
+								<br/><span id="errDefDesc"></span>
+							</td>
+						</tr>
+        				 <tr>
+							<td><?php echo $this->translate("Active");?><span class="reqMark">*</span></td>
+							<td <?php if( $this->rtl=='rtl'){?>style="text-align:right;padding-right:10px" <?php }?>><?php echo $this->lobjMaintenanceForm->Status;?><br/><span id="errDefCode" class="error"></span></td>
+							<td></td>
+							<td></td>
+						</tr>
+						
+						<tr>
+							<td align = "right" colspan="4">
+								<?php echo $this->lobjMaintenanceForm->Save;?>
+								<?php if(isset($this->lstrredirecturl)) {?>
+									<input type="button" class="NormalBtn"  dojoType=dijit.form.Button label=<?php echo $this->translate("Back");?> value=<?php echo $this->translate("Back");?> onclick='redirect(0)'/>
+								<?php } else {?>
+									<input type="button" class="NormalBtn"  dojoType=dijit.form.Button label=<?php echo $this->translate("Back");?> value=<?php echo $this->translate("Back");?> onclick  = 'redirect(1);' />
+								<?php } ?>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</div>
+		</div>
+	</fieldset>
+	<fieldset>
+	<div id="hor-minimalist-b" style="height:140px;overflow:auto">
+		  <table class="table" width="100%" >
+			<tr>
+				 <th style="width:22%"><?php echo $this->translate("Definition")." ".$this->translate("Code");?></th>
+				 <th style="width:22%"><?php echo $this->translate("Definition")." ".$this->translate("Description");?></td>
+				 <th ><?php echo $this->defaultlanguage;?></th>
+			</tr>
+		
+    	
+    	
+			<?php if (count($this->lobjPaginator)): ?>
+				<?php foreach ($this->lobjPaginator as $larrMaintainanceDetails ): ?>
+					<tr>
+						<td style="width:160px">
+							<a rel="lyteframe" title="" rev="width: 830px; height: 350px; scrolling: no;" href="<?php echo $this->baseUrl();?>/generalsetup/maintenance/maintenancedetail/idDefnType/<?php echo $this->escape($larrMaintainanceDetails['idDefType']);?>/idDefn/<?php echo $this->escape($larrMaintainanceDetails['idDefinition']);?><?php echo $this->lstrredirectaction?>">
+								<?php echo $this->escape($larrMaintainanceDetails['DefinitionCode']);?>
+							</a>
+						</td>
+						<td style="width:160px">
+							<?php echo $this->escape($larrMaintainanceDetails['DefinitionDesc']);?>
+						</td>
+						<td style="width:160px">
+							<?php echo $this->escape($larrMaintainanceDetails['BahasaIndonesia']);?>
+						</td>
+					</tr>
+				<?php endforeach; ?>
+			<?php endif; ?>
+		
+		
+
+		
+			<tr style="height:25px;border:1px solid #CCCCCC;color:#666699;padding:6px">
+				<td colspan="8" align="right">
+					<div class="pagination">
+						<?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+					</div>
+				</td>
+			</tr>
+		</table>
+		</div>
+	</fieldset>
+</body>

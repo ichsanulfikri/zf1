@@ -1,0 +1,450 @@
+<script>
+
+function delCourse(){	
+
+	var idCourse = $('input:radio[name=idCourse]:checked').val();
+	
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'delete-course','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>/idCourse/"+idCourse;
+}
+
+function addCourse(){	
+
+	if ($("#dialog-add-course").is(":hidden")) {		
+		$("#dialog-add-course").slideDown("slow");
+	} else {
+		$("#dialog-add-course").hide();
+	}
+	
+	
+}
+
+
+function getCreditHours(e){
+
+	var SubjectType = $('select[name="SubjectType"]').val();
+
+	if(SubjectType!=''){
+			$.ajax({
+				url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'ajax-get-subject','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>",
+				data: {'IdSubject':$(e).val(),'SubjectType':SubjectType},
+				type: 'POST',
+				dataType: 'json'	
+			}).done(function ( data ) {
+		
+				if(data.status==0){
+					alert("Sorry you cannot choose this Subject. The Credit Hour has exceed available balance Credit Hours. Available balance credit hours is "+data.available);
+					$('#IdSubject').get(0).selectedIndex = 0;						
+				}else{
+					$('#CreditHours').val(data.CreditHours);
+					$("#Compulsory").removeAttr("disabled");
+				}
+			});
+	}else{
+		alert("Please Select Subject Type First.");
+		$('#IdSubject').get(0).selectedIndex = 0;
+	}
+}
+
+function back(){
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'landscape-list','id'=>$this->programId),'default',true);?>";
+}
+
+function validate(){
+	var SubjectType = $('select[name="SubjectType"]').val();
+
+	
+		
+		//check dah exceed ke credit hours
+		if(SubjectType!=''){
+			
+				$.ajax({
+					url: "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'ajax-get-program-requirement','idlandscape'=>$this->landscapeId,'idprogram'=>$this->programId),'default',true);?>",
+					data: {'SubjectType':SubjectType},
+					type: 'POST',
+					dataType: 'json'	
+				}).done(function ( data ) {	
+		
+					if(SubjectType==275){ //elective
+		
+						//check kalo dah exceed limit so disbaledkan button compulsory
+						if(data.status==0){
+							$("#Compulsory").attr("disabled", "disabled");
+						}
+						
+					}else{
+
+						$("#Compulsory").attr("disabled", "disabled");
+						$('input[name=Compulsory]').attr('checked', false);
+												
+						if(data.status==0){
+							alert("Sorry you have exceed total credit hours for this particular Subject Type");	
+							$('#SubjectType').get(0).selectedIndex = 0;
+						}
+					}
+					
+					
+				});
+		}//end if
+	
+}
+</script>
+
+<script type="text/javascript">
+$(function() {
+	 $( "#tabs" ).tabs();
+});
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Info"); ?></a></div></li>
+		<li class="prevDone"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'program-requirement','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Program Requirments"); ?></a></div></li>
+		<li class="lastCurrent"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>	
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+			<li>
+				<a href="#" onclick="addCourse()" >
+					<span class='add'></span>
+					Add
+				</a>
+			</li>
+			<li>
+				<a href="#" onclick="delCourse()" >
+					<span class='delete'></span>
+					Delete
+				</a>
+			</li>
+		  	<li>
+				<a href="#" onclick="back()" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+	
+<div id="dialog-add-course" title="Add Course" style="display:none">
+<fieldset><legend><?php echo $this->translate("Add Course Form")?></legend>
+<?php echo $this->form; ?>
+</fieldset>
+<br><br>
+</div>
+		
+<div style="width:100%;">
+<fieldset><legend><?php echo $this->translate("Program Requirement List")?></legend>
+<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="200">Course Type</th>
+			<th width="100px">Minimum Credit Hours</th>
+		</tr>
+		  
+		  
+		   <?php 
+		   if(count($this->programrequirement)>0){
+		   	 $total_credit_hours=0;
+		  	 foreach($this->programrequirement as $req){
+		  	 	
+		  	 $total_credit_hours = $total_credit_hours + $req["CreditHours"];
+		  	?>
+			<tr class='shade'>
+				<td><?php echo $req["DefinitionDesc"]?></td>
+				<td align="center"><?php echo $req["CreditHours"]?></td>
+			</tr>
+			<?php } //end foreach ?>
+		   
+						
+		<tr>
+			<td align="right">Total : </td>
+			<td align="center"><strong><?php echo $total_credit_hours;?></strong></td>			
+		</tr>
+		<?php }//end if ?>
+	</table>
+</fieldset>
+
+<br><br>
+	
+
+<div id="tabs">
+	<ul>    	
+    	<li><a href="#tabs-2"><?php echo $this->translate("View by Majoring")?></a></li>   
+    	<li><a href="#tabs-3"><?php echo $this->translate("View by Course Type")?></a></li>   	
+  	</ul>
+  	
+  	
+  	<!--  Start Div 2 -->
+  	<div id="tabs-2">
+  	       
+  	       <h1><?php echo $this->translate("Common Courses")?></h1><br>
+  	       <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>
+					<th width="50px">Compulsory?</th>
+					<th width="50px">Credit Hour</th>
+					
+				</tr>
+				
+				<?php 
+				if(is_array($this->course_landscape)){
+					$total_credit_hours=0;
+					foreach($this->course_landscape as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+						
+						if($course["SubjectType"]==275){//elective
+							if($common["Compulsory"]==1){
+								$compulsory = $this->translate("Yes");
+							}else{
+								$compulsory = $this->translate("No");
+							}
+						}else{
+								$compulsory = $this->translate("Yes");
+						}
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $common["IdSemester"]?></td>
+						<td align="center"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>
+						<td align="center"><?php echo $compulsory?></td>
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="5" bgcolor="#F3F781"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F3F781"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		</table>
+		
+		<br><br>
+		
+		<h1><?php echo $this->translate("Elective Courses")?></h1><br>
+  	       <table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>					
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>
+					<th width="50px">Compulsory?</th>
+					<th width="50px">Credit Hour</th>
+					
+				</tr>
+				
+				<?php 
+				if(is_array($this->elective_course)){
+					$total_credit_hours=0;
+					foreach($this->elective_course as $common) { 					
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+						
+						if($common["Compulsory"]==1){
+							$compulsory = $this->translate("Yes");
+						}else{
+							$compulsory = $this->translate("No");
+						}
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $common["IdSemester"]?></td>
+						<td align="center"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>
+						<td align="center"><?php echo $compulsory?></td>
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="5" bgcolor="#F3F781"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F3F781"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		</table>
+		
+		<br><br>
+		
+		 <h1><?php echo $this->translate("Majoring Courses")?></h1><br>
+		 
+			<?php 
+			if($this->majoring){
+			
+			foreach($this->majoring as $major){
+			$total_majoring_credit_hours=0;
+			
+				//get courses for each majoring
+				$landscapeSubjectDb =  new GeneralSetup_Model_DbTable_Landscapesubject();
+				$majoring_course = $landscapeSubjectDb->getMajoringCourse($this->programId,$this->landscapeId,$major["IDProgramMajoring"]);
+			?>
+			<h2><?php echo $major["BahasaDescription"]?>-<?php echo $major["IDProgramMajoring"];?></h2><br>
+			
+			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>
+					<th width="50px">Compulsory?</th>
+					<th width="50px">Credit Hour</th>
+				</tr>	
+				<?php 
+				if($majoring_course){					
+					foreach($majoring_course as $mcourse) { 
+						
+						$total_majoring_credit_hours = $total_majoring_credit_hours + $mcourse["CreditHours"];
+						
+						if($course["SubjectType"]==275){//elective
+							if($common["Compulsory"]==1){
+								$compulsory = $this->translate("Yes");
+							}else{
+								$compulsory = $this->translate("No");
+							}
+						}else{
+								$compulsory = $this->translate("Yes");
+						}
+				?>
+					<tr class='shade'>
+						<td align="center"><?php echo $mcourse["IdSemester"]?></td>
+						<td align="center"><?php echo $mcourse["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $mcourse["SubCode"]?></td>
+						<td align="center"><?php echo $mcourse["DefinitionDesc"]?></td>
+						<td align="center"><?php echo $compulsory?></td>
+						<td align="center"><?php echo $mcourse["CreditHours"]?></td>
+					</tr>
+				<?php }//end foreach majoring course
+				 }//end if ?>
+				 <tr>
+						<td align="right" colspan="5" bgcolor="#E6E6E6"><strong><?php echo $this->translate("Total Credit Hours")?></strong></td>
+						<td align="center" bgcolor="#F3F781"><strong><?php echo $total_majoring_credit_hours;?></strong></td>						
+				</tr>				
+			</table>
+			<br>
+			<!--<table class="" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>	
+					<td align="right"><strong><em><?php echo $this->translate("Total (Common + Majoring) Credit Hours")?> : <?php echo $total_majoring_credit_hours+$total_credit_hours;?></em></strong></td>
+														
+				</tr>
+			</table>
+			--><br>
+			<?php } //end foreach majoring name
+			} //end if majoring ?>
+  	</div>
+  	
+  	
+  	<!--  Start Div 3 -->
+  	<div id="tabs-3">
+  	
+  		<?php   
+  		if($this->programrequirement){	
+  			$grand_course_credit_hours =0 ;	
+  			$grand_elective_course_credit_hours  =0;
+  			
+  			foreach($this->programrequirement as $programReq){
+  				
+  			$course_credit_hours = 0;
+  			
+  			//get courses for by program requirement
+			$landscapeSubjectDb =  new GeneralSetup_Model_DbTable_Landscapesubject();
+			$courses = $landscapeSubjectDb->getCourseByProgramReq($this->programId,$this->landscapeId,$programReq["SubjectType"]);
+  		?>
+  		
+  			<h2><?php echo $programReq["DefinitionDesc"]?>-<?php echo $programReq["SubjectType"]?></h2><br>
+  			
+  			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>			
+				    <th width="5px">&nbsp;</th>	   
+					<th width="50px">Semester</th>
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Majoring/Common</th>
+					<th width="100px">Compulsory?</th>
+					<th width="50px">Credit Hour</th>					
+				</tr>	
+				
+  			<?php
+  			if($courses){
+  				
+  				foreach($courses as $course){
+  					
+  					if($course["IDProgramMajoring"]=='' || $course["IDProgramMajoring"]==0){
+  						
+  						if($course["SubjectType"]==275){
+  							$majoring_name = '';
+  						}else{
+  							$majoring_name = $this->translate("Common");
+  						}
+  						
+  					}else{
+  						$majoring_name = $course["BahasaDescription"];
+  					}
+  					
+  					$course_credit_hours = $course_credit_hours+$course["CreditHours"];
+  					
+  					$grand_course_credit_hours = $grand_course_credit_hours + $course["CreditHours"];
+  					
+  					if($course["SubjectType"]==275){//elective
+	  					if($course["Compulsory"]==1){
+								$compulsory = $this->translate("Yes");
+								$grand_elective_course_credit_hours = $grand_elective_course_credit_hours + $course["CreditHours"];
+						}else{
+								$compulsory = $this->translate("No");
+						}
+  					}else{//default semua wajib amik
+  						$compulsory = $this->translate("Yes");
+  						$grand_elective_course_credit_hours = $grand_elective_course_credit_hours + $course["CreditHours"];
+  					}
+  			?>
+  				
+  				<tr class='shade'>  			
+  				        <td align="center"><input type="radio" value="<?php echo $course["IdLandscapeSub"]; ?>" name="idCourse" id="idCourse"></td>		
+						<td align="center"><?php echo $course["IdSemester"]?></td>
+						<td align="center"><?php echo $course["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $course["SubCode"]?></td>
+						<td align="center"><?php echo $majoring_name; ?></td>
+						<td align="center"><?php echo $compulsory?></td>
+						<td align="center"><?php echo $course["CreditHours"]?></td>
+					</tr>
+					
+  			<?php }//end foreach 
+  			} //end courses?>
+  			 <tr>
+						<td align="right" colspan="6" bgcolor="#E6E6E6"><strong><?php echo $this->translate("Total Credit Hours")?></strong></td>
+						<td align="center" bgcolor="#F3F781"><strong><?php echo $course_credit_hours;?></strong></td>
+			</tr>	
+  		</table>
+  		
+  		<?php }//prog req 
+  			} //end prog req
+  		?>
+  		
+  		<br>
+  		<table class="" width="50%" cellpadding="5" cellspacing="2" border="0">
+  		 	<tr>
+  		 	   <td><?php echo $this->translate("Grand Total (with Not Compulsory Elective)")?>  </td>
+				<td align="center" bgcolor="#CEF6D8">: <?php echo $grand_course_credit_hours;?> <?php echo $this->translate("Credit Hours")?></td>
+			</tr>
+			<tr>
+  		 	    <td><?php echo $this->translate("Grand Total (without Not Compulsory Elective)")?></td>
+				<td align="center" bgcolor="#CEF6D8">: <?php echo $grand_elective_course_credit_hours;?> <?php echo $this->translate("Credit Hours")?></td>
+			</tr>
+  		</table>
+  			
+  	</div>
+  	
+</div>
+  
+
+

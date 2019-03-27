@@ -1,0 +1,477 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="">
+<head>
+<!--<style>
+.barrel_roll {
+-webkit-transition: -webkit-transform 4s ease;
+-webkit-transform: rotate(360deg);
+-moz-transition: -moz-transform 4s ease;
+-moz-transform: rotate(360deg);
+-o-transition: -o-transform 4s ease;
+-o-transform: rotate(360deg);
+transition: transform 4s ease;
+transform: rotate(360deg);
+}
+</style> 
+--><script type="text/javascript">
+	dojo.addOnLoad(function() {
+
+		dijit.byId('State').set('value','');
+		dijit.byId('State').set('placeHolder','Select');
+
+		var cid = dijit.byId('Country').value;	
+		fnGetCountryStateList(cid,"State");
+		
+		dijit.byId('City').set('value','');
+		dijit.byId('City').set('placeHolder','Select');
+		dijit.byId('IdStaff').set('value','');
+		dijit.byId('IdStaff').set('placeHolder','Select');		
+
+		dijit.byId('AffiliatedTo').set('value','');
+		dijit.byId('AffiliatedTo').set('placeHolder','Select');
+		dijit.byId('CollegeType').set('value','');
+		dijit.byId('CollegeType').set('placeHolder','Select');
+		var cid = dijit.byId('Country').value;
+		
+		var form = dijit.byId("myForm");
+		var value=form.attr('value').CollegeType;
+		//fnToggleCollegeType(value);
+	});
+
+
+	function fnGetStaffList(IdStaff){ 
+		if(IdStaff != "")
+			{ 
+				var xhrArgs = {
+						url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstafflist/idStaff/"+IdStaff,
+						handleAs:'json',
+						load:function(data){ 
+							dijit.byId('FromDate').set('value',data['JoiningDate']);
+						}
+				   }
+				dojo.xhrGet(xhrArgs); 
+			} 
+		} 
+
+function fnGetStateCityList(idState){ 
+		if(idState != "")
+			{ var xhrArgs = {
+						url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+						handleAs:'json',
+						load:function(data){ 
+							AutoFillNextEditableDropDown("City",data); 
+						}
+				   }
+				dojo.xhrGet(xhrArgs); 
+			} 
+		} 	
+function fnGetStateCityListStaff(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("Citystaff",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 					
+function fnGetCountryStateList(idCountry,state){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown(state,data);  
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+
+
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+
+function validateCollegeName( value, constraint )
+{
+
+var loginID = dijit.byId( "CollegeName" );
+
+var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+if( "" == loginID.value ) {
+    // for some required=true is not kicking in, so we are forcing it.
+    bNoNameFound = false;
+}
+else {      
+    if( false == loginID._focused ) {
+        console.log( "Checking username..." );
+        dojo.xhrGet({
+            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/collegemaster/getcollegename/CollegeName/"+value,
+            handleAs: 'text',
+            content: { l: value},
+            timeout: 10000, 
+            load: function( data ) {
+                if ( data ) {
+                    // setting the state to error since the username is already taken
+                    bNoNameFound = false;
+                    loginID.set( "state", "Error" );
+                    loginID.displayMessage( "The Faculty Name is already taken..." );
+                    // used to change the style of the control to represent a error
+                    loginID._setStateClass();
+                    console.log( "Invalid username" ); 
+                }
+                else
+                {
+                    bNoNameFound = true;
+                    loginID.set( "state", "" );
+                    loginID.displayMessage( "" );
+                }
+            }
+        });
+    }
+}
+
+return bNoNameFound;
+}
+
+
+function validateCollegeCode( value, constraint )
+{
+
+var loginID = dijit.byId( "CollegeCode" );
+
+var bNoNameFound =  ( "Error" == loginID.get( "state" ) ) ? false:true;
+
+if( "" == loginID.value ) {
+    // for some required=true is not kicking in, so we are forcing it.
+    bNoNameFound = false;
+}
+else {      
+    if( false == loginID._focused ) {
+        
+    	value=value.replace(/[$^?+*()|\\]/g,"*"); 
+    	    	
+        console.log( "Checking username..." );
+        dojo.xhrGet({
+            url: "<?php echo $this->baseUrl();?>"+"/generalsetup/collegemaster/getcollegecode/CollegeCode/"+value,
+            handleAs: 'text',
+            content: { l: value},
+            timeout: 10000, 
+            load: function( data ) {
+                if ( data ) {
+                    // setting the state to error since the username is already taken
+                    bNoNameFound = false;
+                    loginID.set( "state", "Error" );
+                    loginID.displayMessage( "The Faculty Name is already taken..." );
+                    // used to change the style of the control to represent a error
+                    loginID._setStateClass();
+                    console.log( "Invalid username" ); 
+                }
+                else
+                {
+                    bNoNameFound = true;
+                    loginID.set( "state", "" );
+                    loginID.displayMessage( "" );
+                }
+            }
+        });
+    }
+}
+
+return bNoNameFound;
+}
+
+function checkphonefield(){
+
+ var workphone = dijit.byId("Phone1").value;
+ var workcountrycode = dijit.byId('Phone1countrycode').value;
+ var workstatecode = dijit.byId('Phone1statecode').value;
+
+ var homePhone = dijit.byId("Phone2").value;
+ var homecountrycode = dijit.byId('Phone2countrycode').value;
+ var homestatecode = dijit.byId('Phone2statecode').value;
+
+
+  var fax = dijit.byId("Fax").value;
+  var faxstatecode = dijit.byId('Faxstatecode').value;
+  var faxcountrycode = dijit.byId('Faxcountrycode').value;
+
+if(faxcountrycode!=''){
+   if(faxstatecode == ''){
+    dijit.byId("Faxstatecode").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Faxstatecode").set( "state", "Error" );
+    return false;
+   }
+   if(fax == ''){
+     dijit.byId("Fax").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Fax").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(faxstatecode!=''){
+   if(faxcountrycode == ''){
+    dijit.byId("Faxcountrycode").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Faxcountrycode").set( "state", "Error" );
+    return false;
+   }
+   if(fax == ''){
+     dijit.byId("Fax").focus();
+    alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Fax").set( "state", "Error" );
+    return false;
+   }
+ }
+  if(fax != ''){
+    var len = fax.length;
+    if(len < 5){
+      dijit.byId("Fax").focus();
+      alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Fax").set( "state", "Error" );
+      return false;
+    }
+    if(faxcountrycode == ''){
+      dijit.byId("Faxcountrycode").focus();
+       alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Faxcountrycode").set( "state", "Error" );
+      return false;
+    }
+    if(faxstatecode == ''){
+      alert('Incorrect Fax details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Faxstatecode").focus();
+      dijit.byId("Faxstatecode").set( "state", "Error" );
+      return false;
+    }
+  }
+
+ if(workcountrycode!=''){
+   if(workstatecode == ''){
+    dijit.byId("Phone1statecode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone1statecode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("Phone1").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone1").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(workstatecode!=''){
+   if(workcountrycode == ''){
+    dijit.byId("Phone1countrycode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone1countrycode").set( "state", "Error" );
+    return false;
+   }
+   if(workphone == ''){
+     dijit.byId("Phone1").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone1").set( "state", "Error" );
+    return false;
+   }
+ }
+  if(workphone != ''){
+    var len = workphone.length;
+    if(len < 5){
+      dijit.byId("Phone1").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone1").set( "state", "Error" );
+      return false;
+    }
+    if(workcountrycode == ''){
+      dijit.byId("Phone1countrycode").focus();
+       alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone1countrycode").set( "state", "Error" );
+      return false;
+    }
+    if(workstatecode == ''){
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone1statecode").focus();
+      dijit.byId("Phone1statecode").set( "state", "Error" );
+      return false;
+    }
+  }
+
+  if(homecountrycode!=''){
+   if(homestatecode == ''){
+    dijit.byId("Phone2statecode").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone2statecode").set( "state", "Error" );
+    return false;
+   }
+   if(homePhone == ''){
+     dijit.byId("Phone2").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone2").set( "state", "Error" );
+    return false;
+   }
+ }
+
+ if(homestatecode!=''){
+   if(homecountrycode == ''){
+    dijit.byId("Phone2countrycode").focus();
+    alert('Home country code should not blank');
+    dijit.byId("Phone2countrycode").set( "state", "Error" );
+    return false;
+   }
+   if(homePhone == ''){
+     dijit.byId("Phone2").focus();
+    alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+    dijit.byId("Phone2").set( "state", "Error" );
+    return false;
+   }
+ }
+
+
+
+  if(homePhone != ''){
+    var len = homePhone.length;
+    if(len < 5){
+      dijit.byId("Phone2").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone2").set( "state", "Error" );
+      return false;
+    }
+    if(homecountrycode == ''){
+      dijit.byId("Phone2countrycode").focus();
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone2countrycode").set( "state", "Error" );
+      return false;
+    }
+    if(homestatecode == ''){
+      alert('Incorrect Phone details. Please fill Country Code (XXX)-State Code(XX)-Phone(XXXXXXXXX)');
+      dijit.byId("Phone2statecode").focus();
+      dijit.byId("Phone2statecode").set( "state", "Error" );
+      return false;
+    }
+  }
+  return true;
+}
+
+</script> 
+</head>
+<body class='claro'>
+<!--<button onclick="document.getElementsByTagName('body')[0].className='barrel_roll';">BARREL ROLL!</button>
+ --><fieldset>
+    <legend><?php echo $this->translate($this->College);?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/collegemaster/newcollege" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+                  if(checkphonefield()){
+                    return true;
+                  }else{
+                    return false;
+                  }
+                } else {
+                  return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("$this->College").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate($this->College).' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->CollegeName;?>
+                            	<?php echo $this->lobjcollegeForm->UpdDate;?>
+                            	<?php echo $this->lobjcollegeForm->UpdUser;?></td>
+                            <td ><?php echo $this->translate($this->defaultlanguage);?><span class="reqMark"></span></td>
+                            <td  ><?php echo $this->lobjcollegeForm->ArabicName;?></td>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("Short Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->ShortName;?></td>
+                            <td ><?php echo $this->translate($this->College).' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->CollegeCode;?></td>
+                        </tr>
+                       
+                       <tr>
+                            <th colspan = "4"><?php echo $this->translate("Address").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Address 1");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Add1;?></td>
+                            <td ><?php echo $this->translate("Address 2");?></td>
+                             <td ><?php echo $this->lobjcollegeForm->Add2;?>
+                        </tr>
+                        <tr> 
+                           
+                            <td ><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Country;?></td>
+                            <td ><?php echo $this->translate("State");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->State;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("City");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->City;?></td>
+                            <td ><?php echo $this->translate("Zip Code");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Zip;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Phone 1");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Phone1countrycode;?><?php echo $this->lobjcollegeForm->Phone1statecode;?><?php echo $this->lobjcollegeForm->Phone1;?></td>
+                            <td ><?php echo $this->translate("Phone 2");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Phone2countrycode;?><?php echo $this->lobjcollegeForm->Phone2statecode;?><?php echo $this->lobjcollegeForm->Phone2;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Fax");?></td>
+                            <td ><?php echo $this->lobjcollegeForm->Faxcountrycode;?><?php echo $this->lobjcollegeForm->Faxstatecode;?><?php echo $this->lobjcollegeForm->Fax;?></td>
+                            <td ><?php echo $this->translate("Email");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Email;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Affiliated").' '.$this->translate("To");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->AffiliatedTo;?></td>
+                            <td ><?php echo $this->translate("$this->College").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjcollegeForm->CollegeType;?></td>
+                        </tr>
+                        <tr> 
+                            <td ><?php echo $this->translate("Is Department");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->IsDepartment;?></td>
+                            <td ><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td ><?php echo $this->lobjcollegeForm->Active;?></td>
+                        </tr>
+                         <tr>
+                            <th colspan = "4"><?php echo $this->translate($this->Dean).' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Dean");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjcollegeForm->IdStaff;?></td>
+                            <td><?php echo $this->translate("Joining").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjcollegeForm->FromDate;?></td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                           <td></td>
+                            <td></td>        
+                            <td align = "right"><?php echo $this->lobjcollegeForm->Save;?>
+							<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'collegemaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                               
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>
+</body>
+</html>

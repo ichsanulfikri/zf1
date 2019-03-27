@@ -1,0 +1,106 @@
+<head>
+
+<script type="text/javascript">
+
+dojo.addOnLoad(function(){
+	});
+function fnToggleCollegeDetails(value){
+	if(value != "")
+	{ 
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/departmentmaster/getcolgbranchlist/value/"+value,
+				handleAs:'json',
+				load:function(data){ 
+					AutoFillNextEditableDropDown("IdCollege",data); 
+				}
+		   }
+		dojo.xhrGet(xhrArgs); 
+	} 
+}
+function fnGetStaffList(IdStaff){ 
+	if(IdStaff != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstafflist/idStaff/"+IdStaff,
+					handleAs:'json',
+					load:function(data){ 
+						dijit.byId('FromDate').set('value',data['JoiningDate']);
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	 
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+</script> 
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("$this->Department");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/departmentmaster/departmentmasterlist/id/<?php echo $this->iddepartment; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("$this->Department").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td ><?php echo $this->translate("$this->Department").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjdepartmentmasterForm->DepartmentName;?>
+                            <td><?php echo $this->translate($this->defaultlanguage);?></td>
+                            <td><?php echo $this->lobjdepartmentmasterForm->ArabicName;?></td>
+                             <?php echo $this->lobjdepartmentmasterForm->IdDepartment;?>
+                            <?php echo $this->lobjdepartmentmasterForm->UpdDate;?>
+                            <?php echo $this->lobjdepartmentmasterForm->UpdUser;?></td>
+                        </tr>
+                      	<tr> 
+                      		<td><?php echo $this->translate("Short Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjdepartmentmasterForm->ShortName;?></td>
+                      		<td><?php echo $this->translate("$this->Department").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjdepartmentmasterForm->DeptCode;?></td>
+                        </tr>
+                         <tr> 
+                        	<!--<td ><?php echo $this->translate("$this->Department").' '.$this->translate("Type");?><span class="reqMark"></span></td>
+                      		<td><?php echo $this->lobjdepartmentmasterForm->DepartmentType;?></td>
+                           --><td ><span id="label1"><?php echo $this->translate("$this->College");?></span><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjdepartmentmasterForm->IdCollege;?></td>
+                        </tr>
+                         <tr>
+                          <th colspan = "4"><?php echo $this->translate('Head').' '.$this->translate("of").' '.$this->translate($this->Department).$this->translate("Details");?></th>
+                        </tr>
+                         <tr>
+                            <td><?php echo $this->translate('Head').' '.$this->translate("of").' '.$this->translate($this->Department);?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjdepartmentmasterForm->IdStaff;?></td>
+                        	<td><?php echo $this->translate("Joining").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                        	<td><?php echo $this->lobjdepartmentmasterForm->FromDate;?><?php echo $this->lobjdepartmentmasterForm->ToDate;?></td>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                        	<td><?php echo $this->lobjdepartmentmasterForm->Active;?></td>
+                        	<td></td>
+                        	<td></td>
+                        </tr>
+                        <tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjdepartmentmasterForm->Save;?>
+                             <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'departmentmaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>
+              </table>
+            
+            </Form>
+
+</fieldset>

@@ -1,0 +1,88 @@
+<head>
+<script>
+dojo.addOnLoad(function(){
+		
+	dijit.byId('field5').set('value','');
+	dijit.byId('field5').set('placeHolder','Select');
+	dijit.byId('field8').set('value','');
+	dijit.byId('field8').set('placeHolder','Select');
+	
+	});
+</script>
+</head>
+<div align="center" style="background: #fff;">
+	<ul class="stepsmenu">
+		<li class="second"><a href="/generalsetup/university">University</a></li>
+		<li class="third"><a href="/generalsetup/collegemaster">Faculty</a></li>
+	    <li class="fourth"><a href="/generalsetup/departmentmaster">Department</a></li>
+    	<li class="fifth"><a href="/generalsetup/branchofficevenue/index/idbrc/1">Branch</a></li>										
+	</ul>
+</div>
+<div style="clear:both"></div>
+<fieldset>
+<legend><?php echo $this->translate->_($this->idbrch).' '.$this->translate->_("Search");?></legend>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/branchofficevenue/index/search/1/idbrc/<?php echo $this->lintidbrc;?>" method="POST">
+		<table width="100%">
+			<tr>	
+				<td><?php echo $this->translate($this->idbrch).' '.$this->translate("Name");?></td>
+				<td><?php echo $this->lobjform->field2;?></td>		
+		    	<td><?php echo $this->translate("Country").' '.$this->translate("Name");?></td>
+				<td><?php echo $this->lobjform->field5;?></td>
+            </tr>
+            <tr>							
+		    	<td><?php echo $this->translate("State").' '.$this->translate("Name");?></td>
+                <td ><?php echo $this->lobjform->field8;?></td>
+                <td ><?php echo $this->translate("Active");?></td>
+                <td ><?php echo $this->lobjform->field7;?></td>
+            </tr>          
+            
+             <tr>							
+				<td><?php echo $this->translate($this->defaultlanguage);?></td>
+                <td ><?php echo $this->lobjform->field28;?></td>                
+             </tr> 
+              
+			<tr>
+				<td colspan="4" align="center">
+							<?php echo $this->lobjform->Search;?>
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'branchofficevenue', 'action'=>'newbranchofficevenue','idbrc' => $this->lintidbrc),'default',true);?>';" />
+							<?php echo $this->lobjform->Clear;?>					
+				</td>
+			</tr>
+		</table>
+	</form>	
+</fieldset>
+</br>
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+	     <th><?php echo $this->translate($this->idbrch).' '.$this->translate("Name");?></th>
+	     <th ><?php echo $this->translate($this->defaultlanguage);?></th>
+	     <th ><?php echo $this->translate("Country Name");?></th>
+	     <th ><?php echo $this->translate("Province Name");?></th>
+	      
+	</tr>
+	<?php if (count($this->paginator)): 
+		foreach ($this->paginator as $Branchofficevenue ): ?>
+	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td>
+			<a href="<?php echo $this->baseUrl();?>/generalsetup/branchofficevenue/branchofficevenuelist/id/<?php echo $this->escape($Branchofficevenue['IdBranch']);?>/idbrc/<?php echo $this->lintidbrc;?>" rel="lyteframe" rev="width: 870px; height: 475px; scrolling: auto" >
+			<?php echo $this->escape($Branchofficevenue['BranchName']);?>
+			</a>
+		</td>
+		<td><?php echo $this->escape($Branchofficevenue['Arabic']);?></td>
+		<td><?php echo $this->escape($Branchofficevenue['CountryName']);?></td>
+		<td><?php echo $this->escape($Branchofficevenue['StateName']);?></td>
+		
+	</tr>
+		<?php endforeach;
+	endif; ?>
+	<tr>
+		<td colspan="4" align="right">
+			<div class="pagination">
+				<?php echo $this->paginationControl($this->paginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+			</div>																   
+		</td>
+	</tr>
+</table>
+</fieldset>
+</div>

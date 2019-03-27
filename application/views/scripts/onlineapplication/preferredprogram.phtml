@@ -1,0 +1,255 @@
+<?php
+if (isset($this->IntakeList)) {
+  $IntakeList = $this->IntakeList;
+  if(count($IntakeList) == "0") {
+  	echo "<script>alert('You application cannot be submitted due to some problem. Please contact the university.');$('#tab1').click();</script>";
+  	
+  }
+}
+//echo "<pre>";
+//print_r($this->preferreddet);
+?>
+<script>
+  dojo.addOnLoad(function() {
+<?php
+if (isset($this->preferreddet)) {
+  $i =1;
+  foreach ($this->preferreddet as $det) {
+?>
+                var intake = <?php echo $det['IdIntake']; ?>;
+                setallprogramvalues(<?php echo $i; ?>,<?php echo $det['IdProgramLevel']; ?>);
+                setprogram(<?php echo $i; ?>,<?php echo $det['IdProgram']; ?>)                
+                //$("#priority_"+<?php echo $i; ?>).val(<?php echo $det['IdPriorityNo']; ?>);
+                 setInterval(function(){
+                  $("#branch_"+<?php echo $i;?>).val(<?php echo $det['IdBranch'];?>);
+                  $("#scheme_"+<?php echo $i;?>).val(<?php echo $det['IdScheme'];?>);
+                },200);
+                //$("#"+intake).attr('checked',true);
+<?php
+  $i++;}
+}
+?>
+      });
+
+      function setprogram(row,program){
+         setInterval(function(){$("#program_"+row).val(program)},200);
+        getBranch(program,'branch_'+row);
+      }
+
+      function setallprogramvalues(row,programlvl){
+         setInterval(function(){$("#programlevel_"+row).val(programlvl)},200);
+        getProgram(programlvl,'program_'+row);
+      }
+      function getProgram(programlevelId,id){
+        var tem = id.split("_");
+        rowid = tem[1];
+        var intakeId = $("#IdIntake").val();        
+        $.ajax({
+          type: "GET",
+          url: '<?php echo $this->url(array('controller' => 'onlineapplication', 'action' => 'programlistajax'), 'default', true); ?>',
+          data: "IntakeId=" + intakeId + "&programlevelId=" +programlevelId , // appears as $_GET['id'] @ ur backend side
+          success: function(data) {
+            // data is ur summary
+            $('#'+'program_'+tem[1]).html(data);
+          }
+
+        });
+      }
+
+      function getBranch(programId,id){
+        var tem = id.split("_");
+        rowid = tem[1];
+        var intakeId = $("#IdIntake").val();
+        $.ajax({
+          type: "GET",
+          url: '<?php echo $this->url(array('controller' => 'onlineapplication', 'action' => 'branchlistajax'), 'default', true); ?>',
+          data: "IntakeId=" + intakeId + "&programId=" +programId , // appears as $_GET['id'] @ ur backend side
+          success: function(data) {
+            // data is ur summary
+            $('#'+'branch_'+tem[1]).html(data);
+          }
+
+        });
+
+        getScheme(programId,id);
+      }
+
+      function getScheme(programId,id){
+        var tem = id.split("_");
+        rowid = tem[1];
+        var intakeId = $("#IdIntake").val();
+        $.ajax({
+          type: "GET",
+          url: '<?php echo $this->url(array('controller' => 'onlineapplication', 'action' => 'schemelistajax'), 'default', true); ?>',
+          data: "IntakeId=" + intakeId + "&programId=" +programId , // appears as $_GET['id'] @ ur backend side
+          success: function(data) {
+            // data is ur summary
+            $('#'+'scheme_'+tem[1]).html(data);
+          }
+
+        });
+      }
+
+      function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+      function validatePreferredForm(){
+        var flag = true;
+        var count = 0;
+        var progcount = 0;
+        var rowcount = <?php echo $this->noofpreferred;?>;      
+        var batchArray  = new Array();
+        var i = 0;
+         $('.preferreddrop').each(function() {
+            var rowId = $(this).attr('id');
+            var progval = $('#'+rowId).val();
+            if(progval == ''){
+              progcount++;
+            }
+            else{
+              batchArray.push(progval);
+              if(arrHasDupes(batchArray)){
+               alert('Duplicate entry of program');
+               batchArray = batchArray.unique();
+               flag = false;
+              }
+            }
+            i++;
+         });
+		if(flag){
+	         for(var j=1;j<=rowcount;j++){    	
+	     		if($("programlevel_"+j).val() != ''){
+	     			if($("#program_"+j).val() == ''){
+	     				alert('Please select program');
+	     				flag = false;
+	     			}
+	     			if($("#branch_"+j).val() == ''){
+	     				alert('Please select branch');
+	     				flag = false;
+	     			}
+	     			if($("#scheme_"+j).val() == ''){
+	     				alert('Please select scheme');
+	     				flag = false;
+	     			}
+	     		}
+	      	}
+		}
+    if(progcount == i){
+      alert('At least One program is required');
+      flag = false;
+    }
+    
+
+
+//        $('.preferredstatus').each(function() {
+//          var mcCbxCheck = $(this);
+//          if(mcCbxCheck.is(':checked')) {
+//            count++
+//            var rowId = $(this).attr('id');
+//            if($('#'+'programlevel_'+rowId).val() == ''){
+//              flag = false;
+//              alert('Please select program level');
+//            }
+//          }
+//        });
+
+//        if(count > 3 || count == 0){
+//          flag = false;
+//          alert('You can choose maximum three program and minimum one program');
+//        }
+        if(flag){
+          var values = $('#preferred').serialize();
+          console.log(values);
+          $.ajax({
+            type: 'POST',
+            url: '<?php echo $this->url(array('controller' => 'onlineapplication', 'action' => 'addpreferreddetail'), 'default', true); ?>',
+            async: false,
+            data: values,
+            success: function(responseText) {
+              //alert(responseText)
+              var  tabid= '4';
+				var tab_id = "#tab"+tabid;
+				$(tab_id).live('click',function(){
+				var activeTab = $(this);
+				// check if the current tab already selected
+				if($(this).hasClass("selected")){
+					return;
+				}
+
+				var contentId = $(this).attr("id");
+				contentId = contentId.replace("tab", "content");
+
+
+				// remove selected class for previous tab
+				var tmp = $("#tabbedpanels a.selected").attr("id").replace("tab", "content");
+
+				$("#tabbedpanels a.selected").removeClass("selected");
+
+				$("#"+tmp).hide();
+
+				// 	adding selected class to this tab
+				$(this).addClass("selected");
+
+				$("#"+contentId).show();
+					});
+ 				$("#tab4").click();
+            }
+          });
+        }
+      }
+</script>
+<form name="preferred" id="preferred" action="" width="100%">
+  <table class="table" >
+    <tr>
+      <th><?php echo $this->translate("Priority"); ?></th>
+      <th><?php echo $this->translate("Intake"); ?></th>
+      <th><?php echo $this->translate("Program Level"); ?></th>
+      <th><?php echo $this->translate("Program"); ?></th>
+      <th><?php echo $this->translate("Branch"); ?></th>
+      <th><?php echo $this->translate("Scheme"); ?></th>
+      <!--<th width="40px"><?php echo $this->translate("Status");?></th>-->
+
+    </tr>
+<?php //$i =1;foreach ($IntakeList as $intake) { ?>
+    <?php for ($i=1;$i<=$this->noofpreferred;$i++) { ?>
+    <?php //if($i<=$this->noofpreferred){?>
+    <tr>
+      <td>
+<?php echo $i//echo $this->applicantpreferredForm->IdPriorityNo->setName('priority_' . $intake['IdIntake'])->setAttrib('id', 'priority_' . $intake['IdIntake']); ?>
+      </td>
+      <td class="preferredselect">
+<?php if(isset($IntakeList[0]['IdIntake'])) { echo $this->applicantpreferredForm->IdIntake->setValue($IntakeList[0]['IdIntake']); ?><?php echo $IntakeList[0]['IntakeDesc']; } ?>
+      </td>
+      <td >
+<?php echo $this->applicantpreferredForm->IdProgramLevel->setName('programlevel_' . $i)->setAttrib('id', 'programlevel_' . $i); ?>
+      </td>
+      <td>
+<?php echo $this->applicantpreferredForm->IdProgram->setName('program_' . $i)->setAttrib('id', 'program_' . $i); ?>
+      </td>
+      <td>
+<?php echo $this->applicantpreferredForm->IdBranch->setName('branch_' . $i)->setAttrib('id', 'branch_' . $i); ?>
+      </td>
+      <td>
+<?php echo $this->applicantpreferredForm->IdScheme->setName('scheme_' . $i)->setAttrib('id', 'scheme_' . $i); ?>
+      </td>
+      <!--<td width="40px">
+<?php //echo $this->applicantpreferredForm->Status->setName($IntakeList[0]['IdIntake'])->setAttrib('id', $IntakeList[0]['IdIntake']); ?>
+      </td>-->
+    </tr>
+    <?php //}$i++;} ?>
+<?php } ?>
+    <tr>
+      <td colspan="7" align="right"><input type="button" name="Next" value="Save & Next" onClick="validatePreferredForm()"></td>
+    </tr>
+  </table>
+</form>
+
+

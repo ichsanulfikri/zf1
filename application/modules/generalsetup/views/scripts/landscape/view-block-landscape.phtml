@@ -1,0 +1,249 @@
+<script type="text/javascript">
+$(function() {
+	<?php 
+	 for($i=1; $i<=$this->landscape["SemsterCount"]; $i++){ ?>
+		 $( "#semesterTabs-<?php echo $i; ?>").tabs();
+	 <?php } ?>
+});
+
+
+function back(){
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'landscape-list','id'=>$this->programId),'default',true);?>";
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		   
+			<li>
+				<a href="#" onclick="back();">
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+
+
+<div style="width:100%;">
+
+<h2><?php echo $this->translate("Landscape Info")?></h2>
+	<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="30%"><?php echo $this->translate("Program Name")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["ArabicName"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Landscape Type")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["DefinitionDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Intake")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["IntakeDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Semester")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["SemsterCount"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Credit Hours")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["TotalCreditHours"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Add / Drop")?></th>
+			<td width="5px">:</td>
+			<td><?php  echo ($this->landscape["AddDrop"] == 1 ? $this->translate("Yes"): $this->translate("No"))?></td>
+		</tr>
+		
+	</table>
+
+<br><br><br>
+
+<fieldset><legend><?php echo $this->translate("Program Requirement List")?></legend>
+<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="200">Course Type</th>
+			<th width="100px">Compulsory</th>
+			<th width="100px">Minimum Credit Hours</th>
+			
+		</tr>
+		  
+		  
+		   <?php 
+		   if(count($this->programrequirement)>0){
+		   	 $total_credit_hours=0;
+		  	 foreach($this->programrequirement as $req){
+		  	 	
+		  	 $total_credit_hours = $total_credit_hours + $req["CreditHours"];
+		  	?>
+			<tr class='shade'>
+				<td><?php echo $req["DefinitionDesc"]?></td>
+				<td align="center"><?php echo ($req["Compulsory"]==1) ? $this->translate("Yes"): $this->translate("No")?></td>
+				<td align="center"><?php echo $req["CreditHours"]?></td>
+			</tr>
+			<?php } //end foreach ?>
+		   
+						
+		<tr>
+			<td align="right" colspan=2>Total : </td>
+			<td align="center"><strong><?php echo $total_credit_hours;?></strong></td>			
+		</tr>
+		<?php }//end if ?>
+	</table>
+</fieldset>
+
+<br><br><br><br>
+
+<?php 
+for($i=1; $i<=$this->landscape["SemsterCount"]; $i++){
+
+	$blockSemDB = new GeneralSetup_Model_DbTable_LandscapeBlockSemester();
+	$blocks = $blockSemDB->getlandscapeblockBySem($this->landscapeId,$i);
+?>
+
+ <img src="<?php echo "../images/icon/toggle_collapse_alt.png"?>"> <h4><?php echo $this->translate("Semester").' '.$i; ?></h4><br>
+
+<div id="semesterTabs-<?php echo $i;?>">
+	
+	<?php 
+	if(count($blocks)>0){
+		echo '<ul>';
+		$b=0; 
+		foreach($blocks as $block){?>
+	
+		<li><a href="#blockTab-<?php echo $b;?>"><?php echo $block["blockname"];?></a></li> 
+		 
+	<?php $b++; } //end loop block
+		echo '</ul>';
+	}//end isset block ?>
+	
+	
+	<?php 
+	if(count($blocks)>0){
+		$b=0; 
+		foreach($blocks as $block){
+		
+			//get course
+			$blockCourseDb = new GeneralSetup_Model_DbTable_LandscapeBlockSubject();
+		    $compulsory_course = $blockCourseDb->getBlockCourse($this->landscapeId,$block["idblock"],1);
+		    $notcompulsory_course = $blockCourseDb->getBlockCourse($this->landscapeId,$block["idblock"],2);
+			
+	?>
+		
+		<div id="blockTab-<?php echo $b;?>"> 
+		
+						
+			<h1><?php echo $this->translate("Compulsory Courses")?></h1><br>
+  			
+  			<br>
+   			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>		
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>
+					
+				</tr>
+				
+				<?php 
+				if(is_array($compulsory_course)){
+					$total_credit_hours=0;
+					foreach($compulsory_course as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+												
+				?>
+					<tr class='shade'>						
+						<td align="left"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+						
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="3" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		  	 </table>
+		  	 
+		  	 
+		  	 <br><br>
+			
+			<h1><?php echo $this->translate("Not Compulsory Courses")?></h1><br>
+  			
+  			<br>
+   			<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+				<tr>		
+					<th width="200">Course Name</th>
+					<th width="50px">Course Code</th>
+					<th width="100px">Course Type</th>					
+					<th width="50px">Credit Hour</th>
+					
+				</tr>
+				
+				<?php 
+				if(is_array($notcompulsory_course)){
+					$total_credit_hours=0;
+					foreach($notcompulsory_course as $common) { 			
+								
+						$total_credit_hours = $total_credit_hours + $common["CreditHours"];
+												
+				?>
+					<tr class='shade'>						
+						<td align="left"><?php echo $common["BahasaIndonesia"]?></td>
+						<td align="center"><?php echo $common["SubCode"]?></td>
+						<td align="center"><?php echo $common["DefinitionDesc"]?></td>						
+						<td align="center"><?php echo $common["CreditHours"]?></td>
+						
+					</tr>
+				<?php } }?>
+				<tr>
+						<td align="right" colspan="3" bgcolor="#F5F6CE"><strong><?php echo $this->translate("Total")?></strong></td>
+						<td align="center" bgcolor="#F5F6CE"><strong><?php echo $total_credit_hours;?></strong></td>						
+				</tr>
+		  	 </table>
+
+		 </div>
+	
+	
+	<?php $b++; }//end loop block
+	}else{ echo 'There is no Block added. '; } //end isset block ?>
+	
+</div>
+
+<br><br>
+<?php } ?>
+
+</div>

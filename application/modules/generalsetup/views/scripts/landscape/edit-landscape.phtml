@@ -1,0 +1,154 @@
+<script>
+function editLandscape(){	
+		
+	if ($("#dialog-edit-landscape-info").is(":hidden")) {		
+		$("#dialog-edit-landscape-info").slideDown("slow");
+	} else {
+		$("#dialog-edit-landscape-info").hide();
+	}
+}
+
+
+function back(){
+
+	window.location = "<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'landscape-list','id'=>$this->programId),'default',true);?>";
+}
+
+$(function() {
+	
+
+	$( "#dialog-upload" ).dialog({
+        autoOpen: false,
+        width: 650,
+        modal: true,
+        buttons: {
+            "Upload": function() {
+                //$( this ).dialog( "close" );
+                $('#upload').submit();
+
+            	/*var data = new FormData($('input[name^="file"]'));     
+            	jQuery.each($('input[name^="file"]')[0].files, function(i, file) {
+            	    data.append(i, file);
+            	});
+
+            	console.log(data);*/
+            	              	
+            },
+            Cancel: function() {
+                $( this ).dialog( "close" );
+            }
+        }
+    });
+	
+});
+
+
+function uploadBatch(){
+	$( "#dialog-upload" ).dialog('open');
+	
+}
+</script>
+
+<div class="breadcrum">
+	<ul class="tri-steps">
+		<li class="current"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'edit-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Info"); ?></a></div></li>
+		<li class="empty"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'program-requirement','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Program Requirments"); ?></a></div></li>
+		<?php if($this->landscape["LandscapeType"]==44){?>		  
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'manage-block-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php }else{?>			
+			<li class="last"><div class="text"><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>"><?php echo $this->translate("Course"); ?></a></div></li>
+		<?php } ?>
+	</ul>
+	<div class="clear"></div>
+</div>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+			<li>
+				<a href="#" onclick="editLandscape()" >
+					<span class='edit'></span>
+					Edit
+				</a>
+			</li>
+			<li>
+				<a  href="#" onclick="javascript:uploadBatch()">
+					<span class='edit'></span>
+					<?php echo $this->translate("Batch");?>
+				</a>
+			</li>				
+		  	<li>
+				<a href="#" onclick="back()" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<div id="dialog-edit-landscape-info" title="Edit Landscape Info" style="display:none"><?php echo $this->form; ?></div>
+
+
+
+<div style="width:100%;">
+
+	
+
+	<h2><?php echo $this->translate("Landscape Info")?></h2>
+	<table class="table" width="70%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="30%"><?php echo $this->translate("Program Name")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["ArabicName"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Landscape Type")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["DefinitionDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Intake")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["IntakeDesc"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Semester")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["SemsterCount"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Total Credit Hours")?></th>
+			<td width="5px">:</td>
+			<td><?php echo $this->landscape["TotalCreditHours"];?></td>
+		</tr>
+		<tr>
+			<th width="30%"><?php echo $this->translate("Add / Drop")?></th>
+			<td width="5px">:</td>
+			<td><?php  echo ($this->landscape["AddDrop"] == 1 ? $this->translate("Yes"): $this->translate("No"))?></td>
+		</tr>
+		
+	</table>
+</div>
+<div id="dialog-upload" title="<?php echo $this->translate("Upload Application OMR"); ?>">
+    <?php echo $this->formupload;?>
+</div>

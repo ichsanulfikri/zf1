@@ -1,0 +1,133 @@
+<script>
+
+function add(){	
+	
+	if ($("#dialog-add-prerequisite").is(":hidden")) {		
+		$("#dialog-add-prerequisite").slideDown("slow");
+	} else {
+		$("#dialog-add-prerequisite").hide();
+	}
+}
+
+function toggleDiv(e){
+	type = $(e).val();
+	
+
+	if(type==1 || type==3){
+		$("#div_grade_open").hide();
+	}else{
+		$("#div_grade_open").show();
+	}
+
+	
+}
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>	
+		<li>
+				<a href="#" onclick="add();" >
+					<span class='add'></span>
+					Add Prerequisite
+				</a>
+			</li>	
+			<li>
+				<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'course-landscape','idlandscape'=>$this->landscapeId,'id'=>$this->programId),'default',true);?>" >
+					<span class='back'></span>
+					Back
+				</a>
+			</li>
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+
+<br>
+
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+<br>
+
+<div style="width:100%;">
+
+<fieldset  style="width:60%;"><legend><?php echo $this->translate("Course Info")?></legend>
+	<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr>
+			<th width="25%"><?php echo $this->translate("Course Name")?></th>
+			<td><?php echo $this->subject["BahasaIndonesia"]?></td>
+		</tr>
+		<tr>			
+			<th width="25%"><?php echo $this->translate("Course Code")?></th>
+			<td><?php echo $this->subject["SubCode"]?></td>			
+		</tr>
+		<tr>			
+			<th width="25%"><?php echo $this->translate("Program Majoring")?></th>
+			<td><?php if($this->subject["IDProgramMajoring"]) echo $this->subject["BahasaDescription"]; else echo $this->translate("Common");?></td>			
+		</tr>
+	</table>	  
+</fieldset>
+
+<br>
+
+
+<div id="dialog-add-prerequisite" title="Add Prerequisite" style="display:none">
+<fieldset  style="width:60%;"><legend><?php echo $this->translate("Add Form")?></legend>
+<?php echo $this->form; ?>
+</fieldset>
+<br><br>
+</div>
+
+
+<br></br>
+<h2><?php echo $this->translate("Course Prerequisite Lists")?></h2>
+<table class="table" width="100%" cellpadding="5" cellspacing="0" border="0">
+		<tr>		  
+			<th ><?php echo $this->translate("Prerequisite Type")?></th>
+			<th ><?php echo $this->translate("Course Code")?></th>	
+			<th ><?php echo $this->translate("Course Name")?></th>	
+			<th ><?php echo $this->translate("Requirement")?></th>
+			<th ><?php echo $this->translate("Options")?></th>
+		</tr>
+		<?php 
+		$pretype[0]=$this->translate('Pass with Grade');
+		$pretype[1]=$this->translate('Complete Subject');
+		$pretype[2]=$this->translate('Total Credit Hours');
+		$pretype[3]=$this->translate('Co-requisite');
+		
+		if(count($this->subject_prerequisite)>0){
+			foreach($this->subject_prerequisite as $sp){			
+		?>
+		<tr>
+			<td><?php echo $pretype[$sp["PrerequisiteType"]]?></td>
+			<td><?php if($sp["BahasaIndonesia"]=="") echo "-"; else echo $sp["BahasaIndonesia"]; ?></td>
+			<td><?php if($sp["SubCode"]=="") echo "-"; else echo $sp["SubCode"]; ?></td>
+			<td><?php if($sp["PrerequisiteType"]==0 || $sp["PrerequisiteType"]==2) echo $sp["PrerequisiteGrade"]; else echo '-';?></td>
+			<td><a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape','action'=>'delete-prerequisite','idlandscape'=>$this->landscapeId,'id'=>$this->programId,'idSubject'=>$this->idSubject,'IdSubjectPrerequisites'=>$sp["IdSubjectPrerequisites"],'idLandscapeSub'=>$this->idLandscapeSub,'idProgramMajoring'=>$this->idProgramMajoring),'default',true);?>">Delete</a></td>
+		</tr>
+		<?php } }else{ ?>
+		<tr>
+			<td colspan="5"><?php echo $this->translate("There is no data in the list")?></td>
+		</tr>
+		<?php }//end if else?>
+	</table>	
+
+<br>
+
+</div>

@@ -1,0 +1,52 @@
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('IdBank').set('value','');
+	dijit.byId('IdBank').set('placeHolder','Select');
+	dijit.byId('AccountType').set('value','');
+	dijit.byId('AccountType').set('placeHolder','Select');			
+	});
+</script>
+	<fieldset>
+	 <legend><?php echo $this->translate("Bank").' '.$this->translate("Details");?></legend>
+                <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/bankdetails/newbankdetails" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                            <table width="100%" class = "table">
+                            	<tr>
+                            		<th colspan = "4"><?php echo $this->translate("Bank").' '.$this->translate("Details");?></th>
+                            	</tr>
+                                <tr>
+                                    <td><?php echo $this->translate("Bank").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                                    <td><?php echo $this->lobjBankDetailsform->IdBank;?></td>
+                            		     <?php echo $this->lobjBankDetailsform->UpdDate;?>
+                                         <?php echo $this->lobjBankDetailsform->UpdUser;?>
+                                    <td ><?php echo $this->translate("Account").' '.$this->translate("Number");?><span class="reqMark">*</span></td>
+                                    <td ><?php echo $this->lobjBankDetailsform->AccountNumber;?></td>
+                                </tr>
+                                <tr>
+                                	<td ><?php echo $this->translate("Account").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                                    <td ><?php echo $this->lobjBankDetailsform->AccountType;?></td>
+                                    <td ><?php echo $this->translate("Accounting").' '.$this->translate("Head Name");?><span class="reqMark">*</span></td>
+                                    <td ><?php echo $this->lobjBankDetailsform->AccountingHeadName;?></td>
+                                </tr>
+                                <tr>
+                                    <td ><?php echo $this->translate("Description");?></td>
+                                    <td ><?php echo $this->lobjBankDetailsform->Description;?></td>
+                                    <td ><?php echo $this->translate("Active");?></td>
+                                    <td ><?php echo $this->lobjBankDetailsform->Active;?></td>
+                                </tr>
+                                <tr>
+                                <td align = "right" colspan = "4"><?php echo $this->lobjBankDetailsform->Save;?>
+									<input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'bankdetails', 'action'=>'index'),'default',true);?>';" />	
+								</td>
+							    </tr>
+                        </table>
+                    </form>	
+    </fieldset>
+    
+	

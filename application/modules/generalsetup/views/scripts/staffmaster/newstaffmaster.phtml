@@ -1,0 +1,483 @@
+<?php
+if(isset($this->ExtraIdconfDetail)){
+      $ExtraIdconfDetail = array();
+      $ExtraIdconfDetail = $this->ExtraIdconfDetail;
+}
+if(isset($this->NameconfDetail)){
+      $nameConfDetail = array();
+      $nameConfDetail = $this->NameconfDetail;
+}
+?>
+
+<script type="text/javascript">
+var rowid = 1;
+dojo.addOnLoad(function(){
+	dijit.byId('gender').set('value','');
+	dijit.byId('gender').set('placeHolder','Select');
+	var idCountry = dijit.byId('Country').value;
+	fnGetCountryStateList(idCountry)
+	dijit.byId('State').set('value','');
+	dijit.byId('State').set('placeHolder','Select');
+	dijit.byId('City').set('value','');
+	dijit.byId('City').set('placeHolder','Select');
+	dijit.byId('IdDepartment').set('value','');
+	dijit.byId('IdDepartment').set('placeHolder','Select');
+	dijit.byId('IdLevel').set('value','');
+	dijit.byId('IdLevel').set('placeHolder','Select');
+	dijit.byId('IdCollege').set('value','');
+	dijit.byId('IdCollege').set('placeHolder','Select');
+	
+	dijit.byId('FrontSalutation').set('value','');
+	dijit.byId('FrontSalutation').set('placeHolder','Select');
+
+	dijit.byId('BackSalutation').set('value','');
+	dijit.byId('BackSalutation').set('placeHolder','Select');
+	
+	dijit.byId('IdSubject').set('value','');
+	dijit.byId('IdSubject').set('placeHolder','Select');
+
+	dijit.byId('StaffJobType').set('value','');
+	dijit.byId('StaffJobType').set('placeHolder','Select');
+
+
+
+	dijit.byId('PlaceOfBirth').set('value','');
+	dijit.byId('PlaceOfBirth').set('placeHolder','Select');
+	
+	dijit.byId('BankId').set('value','');
+	dijit.byId('BankId').set('placeHolder','Select');
+	
+	var form = dijit.byId("myForm");
+	var value=form.attr('value').StaffType;
+	fnToggleCollegeDetails(value);	
+	});
+
+function addSubjectDetails() {
+	var flag = true;
+	var IdSubject = dijit.byId("IdSubject");
+	var IdSubjectname = dijit.byId("IdSubject").displayedValue;
+	if(IdSubjectname == "") {
+		alert('Please Select Subject');
+		flag = false;
+	}
+	
+	if(flag == true) {
+		sujectInsert();	
+	}			
+	return flag;
+}
+
+var subjectArray  = new Array();
+var oldContent = "";
+var NoCnt	=	0;
+
+function sujectInsert() {
+	
+	var IdSubject = dijit.byId("IdSubject");
+	var IdSubjectname = dijit.byId("IdSubject").displayedValue;
+	subjectArray.push(IdSubjectname);
+	if(arrHasDupes(subjectArray))
+	{
+		subjectArray = subjectArray.unique();
+		alert("Duplicate Subject");
+	} else {
+
+		var trow=document.getElementById('hor').insertRow(rowid);
+		var tcol1=trow.insertCell(0);
+		var tcol2=trow.insertCell(1);
+
+		tcol1.innerHTML="<input type='hidden' id = 'IdSubjects' value='"+IdSubject+"' name=IdSubjectnamegrid[]>"+IdSubjectname;
+		tcol2.innerHTML="<a href='#' onClick='deleteRowsubject(this); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+		rowid++;
+	}
+}
+
+function deleteRowsubject(r)
+{
+	rowid--;
+	
+	var i=r.parentNode.parentNode.rowIndex;
+	subjectArray.splice(parseInt(i-1),1);
+	document.getElementById('hor').deleteRow(i);
+	
+}
+
+function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+	var i, j, n;
+	n=A.length;
+                                         // to ensure the fewest possible comparisons
+	for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+		for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+			if (A[i]==A[j]) return true;
+	}	}
+	return false;
+}
+
+
+Array.prototype.unique = function () {
+    var r = new Array();
+    o:for(var i = 0, n = this.length; i < n; i++)
+    {
+        for(var x = 0, y = r.length; x < y; x++)
+        {
+                if(r[x]==this[i])
+                {
+                	continue o;
+                }
+                
+        }
+        r[r.length] = this[i];
+    }
+    return r;
+}
+
+function fnGetStateCityList(idState){ 
+	if(idState != "")
+		{ var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getstatecitylist/idState/"+idState,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("City",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 	
+function fnToggleCollegeDetails(value){
+	if(value != "")
+	{ 
+		var xhrArgs = {
+				url: "<?php echo $this->baseUrl();?>"+"/generalsetup/departmentmaster/getunivesitycolglist/value/"+value,
+				handleAs:'json',
+				load:function(data){ 
+					AutoFillNextEditableDropDown("IdCollege",data); 
+				}
+		   }
+		dojo.xhrGet(xhrArgs); 
+	} 
+}
+	 
+
+	function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+		dijit.byId(EditableDropDownId).setValue("");
+		var ddwidget = dijit.byId(EditableDropDownId);
+		ddwidget.setAttribute('disabled', false);
+	    var options = {
+						label:"name",
+						identifier:"key",
+						items:JSONText
+					  };
+	    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+	}
+function fnGetCountryStateList(idCountry){ 
+	if(idCountry != "")
+		{ 
+			var xhrArgs = {
+					url: "<?php echo $this->baseUrl();?>"+"/generalsetup/user/getcountrystateslist/idCountry/"+idCountry,
+					handleAs:'json',
+					load:function(data){ 
+						AutoFillNextEditableDropDown("State",data); 
+					}
+			   }
+			dojo.xhrGet(xhrArgs); 
+		} 
+	} 
+		
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+    var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+    ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+</script> 
+ <fieldset>
+    <legend><?php echo $this->translate("Staff").' '.$this->translate("Master");?></legend>
+                <form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/staffmaster/newstaffmaster" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+                    <table class="table" width="100%" >
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Staff").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                           	<td><?php echo $this->translate("Front").' '.$this->translate("Salutation");?><span class="reqMark">*</span></td>
+                           	<td colspan="3"><?php echo $this->lobjstaffmasterForm->FrontSalutation;?></td>
+                        </tr>
+                        
+                        <tr>
+                       	  	<td><?php echo $this->translate("Full").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                           	<td colspan="3"><?php echo $this->lobjstaffmasterForm->FullName;?></td>
+                        </tr>
+                        
+                        <!-- maintain in university name setting -->
+                        <!-- 
+                        <tr>
+                          	<td><?php echo $this->translate("First").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td colspan="3">
+                            	<?php echo $this->lobjstaffmasterForm->FirstName;?>
+                            	<?php echo $this->lobjstaffmasterForm->UpdDate;?>
+                            	<?php echo $this->lobjstaffmasterForm->UpdUser;?>
+                            </td>
+                        </tr>
+                        <tr>
+                        	<td><?php echo $this->translate("Middle").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->ThirdName ;?></td>
+                           	<td><?php echo $this->translate("Last").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->SecondName;?></td>
+                           
+                        </tr>
+                         -->
+                         
+                         <!-- Name setting -->
+                        <?php
+                           if(isset($nameConfDetail) && $nameConfDetail['count'] > 0){
+                             $i = 1;
+                             $j = 1;
+                             $str = "<tr>";
+                             $temp = '';
+                             if($nameConfDetail['count'] == 1){
+                               $field = "NameField1";
+                               $temp = "<td>".$this->translate($nameConfDetail['fields'][1])."</td><td  colspan='3'>".$this->lobjstaffmasterForm->$field."</td></tr>";
+                               $str = $str.$temp;
+                             }else{
+                               foreach($nameConfDetail['fields'] as $key=>$value){
+                                $field = "NameField".$key;
+                                if($i == 1){
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjstaffmasterForm->$field."</td>";
+                                  $i = 2;
+                                  if($j == $nameConfDetail['count']){
+                                    $temp = $temp."</tr>";
+                                  }
+                                }else{
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjstaffmasterForm->$field."</td></tr>";
+                                  $i = 1;
+                                }
+                                $str = $str.$temp;
+                                $j++;
+                               }
+                             }
+                             echo $str;
+                           }
+                         ?>
+                       	
+                        <?php if($this->Languageid == 1){?>
+                        <tr> 	
+                           	<td ><?php echo $this->translate("Arabic").' '.$this->translate("Name");?><span class="reqMark"></span></td>
+                           	<td><?php echo $this->lobjstaffmasterForm->ArabicName;?></td>
+                           	<td></td>
+                        	<td></td>
+                        </tr>
+                        <?php }?>
+                        <!--<tr>
+                        	
+                            <td><?php echo $this->translate("Last").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->SecondName;?></td>
+                        </tr>-->
+                        	<?php
+                           if(isset($ExtraIdconfDetail) && $ExtraIdconfDetail['count'] > 0){
+                             $i = 1;
+                             $j = 1;
+                             $str = "<tr>";
+                             $temp = '';
+                             if($ExtraIdconfDetail['count'] == 1){
+                               $field = "ExtraIdField1";
+                               $temp = "<td>".$this->translate($ExtraIdconfDetail['fields'][1])."</td><td colspan='3'>".$this->lobjstaffmasterForm->$field."</td></tr>";
+                               $str = $str.$temp;
+                             }else{
+                               foreach($ExtraIdconfDetail['fields'] as $key=>$value){
+                                $field = "ExtraIdField".$key;
+                                if($i == 1){
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjstaffmasterForm->$field."</td>";
+                                  $i = 2;
+                                  if($j == $ExtraIdconfDetail['count']){
+                                    $temp = $temp."</tr>";
+                                  }
+                                }else{
+                                  $temp = "<td>".$this->translate($value)."</td><td>".$this->lobjstaffmasterForm->$field."</td></tr>";
+                                  $i = 1;
+                                }
+                                $str = $str.$temp;
+                                $j++;
+                               }
+                             }
+                             echo $str;
+                           }
+                         ?>
+                         <tr>
+                            <td><?php echo $this->translate("Back").' '.$this->translate("Salutation");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->BackSalutation;?></td>
+							<td></td>
+                            <td></td>
+						</tr>
+						<tr>
+                            <th colspan = "4"><?php echo $this->translate("Idendification").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <?php if ($this->RefCodeField1!=""){?>                        
+							<td><?php echo $this->translate("$this->RefCodeField1");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->NationalIdendificationNumber1;?></td>
+                            <?php }?>
+							<?php if ($this->RefCodeField2!=""){?>                        
+							<td><?php echo $this->translate("$this->RefCodeField2");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->NationalIdendificationNumber2;?></td>
+                            <?php }else {?>
+                            <td></td>
+                            <td></td> <?php }?>
+                        </tr> 
+                        <tr>
+                            <?php if ($this->RefCodeField3!=""){?>                        
+							<td><?php echo $this->translate("$this->RefCodeField3");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->NationalIdendificationNumber3;?></td>
+                            <?php }?>
+							<?php if ($this->RefCodeField4!=""){?>                        
+							<td><?php echo $this->translate("$this->RefCodeField4");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->NationalIdendificationNumber4;?></td>
+                            <?php }?>
+                            
+                        </tr> 
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Personal").' '.$this->translate("Details");?></th>
+                        </tr>
+						<tr>
+							<td ><?php echo $this->translate("Gender").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->gender;?></td>
+							<td><?php echo $this->translate("Date Of Birth");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->DOB;?></td> 
+                         </tr>                         
+                         <tr>
+							<td ><?php echo $this->translate("Religion").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Religion;?></td>
+							<td><?php echo $this->translate("Place Of Birth");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->PlaceOfBirth;?></td> 
+                         </tr>                         
+						<tr>
+                            <td><?php echo $this->translate("Designation");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->IdLevel;?></td>
+                            <td><?php echo $this->translate("Staff Id");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->StaffId;?></td>
+                         </tr>
+                         <tr>
+                            <td><?php echo $this->translate("Bank Name");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->BankId;?></td>
+                            <td><?php echo $this->translate("Bank Account Number");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->BankAccountNo;?></td>
+                         </tr>                         
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Address").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("Address 1");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Add1;?></td>
+                            <td><?php echo $this->translate("Address 2");?></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Add2;?>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("Country");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Country;?></td>
+                            <td><?php echo $this->translate("State");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->State;?></td>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("City");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->City;?></td>
+                            <td><?php echo $this->translate("Zip Code");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Zip;?></td>
+                        </tr>
+                        <tr> 
+                            <td><?php echo $this->translate("Phone");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Phonecountrycode;?><?php echo $this->lobjstaffmasterForm->Phonestatecode;?><?php echo $this->lobjstaffmasterForm->Phone;?></td>
+                            <td><?php echo $this->translate("Mobile");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Mobilecountrycode;?><?php echo $this->lobjstaffmasterForm->Mobile;?></td>
+                        </tr>	
+                        
+                        <tr>
+                            <td><?php echo $this->translate("Email");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Email;?></td>
+                            <td><?php echo $this->translate("Home Page");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->HomePage;?></td>
+                        </tr>
+                        <tr>
+                            <th colspan = "4"><?php echo $this->translate("Other").' '.$this->translate("Details");?></th>
+                        </tr>
+                        
+                        <tr> 
+                            <td><?php echo $this->translate("Staff").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->StaffType;?></td>
+                            <td><?php echo $this->translate("Academic").' '.$this->translate("Type");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->StaffAcademic;?></td>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate("Staff").' '.$this->translate("Job Type");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->StaffJobType;?></td>         
+                            <td><?php echo $this->translate("Highest").' '.$this->translate("Qualification");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->HighestQualification;?></td>             
+                        </tr>                        
+                        <tr> 
+                            <td ><span id="label1"><?php echo $this->translate("$this->College");?></span><span class="reqMark">*</span></td>
+                            <td ><?php echo $this->lobjstaffmasterForm->IdCollege;?></td>
+                            <td><?php echo $this->translate("$this->Department");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->IdDepartment;?></td>
+                        </tr>
+                        <tr> 
+                        	<td><?php echo $this->translate("$this->Subject");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->IdSubject;?></td>
+                            <td><?php echo $this->translate("Id No of State Lecturer");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->IdendityNoOfStateLecturer;?></td>
+                        </tr>
+                          <tr> 
+                            <td><?php echo $this->translate("Authorization Letter No:");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->AuthorizationLetterNumber;?></td>
+                        	<td><?php echo $this->translate("PTI Authorization Letter No:");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->PtiAuthorizationLetterNo;?></td>                            
+                        </tr>
+                         <tr> 
+                            <td><?php echo $this->translate("PTI Name");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->PtiName;?></td>
+                        	<td><?php echo $this->translate("Previous PTI No");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->PreviousPtiNo;?></td>                            
+                        </tr>
+                         <tr> 
+                            <td><?php echo $this->translate("Permit No");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->PermitNo;?></td>
+                        	<td><?php echo $this->translate("Joining Date");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->JoiningDate;?></td>                            
+                        </tr>
+                        <tr>  
+                        	                 	
+                        	<td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+                            <td><?php echo $this->lobjstaffmasterForm->Active;?></td>   
+                            <td></td>
+                            <td></td>   
+                            
+                        </tr>
+                        
+                        <tr>
+                        	<td colspan = "8" align = "right"><?php echo $this->lobjstaffmasterForm->Add;?></td>
+                        </tr>
+                     
+                    <table id="hor"  class="table" width="100%" >
+						<tr>
+							<th><?php echo $this->translate->_("Subject").' '.$this->translate->_("Name")?></th>
+							<th><?php echo $this->translate->_("Delete")?></th>
+						</tr>	
+						<tr>
+                            <td align = "right" colspan="4"><?php echo $this->lobjstaffmasterForm->Save;?>
+                            <input type='button' class="NormalBtn" dojotype="dijit.form.Button" label = "<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'staffmaster', 'action'=>'index'),'default',true);?>';" />	
+                            </td> 
+                        </tr>   
+                    </table>   
+              </table>
+            
+            </form>
+
+</fieldset>

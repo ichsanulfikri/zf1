@@ -1,0 +1,379 @@
+<style>
+	.claro .dijitButton .dijitButtonNode, .claro .dijitDropDownButton .dijitButtonNode, .claro .dijitComboButton .dijitButtonNode, .claro .dijitToggleButton .dijitButtonNode {
+		width: 85%;	
+		margin: 3px 2px;
+    	padding: 0 6px;
+	}
+</style>
+
+<head>
+
+<script type="text/javascript">
+var SUCreditH = 0;
+var SUBJCREDITHOUR=0;
+var COMPCREDITHOUR=0;
+var x=0;
+var SCR = new Array();
+
+dojo.require("dijit.form.TimeTextBox");
+dojo.addOnLoad(function(){
+                <?php if($this->displayResult['IdReligion']=='0') { ?>
+                dijit.byId('IdReligion').set('value','');
+	        dijit.byId('IdReligion').set('placeHolder','Select');
+                <?php } ?>
+                
+	});
+
+
+	function fnCourseType(CourseType) {
+	if(CourseType != "" || CourseType != undefined)
+	{	var xhrArgs = {
+			url: "<?php echo $this->baseUrl();?>"+"/generalsetup/subjectmaster/getmandatoryfields/CourseType/"+CourseType,
+			handleAs:'json',
+			load:function(data){
+				if(data['MandatoryCreditHrs']== "0") {
+					dijit.byId('CreditHours').set('value','0');
+					dijit.byId('CreditHours').set('readOnly',true);
+				} else {
+					dijit.byId('CreditHours').set('value','');
+					dijit.byId('CreditHours').set('readOnly',false);
+				}
+
+				if(data['MandatoryAmount']== "0") {
+					dijit.byId('AmtPerHour').set('value','0');
+					dijit.byId('AmtPerHour').set('readOnly',true);
+				} else {
+					dijit.byId('AmtPerHour').set('value','');
+					dijit.byId('AmtPerHour').set('readOnly',false);
+				}
+			}
+	   }
+		dojo.xhrGet(xhrArgs);
+	 }
+	}
+
+	function fnShowReligion(reltype) {
+		var x = dijit.byId('ReligiousSubject').checked;
+
+		if(x==true){
+			dijit.byId('IdReligion').set('readOnly',false);
+		}else{
+			dijit.byId('IdReligion').set('readOnly',true);
+		}
+
+	}
+
+	var rowid = <?php echo count($this->larrcomponent)+1;?>;
+        var subArray  = new Array();
+	var subjArray  = new Array();
+
+	<?php if($this->larrcomponent) {?>
+	<?php foreach($this->larrcomponent as $larrcomponent) { ?>
+		subArray.push("<?php echo $this->value.$larrcomponent['DefinitionCode'];?>");
+				var SUCreditH=parseFloat(SUCreditH)+<?php echo $larrcomponent['CreditHour'];?>;
+	<?php }} ?>
+        console.log(subArray);        
+
+	function addsubjectcreditHours() {
+
+		var flag = true;
+		var CreditHours =dojo.byId("CreditHours").value
+		if(CreditHours==''){
+		    dijit.byId("CreditHours").attr('required','true');
+			dijit.byId("CreditHours").focus();
+			return false;
+		}
+
+		var Idcomponents = dijit.byId("Idcomponents").value;
+		var IdcomponentsName = dijit.byId("Idcomponents").displayedValue;
+		var CreditHour = dojo.byId("CreditHour").value;
+		var credithr=parseFloat(credithr)+parseFloat(CreditHour);
+
+
+
+		if(Idcomponents==''){
+		    dijit.byId("Idcomponents").attr('required','true');
+			dijit.byId("Idcomponents").focus();
+			return false;
+		}
+		if(CreditHour==''){
+		    dijit.byId("CreditHour").attr('required','true');
+			dijit.byId("CreditHour").focus();
+			return false;
+		}
+
+		if(flag == true) {
+			subjectcreditInsert();
+		}
+		return flag;
+
+	}
+
+	function subjectcreditInsert(){
+
+
+		var Idcomponents = dijit.byId("Idcomponents").value;
+		var IdcomponentsName = dijit.byId("Idcomponents").displayedValue;
+		var CreditHour = dojo.byId("CreditHour").value;
+		var CreditHours =dojo.byId("CreditHours").value;
+
+		SUBJCREDITHOUR=CreditHours;
+		COMPCREDITHOUR=CreditHour;
+		SUCreditH = parseFloat(SUCreditH) + parseFloat(CreditHour);
+		subArray.push(IdcomponentsName);
+                //console.log(subArray); 
+		if(parseFloat(SUCreditH)<=parseFloat(CreditHours)){
+			if(arrHasDupes(subArray))
+			{
+					subArray = subArray.unique();
+					SUCreditH = parseFloat(SUCreditH) - parseFloat(CreditHour);
+					alert("Duplicate Compomnent");
+					return false;
+			} else {
+
+					var trow=document.getElementById('hor').insertRow(rowid);
+					var tcol1=trow.insertCell(0);
+					var tcol2=trow.insertCell(1);
+					var tcol3=trow.insertCell(2);
+
+					tcol1.innerHTML= "<input type='hidden' value='"+Idcomponents+"' name=Idcomponentsgrid[]>"+IdcomponentsName;
+					tcol2.innerHTML= "<input type='hidden' value='"+CreditHour+"' name=CreditHourgrid[]>"+CreditHour;
+					tcol3.innerHTML="<a href='#' onClick='deleteRow(this,\""+IdcomponentsName+"\",\""+CreditHour+"\"); return false;'><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'></a>";
+					rowid++;
+			}
+
+			}
+			else
+			{
+					SUCreditH = parseFloat(SUCreditH) - parseFloat(CreditHour);
+					alert("ComponentCredit Hours Exceeds Subject Credit Hours "+ parseInt(SUBJCREDITHOUR));
+			}
+
+	}
+
+	function deleteRow(r,SCH,COMPCREDITHOUR)
+	{
+		rowid--;
+		var len=subjArray.length;
+		for(i=0;i<=len;i++){
+				if(subjArray[i]==SCH)
+				{
+					subjArray.splice(i,1);
+				}
+			}
+		var i=r.parentNode.parentNode.rowIndex;
+                
+                var makeArr = SCH;
+                subArray.splice(subArray.indexOf(makeArr), 1);
+                
+		document.getElementById('hor').deleteRow(i);
+		SUCreditH = parseFloat(SUCreditH) - parseFloat(COMPCREDITHOUR);
+	}
+
+	function arrHasDupes( A ) {              // finds any duplicate array elements using the fewest possible comparison
+		var i, j, n;
+		n=A.length;
+	                                         // to ensure the fewest possible comparisons
+		for (i=0; i<n; i++) {                // outer loop uses each item i at 0 through n
+			for (j=i+1; j<n; j++) {          // inner loop only compares items j at i+1 to n
+				if (A[i]==A[j]) return true;
+		}	}
+		return false;
+	}
+
+	Array.prototype.unique = function () {
+	    var r = new Array();
+	    o:for(var i = 0, n = this.length; i < n; i++)
+	    {
+	        for(var x = 0, y = r.length; x < y; x++)
+	        {
+	                if(r[x]==this[i])
+	                {
+	                	continue o;
+	                }
+
+	        }
+	        r[r.length] = this[i];
+	    }
+	    return r;
+	}
+
+function loadDepartment() {
+    var idfaculty = dijit.byId("IdFaculty").value;
+    var xhrArgs = {
+        url: '<?php echo $this->baseUrl();?>'+'/generalsetup/subjectmaster/getdepartment/idFaculty/'+idfaculty,
+        handleAs:'json',
+        load:function(data){
+            AutoFillNextEditableDropDown('IdDepartment',data);
+        }
+    }
+    dojo.xhrGet(xhrArgs);
+}
+
+function AutoFillNextEditableDropDown(EditableDropDownId,JSONText){
+	dijit.byId(EditableDropDownId).setValue("");
+	var ddwidget = dijit.byId(EditableDropDownId);
+	ddwidget.setAttribute('disabled', false);
+        var options = {
+					label:"name",
+					identifier:"key",
+					items:JSONText
+				  };
+        ddwidget.store = new dojo.data.ItemFileReadStore( { data: options } );
+}
+
+</script>
+</head>
+ <fieldset>
+    <legend><?php echo $this->translate("$this->Subject");?></legend>
+     <Form dojoType="dijit.form.Form"  id="myForm" action="<?php echo $this->baseUrl();?>/generalsetup/subjectmaster/subjectmasterlist/id/<?php echo $this->idsubject; ?>" method="post"  name= "myForm">
+                <script type="dojo/method" event="onSubmit">
+                 if (this.validate()) {
+					if(SUCreditH < SUBJCREDITHOUR)
+					{
+						alert("Components Total Credit Hours Should be Equal to Subject Total Credit Hours");
+						return false;
+					}
+					else
+					{
+						return true;
+					}
+                }
+				else
+				{
+                    return false;
+                }
+				</script>
+<table class="table" width="100%" >
+	<tr>
+    	<th colspan = "4"><?php echo $this->translate("$this->Subject Details");?></th>
+	</tr>
+    <tr>
+    	<td><?php echo $this->translate("Subject Name");?><span class="reqMark">*</span></td>
+        <td><?php echo $this->lobjsubjectmasterForm->SubjectName;?></td>
+        <td><?php echo $this->translate("Short").' '.$this->translate("Name");?></td>
+        <td>
+        	<?php echo $this->lobjsubjectmasterForm->ShortName;?>
+            <?php echo $this->lobjsubjectmasterForm->IdSubject;?>
+            <?php echo $this->lobjsubjectmasterForm->UpdDate;?>
+            <?php echo $this->lobjsubjectmasterForm->UpdUser;?>
+		</td>
+	</tr>
+	<tr>
+    	<td><?php echo $this->translate("$this->Subject Name");?> (<?php echo $this->translate($this->defaultlanguage);?>)</td>
+        <td ><?php echo $this->lobjsubjectmasterForm->subjectMainDefaultLanguage;?></td>
+        <td><?php echo $this->translate("$this->Subject").' '.$this->translate("Code");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->SubCode;?></td>
+	</tr>
+	
+	<!-- <tr>
+		<td><?php echo $this->translate("Amount").' '.$this->translate("Per").' '.$this->translate("Hour");?><span
+			class="reqMark"></span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->AmtPerHour;?></td>
+		<td><?php echo $this->translate("Minimum Credit").' '.$this->translate("Hours");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->MinCreditHours;?></td>
+		</tr>
+		-->
+	<tr>
+	<td><?php echo $this->translate("Course Type");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->CourseType;?></td>
+                    <td><?php echo $this->translate("Credit").' '.$this->translate("Hours");?><span
+			class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->CreditHours;?></td>
+		
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Faculty").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->IdFaculty;?></td>
+		<td><?php echo $this->translate("$this->Department").' '.$this->translate("Name");?></td>
+		<td><?php echo $this->lobjsubjectmasterForm->IdDepartment;?></td>
+	</tr>
+	<tr>
+        <td><?php echo $this->translate($this->Subject).' '.$this->translate("Description");?></td>
+		<td><?php echo $this->lobjsubjectmasterForm->courseDescription;?></td>
+		<td><?php echo $this->translate("Active");?><span class="reqMark"></span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->Active;?></td>
+	</tr>
+
+
+                        <tr>
+                          <th colspan = "4"><?php echo $this->translate($this->Subject).' '.$this->translate("Coordinator").' '.$this->translate("Details");?></th>
+                        </tr>
+                        <tr>
+                            <td><?php echo $this->translate($this->Subject).' '.$this->translate("Coordinator");?><span class="reqMark">*</span></td>
+                            <td><?php echo $this->lobjuniversityForm->IdStaff;?></td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                        <!--
+                        <tr>
+                        	<td><?php //echo $this->translate("From").' '.$this->translate("Date");?><span class="reqMark">*</span></td>
+                        	<td><?php //echo $this->lobjuniversityForm->FromDate;?></td>
+                        	<td><?php //echo $this->lobjuniversityForm->ToDate;?></td>
+                        	<td></td>
+                        </tr>
+ 						-->
+
+                       <!-- <tr>
+                        	<td><?php echo $this->translate("Without Class Time Table Distribution");?><span class="reqMark"></span></td>
+                        	<td><?php echo $this->lobjsubjectmasterForm->ClassTimeTable;?></td>
+                        	<td><?php echo $this->translate("Without Exam Time Table Distribution");?><span class="reqMark"></span></td>
+                        	<td><?php echo $this->lobjsubjectmasterForm->ExamTimeTable;?></td>
+                        </tr>
+                        -->
+                         <tr>
+                        	<td><?php echo $this->translate("If Religious");?><span class="reqMark"></span></td>
+                        	<td><?php echo $this->lobjsubjectmasterForm->ReligiousSubject;?></td>
+                        	<td><?php echo $this->translate("Select Religion");?><span class="reqMark"></span></td>
+                        	<td><?php echo $this->lobjsubjectmasterForm->IdReligion;?></td>
+                        </tr>
+                        <tr>
+		<th colspan="4"><?php echo $this->translate($this->Subject).' '.$this->translate("Component").' '.$this->translate("Details");?></th>
+	</tr>
+
+	<tr>
+		<td><?php echo $this->translate("Component Name");?><span class="reqMark"></span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->Idcomponents;?></td>
+		<td><?php echo $this->translate("Credit Hours");?><span	class="reqMark"></span></td>
+		<td><?php echo $this->lobjsubjectmasterForm->CreditHour;?></td>
+	</tr>
+
+	<tr>
+		<td colspan="4" align="right"><?php echo $this->lobjsubjectmasterForm->Add;?></td>
+	</tr>
+</table>
+<table id="hor" class="table" width="100%" cellpadding="5"
+	cellspacing="1">
+	<tr>
+		<th><?php echo $this->translate("Component").' '.$this->translate("Name")?></th>
+		<th><?php echo $this->translate("Credit").' '.$this->translate("Hours")?></th>
+		<th><?php echo $this->translate("Delete")?></th>
+	</tr>
+
+	<?php  $varcount= count($this->larrcomponent);
+	 foreach($this->larrcomponent as $larrComponent) {?>
+	<tr>
+		<td><?php echo $larrComponent['DefinitionCode'];?></td>
+		<td><?php echo $larrComponent['CreditHour'];?>
+		<input type='hidden' value="<?php echo $this->escape($larrComponent['Idcomponents']);?>" name=Idcomponentsgrid[]>
+		<input type='hidden' value="<?php echo $this->escape($larrComponent['CreditHour']);?>" name=CreditHourgrid[]>
+		</td>
+		<td><a href="javascript:void(0);" onClick="deleteRow(this,'<?php echo $larrComponent['DefinitionCode'];?>','<?php echo $larrComponent['CreditHour'];?>');" ><img src='<?php echo $this->baseUrl();?>/images/delete.png'  border=0 width='16' height='16'>
+										</a></td>
+	</tr>
+	<?php }?>
+</table>
+	<table class="table" width="100%" cellpadding="5" cellspacing="1">
+		<tr>
+			<td align="center" colspan="4"><?php echo $this->lobjsubjectmasterForm->Save;?>
+                           <input type='button' class="NormalBtn"
+			dojotype="dijit.form.Button"
+			label="<?php echo $this->translate('Back')?>" value='click'
+			onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'subjectmaster', 'action'=>'index'),'default',true);?>';" />
+			</td>
+		</tr>
+</table>
+
+</Form>
+
+</fieldset>

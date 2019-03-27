@@ -1,0 +1,151 @@
+<script>
+
+function createGroup(IdSubject,IdSemester,total_student){
+	
+	$( "#dialog-group-form" ).dialog('open');
+	$( "#IdSubject" ).val(IdSubject);
+	$( "#idSemester" ).val(IdSemester);
+	$( "#total_student" ).val(total_student);
+}
+
+$(function() {
+
+	$( "#dialog:ui-dialog" ).dialog( "destroy" );
+	
+    $( "#dialog-group-form" ).dialog({
+      modal: true,
+      autoOpen: false,
+      width: 600,
+      buttons: {
+        "Cancel": function() {
+          $( this ).dialog( "close" );
+        },
+        "Create": function() {
+            
+       	   $("#groupForm").submit();
+       	   $( this ).dialog( "close" );
+       	   
+          }
+      }
+    });
+});
+
+</script>
+
+<div class="message toolbar">
+	<h2><?php echo $this->title; ?></h2>
+	<div class="toolbar-button">
+		<ul>			
+			
+			<li>
+				<a href="#" >
+					<span class='info'></span>
+					Info
+				</a>
+			</li>
+		</ul>
+	</div>
+</div>
+<br>
+<?if(isset($this->noticeMessage)){?>
+<div class="message notice"><strong><? echo $this->noticeMessage;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeSuccess)){?>
+<div class="message success"><strong><? echo $this->noticeSuccess;?></strong>.</div>
+<?}?>
+<?if(isset($this->noticeError)){?>
+<div class="message error"><strong><? echo $this->noticeError;?></strong>.</div>
+<?}?>
+
+
+<div style="width:100%;">
+
+<div id="search_form" >
+	<?php echo  $this->form;?>
+</div>
+
+<div id="dialog-group-form" title="Create Group">
+<form id="groupForm" method="post" action="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group','action'=>'create-group'),'default',true);?>">
+<input type="hidden" name="IdSubject" id="IdSubject" value="">
+<input type="hidden" name="idSemester" id="idSemester" value="">
+<input type="hidden" name="total_student" id="total_student" value="0">
+	<table class="" width="100%" cellpadding="5" cellspacing="5" border="0">
+	<tr>
+		<td width="50%"><?php echo $this->translate("No of Group")?></td>
+		<td><input type="text" size=5 name="no_of_group" value="1"></td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Generate Group")?></td>
+		<td>
+		<select name="generate_group_type">
+			<option value="1"><?php echo $this->translate("manual")?></option>
+			<option value="2"><?php echo $this->translate("auto")?></option>
+		</select>
+		</td>
+	</tr>
+	<tr>
+		<td><?php echo $this->translate("Assign Student to Group")?></td>
+		<td><select name="assign_student_type">
+			<option value="1"><?php echo $this->translate("manual")?></option>
+			<option value="2"><?php echo $this->translate("auto")?></option>
+		</select></td>
+	</tr>	
+	</table>
+</form>
+</div>
+
+<?php 
+	//echo $this->paginationControl($this->list_subject,'Sliding','paginationTop.phtml');
+?>
+<?php if(count($this->list_subject)>0){?>
+<table class="table" width="100%" cellpadding="5" cellspacing="2" border="0">
+	<tr>
+		<th width="25px">&nbsp;</th>
+		<th><?php echo $this->translate("Course Code")?></th>
+		<th><?php echo $this->translate("Course Name")?></th>
+		<th><?php echo $this->translate("Faculty")?></th>
+		<th><?php echo $this->translate("Total Registered Student")?></th>
+		<th><?php echo $this->translate("Total Assigned Student")?></th>
+		<th><?php echo $this->translate("Total UnAssigned Student")?></th>
+		<th><?php echo $this->translate("Total Group")?></th>
+		<th><?php echo $this->translate("Action")?></th>
+	</tr>
+	<?php 
+	$i=1;	
+	
+    foreach ($this->list_subject as $k=>$v){
+    	$tosort[$k]=$v["SubjectName"];
+    	$sublist[$k]=$v;
+    }
+		
+	asort($tosort);
+	
+
+	//foreach($this->list_subject as $subject){
+	foreach($tosort as $idx=>$v){
+		//if($subject["total_student"]>0){
+	?>
+		
+	<tr>
+		<td><?php echo $i;?></td>
+		<td><?php echo $sublist[$idx]["SubCode"];?></td>
+		<td><?php echo $sublist[$idx]["SubjectName"];?></td>
+		<td><?php echo $sublist[$idx]["facultyName"];?></td>
+		<td align="center"><?php echo ($sublist[$idx]["total_student"]==0 ? '0':$sublist[$idx]["total_student"]);?></td>
+		<td align="center"><?php echo ($sublist[$idx]["total_assigned"]==0 ? '0':$sublist[$idx]["total_assigned"]);?></td>
+		<td align="center"><?php echo ($sublist[$idx]["total_unassigned"]==0 ? '0':$sublist[$idx]["total_unassigned"]);?></td>
+		<td align="center"><?php echo $sublist[$idx]["total_group"];?></td>
+		<td>
+		<?php if($sublist[$idx]["total_group"]!=0){?>
+		<a href="<?php echo $this->url(array('module'=>'generalsetup','controller'=>'course-group','action'=>'group-list','idSubject'=>$sublist[$idx]["IdSubject"],'idSemester'=>$sublist[$idx]["IdSemester"]),'default',true);?>"><?php echo $this->translate("Group List")?></a>
+		<?php }else{?>
+		<a href="#" onclick="createGroup('<?php echo $sublist[$idx]["IdSubject"];?>','<?php echo $sublist[$idx]["IdSemester"];?>','<?php echo $sublist[$idx]["total_student"];?>')"><?php echo $this->translate("Create Group")?></a></td>
+		<?php }?>
+	</tr>
+		<?php 
+		$i++; }?>
+	<?php }?>
+</table>
+<?php //}//end if?>
+</div>
+<br>

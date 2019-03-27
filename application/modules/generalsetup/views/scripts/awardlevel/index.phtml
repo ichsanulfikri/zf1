@@ -1,0 +1,70 @@
+
+<body class="claro">
+<div id="searchDiv">
+	<fieldset>
+	<legend><?php echo $this->translate("Award").' '.$this->translate("Level");?></legend>
+	<div class="search" style="margin-left:20px;">
+	<form dojoType="dijit.form.Form" action="<?php echo $this->baseUrl();?>/generalsetup/awardlevel/index/search/1" method="POST"  name= "form1" id= "form1">
+		<script type="dojo/method" event="onSubmit">
+ 		 if (this.validate()) {
+			return true;
+		} else {
+		return false;}
+		</script>
+				<table width="100%">
+					<table width="100%">
+					<tr>	
+						<td><?php echo $this->translate("Award").' '.$this->translate("Name");?></td>
+						<td><?php echo $this->lobjform->field2;?></td>		
+						<td><?php echo $this->translate("Award").' '.$this->translate("Code");?></td>
+						<td><?php echo $this->lobjform->field3;?></td>	
+            	   </tr>     
+         		   <tr>          				
+						<td ><?php echo $this->translate("Active");?></td>
+               			<td ><?php echo $this->lobjform->field7;?></td>
+                		<td ></td>
+                 		<td ></td>
+           		 </tr>      
+				  <tr>
+	               <td align = "center" colspan = "4">
+						<?php echo $this->lobjform->Search;?>
+						<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'awardlevel', 'action'=>'newaward'),'default',true);?>';" />
+						<?php echo $this->lobjform->Clear;?>
+				   </td>
+                 </tr>
+				</table>
+			</form>	
+		</div>
+	</fieldset> 
+	 <br/>
+	<fieldset>
+			<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th><?php echo $this->translate("Award").' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Award").' '.$this->translate("Code");?></th>
+	        	<th><?php echo $this->translate("Allowed Program").' '.$this->translate("Change  Request");?></th>
+			</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjAwardList ): ?>
+					<tr>
+						<td>
+							<a href="<?php echo $this->baseUrl();?>/generalsetup/awardlevel/editaward/id/<?php echo $this->escape($lobjAwardList['idDefinition']);?>" >
+								<?php echo $this->escape($lobjAwardList['DefinitionDesc']);?>
+							</a>
+						</td>
+						<td><?php print_r($this->escape($lobjAwardList['DefinitionCode']));?></td>
+						<td>
+							<a href="<?php echo $this->baseUrl();?>/generalsetup/awardlevel/awardlevel/id/<?php echo $this->escape($lobjAwardList['idDefinition']);?>" >
+								<?php echo $this->translate("Change");?>
+							</a>
+						</td>
+					</tr>
+				<?php endforeach;
+			endif; ?>
+			<tr>
+				<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+			</tr>
+		</table>
+	</fieldset>
+</div>
+</body>

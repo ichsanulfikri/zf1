@@ -1,0 +1,69 @@
+
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field5').set('value','');
+	dijit.byId('field5').set('placeHolder','Select');
+	});
+</script>
+</head>
+<fieldset>
+<legend><?php echo $this->translate->_("Sponsor").' '.$this->translate->_("Search");?></legend>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/sponsor/index/search/1" method="POST">
+		<table width="100%">
+			<tr>	
+			<td><?php echo $this->translate("Sponsor").' '.$this->translate("Type");?></td>
+				<td><?php echo $this->lobjform->field5;?></td>					
+				<td><?php echo $this->translate("Sponsor").' '.$this->translate("Name");?></td>
+				<td><?php echo $this->lobjform->field2;?></td>					
+			</tr>
+			<tr>	
+				<td><?php echo $this->translate("Email");?></td>
+				<td><?php echo $this->lobjform->field3;?></td>					
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->lobjform->field7;?></td>	
+			</tr>
+			<tr>
+				<td colspan="4" align="center">
+							<?php echo $this->lobjform->Search;?>
+								<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'sponsor', 'action'=>'newsponsor'),'default',true);?>';" />
+							<?php echo $this->lobjform->Clear;?>					
+				</td>
+			</tr>
+		</table>
+	</form>	
+</fieldset>
+</br>
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+	     <th><?php echo $this->translate("Sponsor").' '.$this->translate("Name");?></th>
+		<th><?php echo $this->translate("Sponsor").' '.$this->translate("Type");?></th>
+		<th><?php echo $this->translate("Email");?></th>
+	</tr>
+	<?php if (count($this->paginator)): 
+		foreach ($this->paginator as $sponsorList ): ?>
+	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td>
+			<a href="<?php echo $this->baseUrl();?>/generalsetup/sponsor/sponsordetail/id/<?php echo $this->escape($sponsorList['idsponsor']);?>" rel="lyteframe" rev="width: 870px; height: 475px; scrolling: auto" >
+				
+		<?php  if($this->escape($sponsorList['typeSponsor'])== 1) echo $this->escape($sponsorList['Organisation']); else echo $this->escape($sponsorList['SponsorName'])?>
+		
+		<?php //echo $this->escape($sponsorList['Organisation']);?>
+			</a>
+		</td>
+		<td> <?php //echo $this->escape($sponsorList['SponsorName']);?>  <?php  if($this->escape($sponsorList['typeSponsor'])== 1) echo "Organisation"; else echo "Individual";?></td>
+		<td> <?php echo $this->escape($sponsorList['Email']);?> </td>
+	</tr>
+		<?php endforeach;
+	endif; ?>
+	<tr>
+		<td colspan="8" align="right">
+			<div class="pagination">
+				<?php echo $this->paginationControl($this->paginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+			</div>																   
+		</td>
+	</tr>
+</table>
+</fieldset>
+</div>

@@ -1,0 +1,74 @@
+<script type="text/javascript">
+dojo.addOnLoad(function(){
+
+	});
+
+</script>
+<fieldset>
+<legend><?php echo $this->translate("Program").' '.$this->translate("Check List");?></legend>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+		<?php echo $this->lobjProgramchecklistform->UpdDate;?>
+		<?php echo $this->lobjProgramchecklistform->UpdUser;?>
+		<?php echo $this->lobjProgramchecklistform->IdProgram;?>
+		<table class="table" border="0" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th colspan = "4"><?php echo $this->translate("Program").' '.$this->translate("Check List").' '.$this->translate("Details");?></th>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Check List").' '.$this->translate("Name");?><span class="reqMark">*</span></td>
+				<td><?php echo $this->lobjProgramchecklistform->CheckListName;?></td>
+				<td><?php echo $this->translate("Description");?></td>
+				<td><?php echo $this->lobjProgramchecklistform->Description;?></td>
+			</tr>
+			<tr>
+				<td><?php echo $this->translate("Active");?></td>
+				<td><?php echo $this->lobjProgramchecklistform->Active;?></td>
+				<td></td>
+				<td></td>
+			</tr>			
+		</table>
+								
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">          
+			<tr>
+				<td colspan = "4" align = "right">
+					<?php echo $this->lobjProgramchecklistform->Save;?>					
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Back"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'programchecklist', 'action'=>'index'),'default',true);?>';" />												
+				</td>
+			</tr>
+		</table>
+	</form>
+</fieldset>	
+
+	 <br/>
+	<fieldset>
+			<table class="table" width="100%" cellpadding="5" cellspacing="1">
+			<tr>
+				<th><?php echo $this->translate("Checklist").' '.$this->translate("Name");?></th>
+				<th><?php echo $this->translate("Program").' '.$this->translate("Name");?></th>
+	        	<th><?php echo $this->translate("Short").' '.$this->translate("Name");?></th>
+			</tr>
+			<?php if (count($this->paginator)): 
+				foreach ($this->paginator as $lobjProgramList ): ?>
+					<tr>
+						<td>
+							<a href="<?php echo $this->baseUrl();?>/generalsetup/programchecklist/programchecklistedit/id/<?php echo $this->escape($lobjProgramList['IdProgram']);?>/IdCheckList/<?php echo $this->escape($lobjProgramList['IdCheckList']);?>" >
+								<?php echo $this->escape($lobjProgramList['CheckListName']);?>
+							</a>
+						</td>
+						<td><?php print_r($this->escape($lobjProgramList['ProgramName']));?></td>
+						<td><?php print_r($this->escape($lobjProgramList['Description']));?></td>
+					</tr>
+				<?php endforeach;
+			endif; ?>
+			<tr>
+				<td colspan="8" align="right"><div class="pagination"><?php echo $this->paginationControl($this->lobjPaginator,'Sliding','/partials/my_pagination_control.phtml'); ?></div></td>
+			</tr>
+		</table>
+	</fieldset>

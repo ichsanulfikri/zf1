@@ -1,0 +1,52 @@
+<script type="text/javascript">
+  function validateForm(){
+    var emaillogin = $('#Emaillogin').val();
+    var password = $('#password').val();
+    var flag = false;
+    var msg = '';
+    if(emaillogin == ''){
+      flag = true;
+      msg = msg + 'Please enter Username';
+    }
+
+    if(password == ''){
+      flag = true;
+      msg = msg + "\n" +'Please enter Password';
+    }
+
+    if(flag){
+      alert(msg);
+      return false;
+    }
+    return true;
+  }
+</script>
+<form name="login" id="login" action="" method="POST" onsubmit="return validateForm()">
+<div id="wrapper">
+	<div class="loginbox">
+	<h1 align="center"><?php echo $this->translate("Login Here");?></h1>
+	<div class="row">
+	<section>
+	<div class="twelvecol">
+	<fieldset id="inputs">        
+        <?php echo $this->lobjloginform->Emaillogin ;?>
+        <?php echo $this->lobjloginform->password ;?>
+        <?php
+            if($this->alertError!=""){
+        ?>          
+          <ul class="apponlineerrors">
+            <li><?php echo $this->alertError; ?></li>
+          </ul>
+        <?php } ?>
+    </fieldset>
+	<fieldset id="actions">
+        <input type="submit" id="submit" value="Log in">
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'onlineapplication', 'action'=>'forgotpasswordapplicant'),'default',true);?>"><?php echo $this->translate("Forgot your password?");?></a>
+        <a href="<?php echo $this->url(array('module'=>'default','controller'=>'onlineapplication', 'action'=>'registerapplicant'),'default',true);?>"><?php echo $this->translate("Register");?></a>
+        </fieldset>
+
+	</div>
+	</section>
+	</div>
+	</div>
+</div>

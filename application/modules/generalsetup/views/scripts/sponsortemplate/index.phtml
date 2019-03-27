@@ -1,0 +1,56 @@
+
+<head>
+<script>
+dojo.addOnLoad(function(){
+	dijit.byId('field5').set('value','');
+	dijit.byId('field5').set('placeHolder','Select');	
+	});
+</script>
+</head>
+<fieldset>
+<legend><?php echo $this->translate->_("Sponsor").' '.$this->translate->_("Template").' '.$this->translate->_("Search");?></legend>
+	<form action="<?php echo $this->baseUrl();?>/generalsetup/sponsortemplate/index/search/1" method="POST">
+		<table width="100%">
+			<tr>	
+				<td><?php echo $this->translate("Template").' '.$this->translate("Name");?></td>
+				<td><?php echo $this->lobjform->field2;?></td>		
+				<td><?php echo $this->translate("Heads To Sponsor");?></td>
+                <td ><?php echo $this->lobjform->field5;?></td>				
+			</tr>
+			<tr>
+				<td colspan="4" align="center">
+					<?php echo $this->lobjform->Search;?>
+					<input type="button" class="NormalBtn" dojotype="dijit.form.Button" label="<?php echo $this->translate("Add"); ?>" onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'sponsortemplate', 'action'=>'newsponsortemplate'),'default',true);?>';" />
+					<?php echo $this->lobjform->Clear;?>					
+				</td>
+			</tr>
+		</table>
+	</form>	
+</fieldset>
+</br>
+<fieldset>
+		<table class="table" width="100%" cellpadding="5" cellspacing="1">
+	<tr>
+	     <th><?php echo $this->translate("Template").' '.$this->translate("Name");?></th>
+	</tr>
+	<?php if (count($this->paginator)): 
+		foreach ($this->paginator as $SponsorTemplate ): ?>
+	<tr style="background-color:<?php echo $this->cycle(array("#F0F0F0","#FFFFFF"))->next()?>">
+		<td>
+			<a href="<?php echo $this->baseUrl();?>/generalsetup/sponsortemplate/sponsortemplatelist/id/<?php echo $this->escape($SponsorTemplate['idSponsortemplate']);?>" rel="lyteframe" rev="width: 870px; height: 475px; scrolling: auto" >
+			<?php echo $this->escape($SponsorTemplate['templateName']);?>
+			</a>
+		</td>
+	</tr>
+		<?php endforeach;
+	endif; ?>
+	<tr>
+		<td colspan="8" align="right">
+			<div class="pagination">
+				<?php echo $this->paginationControl($this->paginator,'Sliding','/partials/my_pagination_control.phtml'); ?>
+			</div>																   
+		</td>
+	</tr>
+</table>
+</fieldset>
+</div>

@@ -1,0 +1,55 @@
+<fieldset>
+	<legend>Level Academic Landscape</legend>
+	<table width="100%" class="table">
+		<tr>
+			<td>Scheme :</td>
+			<td><?php echo $this->larrdetails['Scheme'] ?></td>
+		</tr>
+		<tr>
+			<td>Faculty :</td>
+			<td><?php echo $this->faculty_name; ?></td>
+		</tr>
+		<tr>
+			<td>Program :</td>
+			<td><?php echo $this->larrdetails['ProgramName'] ?></td>
+		</tr>
+		<tr>
+			<td>Intake :</td>
+			<td><?php echo $this->intake_name; ?></td>
+		</tr>
+	</table>
+	<table width="100%" class="table">
+		<tr>
+			<th>Level</th>
+			<th>Semester</th>
+			<th>Course Type</th>
+			<th>Course ID</th>
+			<th>Course Description</th>
+			<th>Credit Hours</th>
+		</tr>
+		<?php	foreach($this->larrlevellist as $key => $block) { ?>
+		<tr>
+			<td rowspan="<?php echo count($block,1); ?>"><?php echo $key ?></td>
+			<?php foreach($block as $key1 => $item) { ?>
+			<td rowspan="<?php echo count($item); ?>"><?php echo $key1; ?></td>
+			<?php foreach($item as $subject) { ?>
+			<td><?php echo $subject['SubjectType'] ?></td>
+			<td><?php echo $subject['SubCode'] ?></td>
+			<td><?php echo $subject['SubjectName'] ?></td>
+			<td><?php echo $subject['CreditHours'] ?></td>
+		</tr>
+		<?php } ?>
+		<?php } ?>
+		<?php } ?>
+	</table>
+	<table class="table" width="100%">
+		<tr align="right">
+			<td><input type="button" class="NormalBtn"
+				dojotype="dijit.form.Button"
+				label="<?php echo $this->translate("Back"); ?>"
+				onclick="window.location.href='<?php echo $this->url(array('module'=>'generalsetup','controller'=>'landscape', 'action'=>'addlandscape','id'=>$this->IdProgram),'default',true);?>';" />
+			</td>
+		</tr>
+	</table>
+
+</fieldset>

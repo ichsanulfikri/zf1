@@ -1,0 +1,49 @@
+<?if(isset($this->alertError)){?>
+		<script type="text/javascript">
+			alert('<? echo $this->alertError; ?>.');
+		</script>
+	<?}?>	
+<fieldset>
+<form dojoType="dijit.form.Form"  id="myform" name="myform" method="post" action="">
+<script type="dojo/method" event="onSubmit" >
+                if (this.validate()) {
+					return true;
+                } else {
+                    return false;
+                }
+				</script>
+<legend><?php echo $this->translate("Academic Results");?></legend>
+<br/>
+		<table class="table" width="100%" >			
+				<tr>
+					<td><b><?php echo $this->translate("Subject Name");?><b></td>
+					<td><?php echo $this->subjectname;?></td>	
+					<td><b><?php echo $this->translate("Marks Obtained");?><b></td>
+					<td><?php echo $this->marksobt;?>
+					<?php echo $this->lobjacademicresultForm->UpdDate;?>						
+					<?php echo $this->lobjacademicresultForm->IdSubject;?>	
+					<?php echo $this->lobjacademicresultForm->IdRegistration;?>
+					<?php echo $this->lobjacademicresultForm->IdApplication;?>
+					<?php echo $this->lobjacademicresultForm->MarksObtained;?>
+					<?php echo $this->lobjacademicresultForm->programid;?>
+					</td>				
+				</tr>	
+				<tr>
+					<td><b><?php echo $this->translate("Marks Expected");?><b></td>
+					<td><?php echo $this->lobjacademicresultForm->MarksExpected;?></td>	
+					<td><b><?php echo $this->translate("Comments");?><b></td>
+					<td><?php echo $this->lobjacademicresultForm->Comments;?></td>				
+				</tr>
+				
+			<tr>
+		<td align="right" colspan="4">		
+		<input type='submit' class="NormalBtn"	dojotype="dijit.form.Button" name="Save"	label="<?php echo $this->translate('Save')?>" value='Save'/>		
+        <input type='button' class="NormalBtn"	dojotype="dijit.form.Button" label="<?php echo $this->translate('Back')?>" value='click' onclick="window.location.href='<?php echo $this->url(array('controller'=>'studentlogin', 'action'=>'academicresult'),'default',true);?>';" />
+		</td>
+	</tr>
+
+		</table>
+<br/>
+		</form>
+</fieldset>
+
