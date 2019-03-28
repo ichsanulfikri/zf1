@@ -1,0 +1,38 @@
+<fieldset>
+<legend><?php echo $this->translate("Referensi Kriteria Audit")?></legend>
+    <form  method="post" id="form" name="form">
+    	<input type="hidden" name="id" id="id" value="<?php echo $this->data['id']; ?>">
+        <table width="100%">
+        	<tr>
+        		<td>Nomor Standar Audit :</td>
+        		<td><input type="text" name="nomor" ></td>
+        	</tr>
+        	<tr>
+        		<td>Keterangan Standar Audit :</td>
+        		<td><textarea name="ket"></textarea></td>
+        	</tr>
+        	<tr>
+        		<td colspan="2" align="center">
+        		<input type="submit" name="Save" value="Save"></td>
+        	</tr>
+        		<table width="100%" class="table">
+        			<tr>
+        				<th>No. Standar Audit</th>
+        				<th>Keterangan Standar Audit</th>
+        				<th>Action</th>
+        			</tr>
+        		<?php 
+        		foreach ($this->kriterialist as $value) {
+        		?>
+        			<tr>
+        				<td><?php echo $value['no_standar_audit']?></td>
+        				<td><?php echo $value['ket_standar_audit']?></td>
+        				<td><input type="submit" name="Edit" value="Edit">
+        					<input type="submit" name="Delete" value="Delete"></td>
+        			</tr>
+        		<?php }
+        		?>
+        		</table>
+        </table>
+    </form>
+</fieldset>

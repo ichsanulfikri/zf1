@@ -23,19 +23,19 @@
 </table>
 </form>
 <table class="table">
-<tr><th> Nama </th>
-<th>Nim</th>
-<th>Kelas</th>
-<th>Jurusan</th></tr>
-<?php foreach ($this->namalist as $value) { ?>
-	<tr><td><?php echo $value['nama']?></td>
-	<td><?php echo $value['nim']?></td>
-	<td><?php echo $value['kelas']?></td>
-	<td><?php echo $value['jurusan']?></td></tr>
-	<?php }?>
+    <tr><th> Nama </th>
+    <th>Nim</th>
+    <th>Kelas</th>
+    <th>Jurusan</th></tr>
+        <?php foreach ($this->namalist as $value) { ?>
+        	<tr><td><?php echo $value['nama']?></td>
+        	<td><?php echo $value['nim']?></td>
+        	<td><?php echo $value['kelas']?></td>
+        	<td><?php echo $value['jurusan']?></td></tr>
+        	<?php }?>
 </table>
 <fieldset>
-<?php 
-echo $this->form;
-?>
+        <?php 
+            echo $this->form;
+        ?>
 </fieldset>
