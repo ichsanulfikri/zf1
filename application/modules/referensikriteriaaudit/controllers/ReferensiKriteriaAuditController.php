@@ -10,20 +10,22 @@ class Referensikriteriaaudit_ReferensiKriteriaAuditController extends  Base_Base
                 if ($larrformData['id']==''){
                     $dbNama->addData(array('no_standar_audit'=>$larrformData['nomor'],
                                            'ket_standar_audit'=>$larrformData['ket']));
-                    $this->setMessage("Data tersimpan");
                 }
-                else 
+                else {
                     $dbNama->updateData(array('no_standar_audit'=>$larrformData['nomor'],
                                               'ket_standar_audit'=>$larrformData['ket']),
                                               $larrformData['id']);
-            }
-            else if (isset($larrformData['Delete'])){
-                $dbNama->deleteData($larrformData['kd_ref_kriteria_audit']);
-            }
-          else 
-              $id=$larrformData['kd_ref_kriteria_audit'];
-              $this->view->student= $dbNama->getById($id);
+                    }
+                }
+                 else if (isset($larrformData['Delete'])){
+                     $dbNama->deleteData($larrformData['kd_ref_kriteria_audit']);
+                }
+                      else {
+                          $id=$larrformData['kd_ref_kriteria_audit'];
+                          $this->view->kriteria= $dbNama->getById($id);
+                      }
         }
+        
         $this->view->kriterialist=$dbNama->getDataAll();
     }
 }

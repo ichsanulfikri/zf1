@@ -9,6 +9,7 @@ class Latih_Model_DbTable_Nama extends Zend_Db_Table_Abstract {
         }
         public function deleteData($id){
            $this->delete($this->_primary.'='.$id);
+
         }
         public function updateData($data,$id){
             $this->update($data,$this->_primary.'='.$id);
