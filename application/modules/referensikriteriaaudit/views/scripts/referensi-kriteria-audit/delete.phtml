@@ -1,0 +1,12 @@
+<?php echo var_dump($this->result1)?>
+
+<?php foreach ($this->result1 as $data) {?>
+<p>Apakah anda yakin menghapus '<?php echo $data['ket_standar_audit']?>' ?</p>
+
+<form  method="post" action="<?php $this->baseUrl(); ?>/referensikriteriaaudit/referensi-kriteria-audit/delete/id/<?php echo $data['kd_ref_kriteria_audit']?>">
+<input type="hidden" name="id" id="id" value="<?php echo $data['kd_ref_kriteria_audit']; ?>">
+<input type="submit" name="del" value="Yes" />
+<input type="submit" name="del" value="No" />
+
+</form>
+<?php }?>

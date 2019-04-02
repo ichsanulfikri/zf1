@@ -5,11 +5,11 @@
         <table width="100%">
         	<tr>
         		<td>Nomor Standar Audit :</td>
-        		<td><input type="text" name="nomor" value="<?php echo $this->kriteria['no_standar_audit'];?>"></td>
+        		<td><input type="text" name="nomor"></td>
         	</tr>
         	<tr>
         		<td>Keterangan Standar Audit :</td>
-        		<td><textarea name="ket" value="<?php echo $this->kriteria['ket_standar_audit']; ?>"></textarea></td>
+        		<td><textarea name="ket"></textarea></td>
         	</tr>
         	<tr>
         		<td colspan="2" align="center">
@@ -27,9 +27,11 @@
         			<tr>
         				<td><?php echo $value['no_standar_audit']?></td>
         				<td><?php echo $value['ket_standar_audit']?></td>
-        				<td><input type="submit" name="Edit" value="Edit">
-        					<input type="submit" name="Delete" value="Delete">
-        					</td>
+<!--         				<td><input type="submit" name="Edit" value="Edit"> -->
+<!--         					<input type="submit" name="Delete" value="Delete"> -->
+<!--         			    </td> -->
+						<td><a href="<?php echo $this->baseUrl();?>/referensikriteriaaudit/referensi-kriteria-audit/edit/id/<?php echo $value['kd_ref_kriteria_audit'];?>">Edit</a>
+							<a href="<?php echo $this->baseUrl();?>/referensikriteriaaudit/referensi-kriteria-audit/delete/id/<?php echo $value['kd_ref_kriteria_audit'];?>">Delete</a></td>
         			</tr>
         		<?php }
         		?>

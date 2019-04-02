@@ -11,7 +11,7 @@ class Referensikriteriaaudit_Model_DbTable_Kriteria extends Zend_Db_Table_Abstra
             $this->update($data,$this->_primary.'='.$id);
         }
         public function deleteData($id){
-            $this->delete($this->_primary.'='.$id);
+          $this->delete($this->_primary.'='.$id);
         }
 //         public function deleteKriteria(){
 //             $front = Zend_Controller_Front::getInstance();
