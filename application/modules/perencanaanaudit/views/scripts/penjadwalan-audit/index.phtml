@@ -1,47 +1,65 @@
 <fieldset>
 	<table>
 		<tr>
-			<td><button type="button">Penjadwalan Audit</button>
-			<button type="button">Tim Pelaksanaan Audit</button></td>
+			<td><a href="#"><button type="button">Penjadwalan Audit</button></a>
+			<a href="<?php echo $this->baseUrl();?>/perencanaanaudit/tim-pelaksana/"><button type="button">Tim Pelaksanaan Audit</button></td></a>
 		</tr>
-        	
-        		<form action="">
+        		<form method="post" id="form" name="form">
+        			<input type="hidden" name="id" id="id" value="<?php echo $this->penjadwal['kd_penjadwalan_audit']; ?>">
         			<table width="100%">
         			<legend><?php echo $this->translate("Penjadwalan Audit")?></legend>
         				<tr>
         					<td>Tanggal Mulai Audit :</td>
-        					<td><input type="text"></td>
-        					<td>Tanggal Validasi Temuan Audit :</td>
-        					<td><input type="text"></td>
+        					<td><input type="date" name="mulai_audit" required></td>
+        					<td>Tanggal Validasi Temuan Audit : </td>
+        					<td><input type="date" name="val_temuan_audit" required></td>
         				</tr>
         				<tr>
-        					<td>Tanggal Mulai Audit :</td>
+        					<td>Audit (Unit Kerja) :</td>
         					<td>
-        						<select>
+        						<select name="unit" style="resize:none;width:146px;height:25px">
         							<option>Text Goes Here</option>
         						</select>
         					</td>
         					<td>Tanggal Validasi Rekomendasi TPP :</td>
-        					<td><input type="text"></td>
+        					<td><input type="date" name="val_rekomendasi" required></td>
         				</tr>
         				<tr>
         					<td>Tanggal Kirim Checklist :</td>
-        					<td><input type="text"></td>
+        					<td><input type="date" name="kirim_cheklist" required></td>
         					<td>Tanggal Validasi Verifikasi TPP :</td>
-        					<td><input type="text"></td>
+        					<td><input type="date" name="val_verivikasi" required></td>
         				</tr>
         				<tr>
-        					<td>Tanggal Kumpul Cheklist :</td>
-        					<td><input type="text"></td>
+        					<td>Tanggal Kumpul Checklist :</td>
+        					<td><input type="date" name="kumpul_cheklist" required></td>
         				</tr>
         				<tr>
         					<td>Tanggal Visitasi :</td>
-        					<td><input type="text"></td>
+        					<td><input type="date" name="visitasi" required></td>
         				</tr>
         				<tr>
         					<td colspan="4" align="center">
         					<input type="submit" name="Save" value="Save"></td>
         				</tr>
+        					<table width="100%" class="table">
+        						<tr>
+        							<th width="20%">Tanggal Mulai Audit</th>
+        							<th width="60%" colspan="2">Audit</th>
+        							<th width="20%">Action</th>
+        						</tr>
+        						<?php 
+                            		foreach ($this->penjadwal as $value) {
+                            	?>
+        						<tr>
+        							<td><?php echo $value['tgl_mulai_audit']?></td>
+        							<td  colspan="2"><?php echo $value['unit_id']?></td>
+        							<td><a href="#">Edit</a>
+        							<a href="#">Delete</a></td>
+        						</tr>
+        						<?php }
+        						?>
+        					</table>
         			</table>
         		</form>
 		</table>

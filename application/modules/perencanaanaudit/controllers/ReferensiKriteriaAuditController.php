@@ -7,8 +7,10 @@ class Perencanaanaudit_ReferensiKriteriaAuditController extends  Base_Base
         $dbNama = new Perencanaanaudit_Model_DbTable_Kriteria();
         if ($this->_request->isPost()) {
             $larrformData = $this->_request->getPost();
-            if (isset($larrformData['Save'])){
-                if ($larrformData['id']==''){
+            if (isset($larrformData['Save']))
+            {
+                if ($larrformData['id']=='')
+                {
                     $dbNama->addData(array('no_standar_audit'=>$larrformData['nomor'],
                                            'ket_standar_audit'=>$larrformData['ket']));
                 }
@@ -16,15 +18,8 @@ class Perencanaanaudit_ReferensiKriteriaAuditController extends  Base_Base
                     $dbNama->updateData(array('no_standar_audit'=>$larrformData['nomor'],
                                               'ket_standar_audit'=>$larrformData['ket']),
                                               $larrformData['id']);
-                    }
-                }
-                 else if (isset($larrformData['Delete'])){
-                     $dbNama->deleteData($larrformData['kd_ref_kriteria_audit']);
-                }
-                      else {
-                          $id=$larrformData['kd_ref_kriteria_audit'];
-                          $this->view->kriteria= $dbNama->getById($id);
-                      }
+                     }
+             }
         }
         
         $this->view->kriterialist=$dbNama->getDataAll();
