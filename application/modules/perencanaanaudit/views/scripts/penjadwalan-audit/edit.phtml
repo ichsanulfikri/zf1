@@ -1,0 +1,67 @@
+<?php foreach  ($this->result as $data) {
+?>
+<fieldset>
+	<table>
+		<tr>
+			<td><a href="#"><button type="button">Penjadwalan Audit</button></a>
+			<a href="<?php echo $this->baseUrl();?>/perencanaanaudit/tim-pelaksana/"><button type="button">Tim Pelaksanaan Audit</button></td></a>
+		</tr>
+        		<form method="post" id="form" name="form">
+        			<input type="hidden" name="id" id="id" value="<?php echo $data['kd_penjadwalan_audit']; ?>">
+        			<table width="100%">
+        			<legend><?php echo $this->translate("Penjadwalan Audit")?></legend>
+        				<tr>
+        					<td>Tanggal Mulai Audit :</td>
+        					<td><input type="date" name="mulai_audit" value="<?php echo $data['tgl_mulai_audit']; ?>" required></td>
+        				</tr>
+        				<tr>
+        					<td>Audit (Unit Kerja) :</td>
+        					<td>
+        						<select name="unit" style="resize:none;width:144px;height:25px">
+        							<option label="Pilih Unit Kerja">
+        							<?php foreach ($this->unitkerja as $unit) { ?>
+        							<option value="<?php echo $unit['unit_id']; ?>" 
+        									label="<?php echo $unit['nama_unit'] ?> (<?php echo $unit['kd_unit']?>)"
+            									<?php 
+            									   if ($data['unit_id']===$unit['unit_id'])
+            									   {
+            									       echo "selected";
+            									   }
+            									?>
+        									>
+        							<?php } ?>
+        						</select>
+        					</td>
+        				</tr>
+        				<tr>
+        					<td>Tanggal Notifikasi :</td>
+        					<td><input type="date" name="notif" value="<?php echo $data['tgl_notifikasi']; ?>" required></td>
+						</tr>
+        				<tr>
+        					<td>Tanggal Kirim Checklist :</td>
+        					<td><input type="date" name="kirim_cheklist" value="<?php echo $data['tgl_kirim_checklist']; ?>" required></td>
+        					<td>Tanggal Validasi Temuan Audit : </td>
+        					<td><input type="date" name="val_temuan_audit" value="<?php echo $data['tgl_val_temuan_audit']; ?>" required></td>
+        					
+        				</tr>
+        				<tr>
+        					<td>Tanggal Kumpul Checklist :</td>
+        					<td><input type="date" name="kumpul_cheklist" value="<?php echo $data['tgl_kumpul_checklist']; ?>" required></td>
+        					<td>Tanggal Validasi Rekomendasi TPP :</td>
+        					<td><input type="date" name="val_rekomendasi" value="<?php echo $data['tgl_val_rekomds_tpp']; ?>" required></td>
+        				</tr>
+        				<tr>
+        					<td>Tanggal Visitasi :</td>
+        					<td><input type="date" name="visitasi" value="<?php echo $data['tgl_visitasi']; ?>" required></td>
+        					<td>Tanggal Validasi Verifikasi TPP :</td>
+        					<td><input type="date" name="val_verivikasi" value="<?php echo $data['tgl_val_verifikasi_tpp']; ?>" required></td>
+        				</tr>
+        				<tr>
+        					<td colspan="4" align="center">
+        					<input type="submit" name="Save" value="Save"></td>
+        				</tr>
+        			</table>
+        		</form>
+		</table>
+</fieldset>
+<?php } ?>
