@@ -73,27 +73,24 @@ class Perencanaanaudit_PenjadwalanAuditController extends  Base_Base
       }
       public function timpelaksanaAction()
       {
-          $db = new Perencanaanaudit_Model_DbTable_Penjadwalan();
+          $db = new Perencanaanaudit_Model_DbTable_Pelaksana();
           if ($this->_request->isPost())
           {
               $larrformData = $this->_request->getPost();
-              if (isset($larrformData['Save']))
+              if (isset($larrfromData['Save']))
               {
-                  if ($larrformData['id']=='')
+                  if ($larrfromData['id']=='')
                   {
-                      $db->addData(array('tgl_mulai_audit'=>$larrformData['mulai_audit'],
-                          'unit_id'=>$larrformData['unit'],
-                          'tgl_notifikasi'=>$larrfromData['notif'],
-                          'tgl_kirim_checklist'=>$larrformData['kirim_cheklist'],
-                          'tgl_kumpul_checklist'=>$larrformData['kumpul_cheklist'],
-                          'tgl_visitasi'=>$larrformData['visitasi'],
-                          'tgl_val_temuan_audit'=>$larrformData['val_temuan_audit'],
-                          'tgl_val_rekomds_tpp'=>$larrformData['val_rekomendasi'],
-                          'tgl_val_verifikasi_tpp'=>$larrformData['val_verivikasi']
+                      $db->addData(array('kd_penjadwalan_audit'=>$larrfromData['nama_unit'],
+                                            'kd_tim_audit'=>$larrfromData['auditor']
                       ));
                   }
               }
+//               echo var_dump($this->_request->getPost());exit;
           }
+          $this->view->sdm=$db->getSdm();
+          
+          $this->view->pelaksana=$db->getDataAll();
       }
 }
 ?>

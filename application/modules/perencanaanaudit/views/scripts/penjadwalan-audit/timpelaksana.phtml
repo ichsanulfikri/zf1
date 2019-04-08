@@ -1,21 +1,27 @@
+<?php foreach  ($this->pelaksana as $data) {
+?>
 <fieldset>
     <legend><?php echo $this->translate("Tim Pelaksana Auditor")?></legend>
-        <form action="">
+        <form action="" method="post" id="form" name="form">
+        <input type="hidden" name="id" id="id" value="<?php $data['kd_tim_pelaksana']?>">
         	<table width="100%">
     			<tr>
     				<td>Tanggal Mulai Audit : </td>
-    				<td><?php echo a ?></td>
+    				<td><p><?php echo $data['tgl_mulai_audit']; ?></p></td>
     			</tr>
     			<tr>
     				<td>Auditi :</td>
-    				<td><?php echo a ?></td>
+    				<td><p><?php echo $data['nama_unit'] ?></p></td>
     			</tr>
         		<tr>
         			<td>Auditor :</td>
         			<td>
-        				<select name="auditor" style="resize:none;width:144px;height:25px">
+        				<select name="auditor" style="resize:none;width:173px;height:20px">
         					<option label="Pilih Auditor">
-        					
+        					<?php foreach ($this->sdm as $sdm) { ?>
+        					<option value=<?php echo $sdm['kd_diri_sdm']?>
+        							label=<?php echo $sdm['nama_lengkap']?>>
+        					<?php } ?>
         				</select>
         			</td>
         		</tr>
@@ -28,7 +34,15 @@
         					<th>Auditor</th>
         					<th>Action</th>
         				</tr>
+        				<tr>
+        					<td><?php echo $data['nama_lengkap']?></td>
+        					<td><a href="#">Edit</a>
+							<a href="#">Delete</a></td>
+        				</tr>
+        				
         			</table>
         	</table>
         </form>
 </fieldset>
+<?php }
+?>

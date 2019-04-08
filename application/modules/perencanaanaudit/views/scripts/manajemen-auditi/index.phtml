@@ -1,23 +1,19 @@
-<fieldset>
-	<legend><?php echo $this->translate("Penjadwalan Audit")?></legend>
+fieldset>
+	<legend><?php echo $this->translate("Manajemen Audit")?></legend>
 		<form method="post" id="form" name="form">
 			<input type="hidden" name="id" id="id" value="">
 			<table width="100%">
 				<tr>
-					<td align="right">Tanggal Mulai Audit :</td>
-					<td><input type="date" name="mulai_audit" required></td>
-				</tr>
-				<tr>
-					<td align="right">Audit (Unit Kerja) :</td>
+					<td align="right">Auditi :</td>
 					<td>
 						<select name="unit" style="resize:none;width:274px;height:25px">
-							<option label="Pilih Unit Kerja">
-							<?php foreach ($this->unitkerja as $unit) { ?>
-							<option value="<?php echo $unit['unit_id']; ?>" 
-									label="<?php echo $unit['nama_unit'] ?> (<?php echo $unit['kd_unit']?>)">
-							<?php } ?>
+							<option label="Text Here">
 						</select>
 					</td>
+				</tr>
+				<tr>
+					<td align="right">ext :</td>
+					<td><input type="date" name="mulai_audit" required></td>
 				</tr>
 				<tr>
 					<td align="right">Tanggal Notifikasi :</td>
@@ -52,18 +48,6 @@
 							<th width="20%"></th>
 							<th width="20%">Action</th>
 						</tr>
-						<?php 
-                    		foreach ($this->penjadwal as $value) {
-                    	?>
-						<tr>
-							<td><?php echo date('d-m-Y', strtotime($value['tgl_mulai_audit'])); ?></td>
-							<td><?php echo $value['nama_unit'];?></td>
-							<td><a href="<?php echo $this->baseUrl();?>/perencanaanaudit/penjadwalan-audit/timpelaksana/id/<?php echo $value['kd_penjadwalan_audit'];?>">Tim Pelaksana Audit</a></td>
-							<td><a href="<?php echo $this->baseUrl();?>/perencanaanaudit/penjadwalan-audit/edit/id/<?php echo $value['kd_penjadwalan_audit'];?>">Edit</a>
-							<a href="#">Delete</a></td>
-						</tr>
-						<?php }
-						?>
 					</table>
 			</table>
 		</form>
